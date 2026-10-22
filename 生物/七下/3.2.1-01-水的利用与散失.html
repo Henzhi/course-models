@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>水的利用与散失 · 七下 · 生物</title>
+<style>
+  :root{
+    --bg:#f4f6fb; --panel:#fff; --ink:#1d2333; --ink2:#4b5468; --muted:#8b93a7;
+    --line:#e3e6f0; --brand:#5b5bd6; --soft:#eeedfd;
+    --warn:#a8461f; --warnbg:#fff5f0; --warnline:#f6d3c2;
+    --ok:#2f6b45; --okbg:#eef7f1; --okline:#cbe5d5;
+    --shadow:0 1px 2px rgba(29,35,51,.05),0 10px 30px -20px rgba(29,35,51,.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC","Segoe UI",system-ui,sans-serif;
+    background:var(--bg); color:var(--ink); font-size:16px; line-height:1.65;
+    min-height:100vh; display:flex; flex-direction:column; -webkit-font-smoothing:antialiased;
+  }
+  header{padding:14px 24px 12px; background:#fff; border-bottom:1px solid var(--line)}
+  .topbar{display:flex; align-items:center; gap:14px; font-size:13px}
+  .back{
+    color:var(--brand); text-decoration:none; font-weight:600;
+    border:1px solid #dedcfb; background:var(--soft); border-radius:7px;
+    padding:2px 10px; white-space:nowrap;
+  }
+  .back:hover{background:#e4e3fc}
+  .crumb{font-size:13px; color:var(--muted); letter-spacing:.2px}
+  h1{font-size:25px; font-weight:700; letter-spacing:-.3px; margin-top:1px}
+  .sub{font-size:14px; color:var(--ink2); margin-top:3px}
+  .tools{display:flex; gap:10px; align-items:center; margin-top:12px; flex-wrap:wrap}
+  .ghost{
+    border:1px solid var(--line); background:#fff; border-radius:9px;
+    padding:6px 13px; font:inherit; font-size:13.5px; color:var(--ink2); cursor:pointer;
+  }
+  .ghost:hover{border-color:#c4c9dd; color:var(--ink)}
+  .ghost.off{background:#f1f2f8; color:var(--muted)}
+  main{
+    flex:1; display:grid; grid-template-columns:minmax(0,1fr) 408px;
+    gap:16px; padding:16px 20px 8px; min-height:0;
+  }
+  .canvas-wrap{
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:6px; display:flex; min-height:0;
+  }
+  svg{width:100%; height:100%; display:block; min-height:0}
+  .panel{
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:18px 20px 24px; overflow:auto;
+  }
+  .panel h3{font-size:20px; font-weight:700; letter-spacing:-.2px}
+  .panel .step-no{
+    display:inline-block; font-size:12px; font-weight:700; color:#fff;
+    background:var(--brand); border-radius:6px; padding:1px 8px; margin-right:7px;
+    vertical-align:2px;
+  }
+  .panel .en{display:block; font-size:12.5px; color:var(--muted); font-style:italic; margin-top:1px}
+  .panel .tag{
+    display:inline-block; font-size:12px; font-weight:600; color:var(--brand);
+    background:var(--soft); border:1px solid #dedcfb; border-radius:6px;
+    padding:1px 8px; margin-top:7px;
+  }
+  .goal{
+    font-size:16px; color:var(--ink2); margin-top:11px;
+    background:#f7f7fe; border-left:3px solid var(--brand);
+    border-radius:0 8px 8px 0; padding:10px 13px;
+  }
+  .goal b{color:var(--ink)}
+  .p-sec{margin-top:14px}
+  .p-sec h4{font-size:12.5px; font-weight:700; color:var(--muted); letter-spacing:1.2px; margin-bottom:4px}
+  .p-sec p{font-size:16px; color:var(--ink2)}
+  .p-sec.warn{background:var(--warnbg); border:1px solid var(--warnline); border-radius:10px; padding:11px 14px}
+  .p-sec.warn h4{color:var(--warn)}
+  .p-sec.warn p{color:#7d3617}
+  .p-sec.ok{background:var(--okbg); border:1px solid var(--okline); border-radius:10px; padding:11px 14px}
+  .p-sec.ok h4{color:var(--ok)}
+  .p-sec.ok p{color:#2a5c40}
+  .ctrl{border-top:1px dashed var(--line); padding-top:13px; margin-top:14px}
+  .ctrl:first-of-type{border-top:0; padding-top:0; margin-top:10px}
+  .ctrl .lab{font-size:12.5px; font-weight:700; color:var(--muted); letter-spacing:1px; margin-bottom:7px}
+  .steps{display:flex; gap:6px; flex-wrap:wrap}
+  .steps button{
+    border:1px solid var(--line); background:#fff; border-radius:8px;
+    padding:5px 10px; font:inherit; font-size:13px; color:var(--ink2); cursor:pointer;
+    white-space:nowrap;
+  }
+  .steps button:hover{border-color:#c4c9dd}
+  .steps button.on{background:var(--soft); border-color:#c9c3f5; color:var(--brand); font-weight:700}
+  .btns{display:flex; gap:7px; flex-wrap:wrap}
+  .btns button{
+    border:1px solid var(--line); background:#fff; border-radius:8px;
+    padding:6px 13px; font:inherit; font-size:14px; color:var(--ink2); cursor:pointer;
+  }
+  .btns button:hover{border-color:#c4c9dd}
+  .btns button.on{background:var(--soft); border-color:#c9c3f5; color:var(--brand); font-weight:600}
+  .stats{display:flex; gap:8px; margin-top:12px}
+  .stat{
+    flex:1; background:#f7f8fc; border:1px solid var(--line); border-radius:10px;
+    padding:8px 10px; text-align:center;
+  }
+  .stat b{display:block; font-size:20px; line-height:1.3; font-variant-numeric:tabular-nums}
+  .stat span{font-size:11.5px; color:var(--muted)}
+  .stat.hi{background:#f2effe; border-color:#d9d3fa}
+  .stat.hi b{color:var(--brand)}
+  .legend{display:flex; flex-wrap:wrap; gap:7px 14px}
+  .legend .lg{display:inline-flex; align-items:center; gap:6px; font-size:13.5px; color:var(--ink2)}
+  .legend .lg i{width:12px; height:6px; border-radius:3px; display:inline-block; flex:none}
+  .keys{
+    margin-top:16px; padding-top:13px; border-top:1px dashed var(--line);
+    font-size:12.5px; color:var(--muted); line-height:1.9;
+  }
+  .keys span{display:inline-block; margin-right:12px; white-space:nowrap}
+  .keys kbd{
+    font-family:Consolas,monospace; font-size:11.5px; background:#f1f2f8;
+    border:1px solid #dde0ec; border-bottom-width:2px; border-radius:4px;
+    padding:0 5px; color:var(--ink2);
+  }
+  footer{
+    padding:6px 24px 14px; font-size:12.5px; color:var(--muted);
+    display:flex; gap:18px; flex-wrap:wrap;
+  }
+  footer b{color:var(--ink2); font-weight:600}
+
+  [data-part]{cursor:pointer; transition:opacity .18s}
+  [data-part]:hover{opacity:.86}
+  svg.hide-lb .lb{display:none}
+  .cap text{pointer-events:none}
+
+  @media (max-width:1180px){
+    main{grid-template-columns:1fr; grid-template-rows:minmax(300px,1fr) auto}
+    .panel{max-height:350px}
+    h1{font-size:21px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <a class="back" href="../../index.html">← 全部模型</a>
+    <span class="crumb">生物 · 七下 · 第三单元 植物的生活 · 3.2.1</span>
+  </div>
+  <h1>水的利用与散失</h1>
+  <p class="sub">一滴水从土壤到空气的三段路：根毛吸进来，导管拉上去，气孔放出去。顺便把「导管运什么」这个必考坑钉死。</p>
+  <div class="tools">
+    <button type="button" class="ghost" id="btnLabel">隐藏标注　L</button>
+    <button type="button" class="ghost" id="btnFull">全屏　F</button>
+  </div>
+</header>
+
+<main>
+  <div class="canvas-wrap">
+    <svg id="cv" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+  <aside class="panel" id="panel"></aside>
+</main>
+
+<footer>
+  <span><b>教材位置</b>　七下 · 第三单元 植物的生活 · 3.2.1</span>
+  <span><b>课标要求</b>　理解</span>
+  <span><b>建议用时</b>　15–20 分钟</span>
+</footer>
+
+<script>
+window.__APP__ = {"canvas":{"w":1000,"h":682},"legend":[{"color":"#3f7fc0","text":"水（及溶解在水里的无机盐）"},{"color":"#6f9c4a","text":"植物体"}],"parts":[{"id":"root_hair","name":"根毛","en":"root hair","only":"增大吸收面积","desc":"根尖成熟区表皮细胞向外突起形成的细毛，数量极多。","role":"吸收水和无机盐。根毛让根的表面积增大很多倍，吸水才够快。","warn":"根毛不是「根的分支」，是单个表皮细胞伸出去的一根突起——所以它极细、极易在移栽时损伤。"},{"id":"root","name":"根","en":"root","only":"吸水的主要部位","desc":"植物体在地下部分，主根上分出许多侧根。","role":"从土壤中吸收水和无机盐，并把植物体固定在土壤里。","warn":"根吸收的是<b>水和无机盐</b>，有机物是叶片光合作用制造的——根不吸收有机物。"},{"id":"stem","name":"茎","en":"stem","only":"运输通道","desc":"连接根和叶的部分，里面有维管束。","role":"支持叶、花、果实，同时把根吸来的水向上运、把叶制造的有机物向下运。","warn":"上行和下行走的是<b>两套不同的管道</b>：水和无机盐走导管，有机物走筛管。"},{"id":"vessel","name":"导管","en":"vessel","only":"运输水和无机盐（向上）","desc":"位于茎的木质部里，是一串上下贯通的死细胞连成的细管。","role":"把根吸收的水和无机盐，自下而上运到茎、叶、花、果实。蒸腾作用产生的拉力是水上升的主要动力。","warn":"这是本节第一大坑：<b>导管运水和无机盐，筛管运有机物</b>。两者不要互换。"},{"id":"leaf","name":"叶","en":"leaf","only":"蒸腾作用的主要器官","desc":"植物进行光合作用的主要器官，表面分布着大量气孔。","role":"蒸腾作用主要通过叶片进行——叶面积大、气孔多，水蒸气从这里大量散失。","warn":"蒸腾作用不是「浪费水」。它拉动水和无机盐上升、降低叶片温度，是植物必需的生理活动。"},{"id":"stoma","name":"气孔","en":"stoma","only":"水蒸气出去的门","desc":"由两个保卫细胞围成的一个空隙，多分布在叶片的下表皮。","role":"蒸腾失水的门户，也是二氧化碳进入、氧气出去的门户——气体交换和蒸腾共用这一个口。","warn":"气孔既是「蒸腾的门」也是「气体交换的门」，同一扇门干两件事。"},{"id":"guard","name":"保卫细胞","en":"guard cell","only":"控制气孔开闭","desc":"围成气孔的两个半月形细胞，内含叶绿体。","role":"吸水膨胀时气孔张开，失水收缩时气孔关闭。植物靠它决定「什么时候放水、什么时候憋住」。","warn":"保卫细胞是<b>两个细胞</b>，气孔是它们<b>中间的空隙</b>——别把气孔说成一个细胞。"}],"routes":[{"id":"absorb","color":"#3f7fc0","w":11,"speed":0.8,"part":"root","pts":[[300,596],[340,578],[372,556],[392,522],[396,470],[396,420]]},{"id":"rise","color":"#3f7fc0","w":9,"speed":1.0,"part":"vessel","pts":[[396,420],[396,340],[397,268],[412,250],[452,240],[498,228]]},{"id":"transpire","color":"#7aa8d8","w":8,"speed":1.1,"part":"stoma","pts":[[498,228],[512,246],[524,266],[540,284],[556,306],[572,332],[586,356]]}],"shapes":[{"t":"rect","x":60,"y":545,"w":620,"h":75,"fill":"#e9dbc6"},{"t":"line","x1":60,"y1":545,"x2":680,"y2":545,"stroke":"#bda98d","sw":2.5},{"t":"circle","cx":140,"cy":574,"r":5,"fill":"#d3c0a4"},{"t":"circle","cx":210,"cy":598,"r":4,"fill":"#d3c0a4"},{"t":"circle","cx":520,"cy":588,"r":5,"fill":"#d3c0a4"},{"t":"circle","cx":610,"cy":566,"r":4,"fill":"#d3c0a4"},{"t":"circle","cx":470,"cy":606,"r":3.5,"fill":"#d3c0a4"},{"t":"rect","x":382,"y":244,"w":38,"h":302,"rx":6,"fill":"#e8f2da","stroke":"#7f9e57","sw":3,"part":"stem"},{"t":"line","x1":394,"y1":540,"x2":394,"y2":250,"stroke":"#3f7fc0","sw":5,"cap":"round","part":"vessel"},{"t":"line","x1":408,"y1":540,"x2":408,"y2":250,"stroke":"#3f7fc0","sw":5,"cap":"round","part":"vessel"},{"t":"path","d":"M 400 545 C 398 575 402 600 400 620","fill":"none","stroke":"#b98a5e","sw":24,"cap":"round","part":"root"},{"t":"path","d":"M 400 566 C 372 578 344 590 322 602","fill":"none","stroke":"#b98a5e","sw":11,"cap":"round","part":"root"},{"t":"path","d":"M 400 592 C 376 604 352 612 330 618","fill":"none","stroke":"#b98a5e","sw":9,"cap":"round","part":"root"},{"t":"path","d":"M 402 558 C 430 570 456 582 478 592","fill":"none","stroke":"#b98a5e","sw":10,"cap":"round","part":"root"},{"t":"path","d":"M 400 586 C 424 598 448 606 470 614","fill":"none","stroke":"#b98a5e","sw":8,"cap":"round","part":"root"},{"t":"path","d":"M 322 602 L 306 608 M 322 602 L 310 594 M 326 606 L 314 616 M 330 618 L 314 622 M 330 618 L 318 610 M 478 592 L 494 588 M 478 592 L 490 600 M 470 614 L 486 618 M 470 614 L 480 606","fill":"none","stroke":"#9a6a34","sw":2.8,"cap":"round","part":"root_hair"},{"t":"line","x1":400,"y1":254,"x2":362,"y2":228,"stroke":"#7f9e57","sw":5,"cap":"round"},{"t":"ellipse","cx":268,"cy":195,"rx":96,"ry":48,"rot":16,"fill":"#cfe6b4","stroke":"#6f9c4a","sw":2.5,"part":"leaf"},{"t":"line","x1":182,"y1":170,"x2":352,"y2":220,"stroke":"#7f9e57","sw":3,"cap":"round","part":"leaf"},{"t":"ellipse","cx":510,"cy":215,"rx":120,"ry":58,"rot":-18,"fill":"#cfe6b4","stroke":"#6f9c4a","sw":2.5,"part":"leaf"},{"t":"line","x1":406,"y1":247,"x2":614,"y2":183,"stroke":"#7f9e57","sw":3.5,"cap":"round","part":"leaf"},{"t":"ellipse","cx":488,"cy":278,"rx":7,"ry":4,"rot":-10,"fill":"#4a6b33","part":"stoma"},{"t":"ellipse","cx":528,"cy":268,"rx":7,"ry":4,"rot":-10,"fill":"#4a6b33","part":"stoma"},{"t":"ellipse","cx":566,"cy":252,"rx":7,"ry":4,"rot":-10,"fill":"#4a6b33","part":"stoma"},{"t":"line","x1":578,"y1":268,"x2":762,"y2":300,"stroke":"#b0b8c8","sw":1.4,"dash":"5 4"},{"t":"text","x":668,"y":272,"tx":"放大","size":12.5,"fill":"#8b93a7","anchor":"middle","lbl":true},{"t":"ellipse","cx":858,"cy":300,"rx":84,"ry":68,"fill":"#eef6e4","stroke":"#6f9c4a","sw":2.5},{"t":"ellipse","cx":836,"cy":300,"rx":23,"ry":42,"fill":"#b6d68f","stroke":"#5f8c3e","sw":2.2,"part":"guard"},{"t":"ellipse","cx":880,"cy":300,"rx":23,"ry":42,"fill":"#b6d68f","stroke":"#5f8c3e","sw":2.2,"part":"guard"},{"t":"ellipse","cx":858,"cy":300,"rx":7,"ry":36,"fill":"#4a6b33","part":"stoma"},{"t":"circle","cx":858,"cy":240,"r":5.5,"fill":"#3f7fc0","opacity":0.85,"part":"stoma"},{"t":"circle","cx":874,"cy":222,"r":4.5,"fill":"#3f7fc0","opacity":0.75,"part":"stoma"},{"t":"circle","cx":842,"cy":226,"r":4.5,"fill":"#3f7fc0","opacity":0.75,"part":"stoma"},{"t":"text","x":858,"y":200,"tx":"气孔（放大）","size":15,"fill":"#4a6b33","anchor":"middle","weight":700},{"t":"text","x":600,"y":380,"tx":"水蒸气","size":13.5,"fill":"#5b7fa6","anchor":"middle","lbl":true}],"labels":[{"p":"root_hair","text":"根毛","from":[150,604],"to":[312,606],"anchor":"end"},{"p":"vessel","text":"导管（木质部）","from":[248,322],"to":[392,322],"anchor":"end"},{"p":"leaf","text":"叶（蒸腾的主要器官）","from":[700,132],"to":[606,182],"anchor":"start"},{"p":"stoma","text":"气孔","from":[716,424],"to":[800,342],"anchor":"end"},{"p":"guard","text":"保卫细胞","from":[716,236],"to":[816,272],"anchor":"end"}],"steps":[{"name":"一滴水的旅程","say":"土壤里的水，要从<b>根毛</b>进、沿<b>导管</b>上、最后由<b>气孔</b>出去。三步走完，就是这一节。","stats":[{"v":"3 段","label":"路程"},{"v":"1 条","label":"上行通道"},{"v":"99%","label":"从气孔散失的比例"}],"ask":"跟着蓝色小球走一遍：从土壤出来 → 沿根向上 → 穿过茎 → 到叶脉 → 从气孔飘走。","note":"根吸收的水，<b>绝大部分都通过蒸腾作用散失了</b>（约 99%），只有一小部分用于光合作用等生命活动。","parts":["root_hair","root","stem","vessel","leaf","stoma","guard"],"routes":["absorb","rise","transpire"],"caption":"土壤 → 根毛 → 根 → 茎（导管）→ 叶脉 → 气孔 → 空气"},{"name":"根毛吸水","say":"根吸水靠的是<b>根毛</b>：根尖表皮细胞向外伸出的一根根细突起。","stats":[{"v":"极大","label":"表面积"},{"v":"水和无机盐","label":"吸收的东西"},{"v":"成熟区","label":"根毛所在部位"}],"ask":"为什么要长这么多根毛？——表面积越大，吸水越快。移栽植物时伤了根毛，植物就会萎蔫，原因也在这里。","note":"根吸收的是<b>水和无机盐</b>，<b>不吸收有机物</b>。有机物是叶片光合作用制造的。","parts":["root_hair","root"],"routes":["absorb"],"caption":"根毛增大吸收面积，从土壤中吸收水和无机盐"},{"name":"导管：水怎么上去","say":"水从根到叶，走的是<b>导管</b>——位于木质部、上下贯通的一串死细胞。","stats":[{"v":"导管","label":"运水和无机盐"},{"v":"筛管","label":"运有机物"},{"v":"向上","label":"水的方向"}],"ask":"对比记：<b>导管运水和无机盐（向上），筛管运有机物（向下）</b>。两套管道，别互换。","note":"水能上升到几十米高的树顶，靠的是<b>蒸腾拉力</b>——叶在失水，水就被「拉」上来。","parts":["stem","vessel"],"routes":["absorb","rise"],"caption":"导管位于木质部，运输水和无机盐，方向自下而上"},{"name":"气孔：水从哪里出去","say":"水蒸气从<b>气孔</b>散失。气孔由两个<b>保卫细胞</b>围成，是叶片上的「门」。","stats":[{"v":"2 个","label":"保卫细胞"},{"v":"下表皮","label":"气孔主要分布"},{"v":"共用","label":"蒸腾与气体交换"}],"ask":"保卫细胞吸水膨胀 → 气孔张开；失水收缩 → 气孔关闭。所以植物能自己决定什么时候「放水」。","note":"气孔既是<b>蒸腾失水</b>的门，也是<b>二氧化碳进、氧气出</b>的门——同一扇门，两件事共用。","parts":["leaf","stoma","guard"],"routes":["rise","transpire"],"caption":"气孔由两个保卫细胞围成，是水蒸气出去的门户"},{"name":"蒸腾作用有什么用","say":"蒸腾作用<b>不是浪费水</b>。它至少干三件事，每一件都不可替代。","stats":[{"v":"拉力","label":"把水拉上来"},{"v":"降温","label":"保护叶片"},{"v":"水循环","label":"参与自然界"}],"ask":"① 产生蒸腾拉力，把水和无机盐从根拉到叶；② 降低叶片温度，夏天不至于被晒伤；③ 把水送回大气，参与生物圈的水循环。","note":"记住因果链：<b>蒸腾失水 → 产生拉力 → 水和无机盐被拉上来</b>。没有蒸腾，根吸的水上不去。","parts":["leaf","stoma"],"routes":["absorb","rise","transpire"],"caption":"蒸腾作用：提供拉力、降低叶温、参与水循环"}]};
+(function(){
+  "use strict";
+  var D = window.__APP__;
+  var NS = "http://www.w3.org/2000/svg";
+  var svg = document.getElementById("cv");
+  var panel = document.getElementById("panel");
+  var S = { step:0, t:0, playing:true, sel:null };
+
+  svg.setAttribute("viewBox", "0 0 " + D.canvas.w + " " + D.canvas.h);
+
+  function mk(tag, a){
+    var e = document.createElementNS(NS, tag);
+    if(a){ for(var k in a){ if(a[k] !== null && a[k] !== undefined) e.setAttribute(k, a[k]); } }
+    return e;
+  }
+  function r1(v){ return Math.round(v * 10) / 10; }
+
+  // Catmull-Rom -> 三次贝塞尔，把折线点变成平滑路径（保证穿过每个控制点）
+  function smoothPath(pts, close){
+    if(!pts || pts.length < 2) return "";
+    var d = "M " + pts[0][0] + " " + pts[0][1];
+    var n = pts.length;
+    var lim = close ? n : n - 1;
+    for(var i=0;i<lim;i++){
+      var p0 = pts[(i - 1 + n) % n] || pts[i];
+      var p1 = pts[i];
+      var p2 = pts[(i + 1) % n];
+      var p3 = pts[(i + 2) % n] || p2;
+      if(!close){
+        p0 = pts[i - 1] || pts[i];
+        p3 = pts[i + 2] || p2;
+      }
+      var c1x = p1[0] + (p2[0] - p0[0]) / 6, c1y = p1[1] + (p2[1] - p0[1]) / 6;
+      var c2x = p2[0] - (p3[0] - p1[0]) / 6, c2y = p2[1] - (p3[1] - p1[1]) / 6;
+      d += " C " + r1(c1x) + " " + r1(c1y) + " " + r1(c2x) + " " + r1(c2y)
+         + " " + p2[0] + " " + p2[1];
+    }
+    if(close) d += " Z";
+    return d;
+  }
+
+  function shape(s){
+    var node = null;
+    if(s.t === "g"){
+      node = mk("g", null);
+      (s.items || []).forEach(function(c){ var n = shape(c); if(n) node.appendChild(n); });
+      return node;
+    }
+    if(s.pts){
+      var d = s.smooth === false
+        ? "M " + s.pts.map(function(p){ return p[0] + " " + p[1]; }).join(" L ")
+        : smoothPath(s.pts, !!s.close);
+      node = mk("path", {d:d, fill:s.fill || "none", stroke:s.stroke || "none",
+        "stroke-width":s.sw || 0, "stroke-linecap":"round", "stroke-linejoin":"round"});
+      if(s.close && !s.fill) node.setAttribute("fill", "none");
+      return node;
+    }
+    if(s.t === "rect"){
+      node = mk("rect", {x:s.x, y:s.y, width:s.w, height:s.h, rx:s.rx || 0,
+        fill:s.fill || "none", stroke:s.stroke || "none", "stroke-width":s.sw || 0});
+      if(s.rot) node.setAttribute("transform", "rotate(" + s.rot + " " + (s.x + s.w/2) + " " + (s.y + s.h/2) + ")");
+    } else if(s.t === "ellipse"){
+      node = mk("ellipse", {cx:s.cx, cy:s.cy, rx:s.rx, ry:s.ry,
+        fill:s.fill || "none", stroke:s.stroke || "none", "stroke-width":s.sw || 0});
+      if(s.rot) node.setAttribute("transform", "rotate(" + s.rot + " " + s.cx + " " + s.cy + ")");
+    } else if(s.t === "circle"){
+      node = mk("circle", {cx:s.cx, cy:s.cy, r:s.r,
+        fill:s.fill || "none", stroke:s.stroke || "none", "stroke-width":s.sw || 0});
+    } else if(s.t === "path"){
+      node = mk("path", {d:s.d, fill:s.fill || "none", stroke:s.stroke || "none",
+        "stroke-width":s.sw || 0, "stroke-linecap":"round", "stroke-linejoin":"round"});
+    } else if(s.t === "line"){
+      node = mk("line", {x1:s.x1, y1:s.y1, x2:s.x2, y2:s.y2,
+        stroke:s.stroke || "none", "stroke-width":s.sw || 1,
+        "stroke-dasharray":s.dash || null, "stroke-linecap":"round"});
+    } else if(s.t === "text"){
+      node = mk("text", {x:s.x, y:s.y, "font-size":s.size || 15, fill:s.fill || "#1d2333",
+        "text-anchor":s.anchor || "middle", "dominant-baseline":"middle",
+        "font-weight":s.weight || 400});
+      node.textContent = s.tx;
+    }
+    if(node && s.op !== undefined) node.setAttribute("opacity", s.op);
+    return node;
+  }
+
+  var routeEls = {};
+  var flow = [];
+  var flowLayer = null;
+  var capG = null;
+
+  function build(){
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    routeEls = {};
+    flow = [];
+
+    var base = mk("g", null);
+    (D.shapes || []).forEach(function(s){
+      var n = shape(s);
+      if(!n) return;
+      if(s.part) n.setAttribute("data-part", s.part);
+      if(s.lbl) n.setAttribute("class", "lb");
+      base.appendChild(n);
+    });
+    svg.appendChild(base);
+
+    var tube = mk("g", null);
+    (D.routes || []).forEach(function(rt){
+      var d = smoothPath(rt.pts, false);
+      var under = mk("path", {d:d, fill:"none", stroke:rt.color, "stroke-width":rt.w + 9,
+        "stroke-linecap":"round", "stroke-linejoin":"round", opacity:0.18});
+      var core = mk("path", {d:d, fill:"none", stroke:rt.color, "stroke-width":rt.w,
+        "stroke-linecap":"round", "stroke-linejoin":"round", opacity:0.42});
+      under.setAttribute("data-route", rt.id);
+      core.setAttribute("data-route", rt.id);
+      if(rt.part) core.setAttribute("data-hit", rt.part);
+      tube.appendChild(under);
+      tube.appendChild(core);
+      routeEls[rt.id] = core;
+    });
+    svg.appendChild(tube);
+
+    flowLayer = mk("g", null);
+    svg.appendChild(flowLayer);
+
+    (D.labels || []).forEach(function(L){
+      var g = mk("g", {"class":"lb"});
+      if(L.p) g.setAttribute("data-part", L.p);
+      var ln = mk("line", {x1:L.from[0], y1:L.from[1], x2:L.to[0], y2:L.to[1],
+        stroke:"#a4acc0", "stroke-width":1, "stroke-dasharray":"3 3"});
+      g.appendChild(ln);
+      g.appendChild(mk("circle", {cx:L.to[0], cy:L.to[1], r:3.2, fill:"#7b8497"}));
+      var t = mk("text", {
+        x:L.from[0] + (L.anchor === "end" ? -5 : 5), y:L.from[1],
+        "font-size":L.size || 14, fill:"#3c465c", "text-anchor":L.anchor || "end",
+        "dominant-baseline":"middle", "font-weight":500
+      });
+      t.textContent = L.text;
+      g.appendChild(t);
+      svg.appendChild(g);
+    });
+
+    // 底部图注层必须最后重建，否则会被上面的清空逻辑带走
+    capG = mk("g", {"class":"cap"});
+    svg.appendChild(capG);
+  }
+
+  function activeRoutes(){
+    var st = D.steps[S.step];
+    return (st && st.routes) ? st.routes : [];
+  }
+
+  function buildFlow(){
+    flow = [];
+    if(flowLayer){ flowLayer.innerHTML = ""; }
+    var on = activeRoutes();
+    (D.routes || []).forEach(function(rt){
+      var core = routeEls[rt.id];
+      if(!core) return;
+      var isOn = on.indexOf(rt.id) >= 0;
+      var ids = svg.querySelectorAll('[data-route="' + rt.id + '"]');
+      for(var i=0;i<ids.length;i++){
+        ids[i].setAttribute("opacity", isOn ? (i === 0 ? 0.26 : 0.95) : 0.14);
+      }
+      if(!isOn) return;
+      var len = core.getTotalLength();
+      if(!len || len < 2) return;
+      var n = Math.max(3, Math.min(11, Math.round(len / 78)));
+      for(var j=0;j<n;j++){
+        var c = mk("circle", {r:4.4, fill:"#ffffff", stroke:rt.color, "stroke-width":2.4, opacity:0.96});
+        flowLayer.appendChild(c);
+        flow.push({el:c, path:core, len:len, phase:j / n, speed:rt.speed || 0.9});
+      }
+    });
+  }
+
+  function tick(){
+    S.t += 0.0075;
+    if(S.t > 1000) S.t = 0;
+    if(!S.playing) return;
+    for(var i=0;i<flow.length;i++){
+      var f = flow[i];
+      var p = (S.t * f.speed + f.phase) % 1;
+      var pt = f.path.getPointAtLength(p * f.len);
+      f.el.setAttribute("cx", r1(pt.x));
+      f.el.setAttribute("cy", r1(pt.y));
+    }
+  }
+
+  function partById(id){
+    for(var i=0;i<(D.parts || []).length;i++){ if(D.parts[i].id === id) return D.parts[i]; }
+    return null;
+  }
+
+  function controls(){
+    var names = D.steps.map(function(s){ return s.name; });
+    return '<div class="ctrl"><div class="lab">讲解步骤</div><div class="steps">'
+      + names.map(function(nm, i){
+          return '<button type="button" data-go="' + i + '" class="' + (S.step === i ? "on" : "") + '">'
+            + (i + 1) + ". " + nm + '</button>';
+        }).join("")
+      + '</div></div>'
+      + '<div class="ctrl"><div class="lab">播放</div><div class="btns">'
+      + '<button type="button" id="btnPlay" class="' + (S.playing ? "on" : "") + '">'
+      + (S.playing ? "⏸ 暂停流动" : "▶ 播放流动") + '</button>'
+      + '<button type="button" id="btnPrev">上一步</button>'
+      + '<button type="button" id="btnNext">下一步</button>'
+      + '</div></div>';
+  }
+
+  function legendHtml(){
+    if(!D.legend || !D.legend.length) return "";
+    return '<div class="ctrl"><div class="lab">图例</div><div class="legend">'
+      + D.legend.map(function(x){
+          return '<span class="lg"><i style="background:' + x.color + '"></i>' + x.text + '</span>';
+        }).join("")
+      + '</div></div>';
+  }
+
+  function renderPart(id){
+    var p = partById(id);
+    if(!p) return;
+    var h = '<h3>' + p.name + '</h3>';
+    if(p.en) h += '<span class="en">' + p.en + '</span>';
+    if(p.only) h += '<span class="tag">' + p.only + '</span>';
+    h += '<div class="p-sec"><h4>是什么</h4><p>' + p.desc + '</p></div>';
+    h += '<div class="p-sec"><h4>作用</h4><p>' + p.role + '</p></div>';
+    if(p.warn) h += '<div class="p-sec warn"><h4>易错点</h4><p>' + p.warn + '</p></div>';
+    h += '<div class="ctrl"><div class="btns"><button type="button" id="btnBack">← 回到第 '
+      + (S.step + 1) + ' 步</button></div></div>';
+    panel.innerHTML = h;
+  }
+
+  function renderStep(){
+    var st = D.steps[S.step];
+    var h = '<h3><span class="step-no">' + (S.step + 1) + '</span>' + st.name + '</h3>';
+    if(st.say) h += '<p class="goal">' + st.say + '</p>';
+    if(st.stats && st.stats.length){
+      h += '<div class="stats">' + st.stats.map(function(x, i){
+        return '<div class="stat' + (i === 0 ? " hi" : "") + '"><b>' + x.v + '</b><span>' + x.label + '</span></div>';
+      }).join("") + '</div>';
+    }
+    if(st.ask) h += '<div class="p-sec"><h4>观察提示</h4><p>' + st.ask + '</p></div>';
+    if(st.note) h += '<div class="p-sec warn"><h4>关键结论</h4><p>' + st.note + '</p></div>';
+    h += controls() + legendHtml();
+    h += '<div class="keys"><span><kbd>空格</kbd> 暂停/播放</span>'
+      + '<span><kbd>←</kbd><kbd>→</kbd> 切换步骤</span>'
+      + '<span><kbd>1</kbd>–<kbd>' + D.steps.length + '</kbd> 跳步</span>'
+      + '<span><kbd>L</kbd> 标注</span><span><kbd>F</kbd> 全屏</span></div>';
+    panel.innerHTML = h;
+  }
+
+  function applyStep(){
+    var st = D.steps[S.step];
+    var keep = st.parts || null;
+    var ns = svg.querySelectorAll("[data-part]");
+    for(var i=0;i<ns.length;i++){
+      var p = ns[i].getAttribute("data-part");
+      ns[i].setAttribute("opacity", (keep && keep.indexOf(p) < 0) ? "0.32" : "1");
+    }
+    var cap = capG;
+    if(cap){
+      while(cap.firstChild) cap.removeChild(cap.firstChild);
+      if(st.caption){
+        var t = mk("text", {x:D.canvas.w / 2, y:D.canvas.h - 14, "font-size":13.5,
+          fill:"#6b7488", "text-anchor":"middle"});
+        t.textContent = st.caption;
+        cap.appendChild(t);
+      }
+    }
+  }
+
+  function go(i){
+    S.step = Math.max(0, Math.min(D.steps.length - 1, i));
+    S.sel = null;
+    build();
+    buildFlow();
+    applyStep();
+    renderStep();
+  }
+
+  function setPlaying(v){
+    S.playing = v;
+    var b = document.getElementById("btnPlay");
+    if(b){ b.classList.toggle("on", v); b.textContent = v ? "⏸ 暂停流动" : "▶ 播放流动"; }
+  }
+
+  panel.addEventListener("click", function(e){
+    var b = e.target.closest("button");
+    if(!b) return;
+    if(b.hasAttribute("data-go")){ go(+b.getAttribute("data-go")); return; }
+    if(b.id === "btnPlay"){ setPlaying(!S.playing); return; }
+    if(b.id === "btnPrev"){ go(S.step - 1); return; }
+    if(b.id === "btnNext"){ go(S.step + 1); return; }
+    if(b.id === "btnBack"){ S.sel = null; renderStep(); return; }
+  });
+
+  svg.addEventListener("click", function(e){
+    var n = e.target.closest("[data-part],[data-hit]");
+    if(!n){ return; }
+    S.sel = n.getAttribute("data-part") || n.getAttribute("data-hit");
+    renderPart(S.sel);
+  });
+
+  var lbBtn = document.getElementById("btnLabel");
+  lbBtn.addEventListener("click", function(){
+    var off = svg.classList.toggle("hide-lb");
+    lbBtn.classList.toggle("off", off);
+    lbBtn.textContent = off ? "显示标注　L" : "隐藏标注　L";
+  });
+
+  var fullBtn = document.getElementById("btnFull");
+  function toggleFull(){
+    if(!document.fullscreenElement){
+      if(document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+    } else if(document.exitFullscreen){
+      document.exitFullscreen();
+    }
+  }
+  fullBtn.addEventListener("click", toggleFull);
+
+  document.addEventListener("keydown", function(e){
+    var k = e.key;
+    if(k === " "){ e.preventDefault(); setPlaying(!S.playing); }
+    else if(k === "ArrowRight" || k === "ArrowDown"){ e.preventDefault(); go(S.step + 1); }
+    else if(k === "ArrowLeft" || k === "ArrowUp"){ e.preventDefault(); go(S.step - 1); }
+    else if(k === "Escape" || k === "Backspace"){ S.sel = null; renderStep(); }
+    else if(k === "l" || k === "L"){ lbBtn.click(); }
+    else if(k === "f" || k === "F"){ toggleFull(); }
+    else if(k >= "1" && k <= "9"){
+      var idx = +k - 1;
+      if(idx < D.steps.length) go(idx);
+    }
+  });
+
+  go(0);
+  setInterval(tick, 30);
+
+  window.__SELFTEST__ = function(){
+    var errs = [];
+    var W = D.canvas.w, H = D.canvas.h;
+    if(!D.steps || D.steps.length < 3) errs.push("步骤应不少于 3 步");
+    if(!D.routes || !D.routes.length) errs.push("routes 为空");
+    if(!D.parts || !D.parts.length) errs.push("parts 为空");
+
+    var ids = {}, rids = {};
+    (D.parts || []).forEach(function(p){
+      ids[p.id] = 1;
+      if(!p.name || !p.desc || !p.role) errs.push("部位字段缺失: " + p.id);
+    });
+    (D.routes || []).forEach(function(rt){
+      if(rids[rt.id]) errs.push("route id 重复: " + rt.id);
+      rids[rt.id] = 1;
+      if(!rt.color) errs.push("route 缺少颜色: " + rt.id);
+      if(!rt.pts || rt.pts.length < 2) errs.push("route 控制点不足: " + rt.id);
+      (rt.pts || []).forEach(function(pt){
+        if(pt[0] < 0 || pt[0] > W || pt[1] < 0 || pt[1] > H){
+          errs.push("route「" + rt.id + "」有点跑出画布: " + pt[0] + "," + pt[1]);
+        }
+      });
+    });
+    (D.shapes || []).forEach(function(s){
+      if(s.part && !ids[s.part]) errs.push("shape 引用了未知部位: " + s.part);
+    });
+    (D.labels || []).forEach(function(l){
+      if(l.p && !ids[l.p]) errs.push("label 引用了未知部位: " + l.p);
+    });
+    D.steps.forEach(function(st, i){
+      if(!st.name) errs.push("步骤缺少名称: " + (i + 1));
+      (st.routes || []).forEach(function(rid){
+        if(!rids[rid]) errs.push("步骤「" + st.name + "」引用了未知路径: " + rid);
+      });
+      (st.parts || []).forEach(function(pid){
+        if(!ids[pid]) errs.push("步骤「" + st.name + "」引用了未知部位: " + pid);
+      });
+    });
+    // 路径必须真的渲染出长度（防退化成一个点）
+    Object.keys(routeEls).forEach(function(k){
+      var el = routeEls[k];
+      if(!el) return;
+      var L = el.getTotalLength();
+      if(!L || L < 60) errs.push("路径「" + k + "」长度异常: " + Math.round(L || 0));
+    });
+    if(flow.length === 0 && S.step > 0 && D.steps[S.step].routes && D.steps[S.step].routes.length){
+      errs.push("当前步骤配置了路径却没有流动粒子");
+    }
+    var anyFlow = false;
+    D.steps.forEach(function(st){ if(st.routes && st.routes.length) anyFlow = true; });
+    if(!anyFlow) errs.push("没有任何步骤配置流动路径");
+    if(svg.querySelectorAll("[data-part]").length === 0) errs.push("没有渲染出任何部位");
+    return errs;
+  };
+
+  if(!window.__QUIET__){
+    var e = window.__SELFTEST__();
+    if(e.length) console.log("SELFTEST FAIL: " + e.join(" | "));
+    else console.log("SELFTEST PASS");
+  }
+})();
+</script>
+</body>
+</html>

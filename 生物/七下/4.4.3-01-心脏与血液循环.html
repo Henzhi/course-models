@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>心脏与血液循环 · 七下 · 生物</title>
+<style>
+  :root{
+    --bg:#f4f6fb; --panel:#fff; --ink:#1d2333; --ink2:#4b5468; --muted:#8b93a7;
+    --line:#e3e6f0; --brand:#5b5bd6; --soft:#eeedfd;
+    --warn:#a8461f; --warnbg:#fff5f0; --warnline:#f6d3c2;
+    --ok:#2f6b45; --okbg:#eef7f1; --okline:#cbe5d5;
+    --shadow:0 1px 2px rgba(29,35,51,.05),0 10px 30px -20px rgba(29,35,51,.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC","Segoe UI",system-ui,sans-serif;
+    background:var(--bg); color:var(--ink); font-size:16px; line-height:1.65;
+    min-height:100vh; display:flex; flex-direction:column; -webkit-font-smoothing:antialiased;
+  }
+  header{padding:14px 24px 12px; background:#fff; border-bottom:1px solid var(--line)}
+  .topbar{display:flex; align-items:center; gap:14px; font-size:13px}
+  .back{
+    color:var(--brand); text-decoration:none; font-weight:600;
+    border:1px solid #dedcfb; background:var(--soft); border-radius:7px;
+    padding:2px 10px; white-space:nowrap;
+  }
+  .back:hover{background:#e4e3fc}
+  .crumb{font-size:13px; color:var(--muted); letter-spacing:.2px}
+  h1{font-size:25px; font-weight:700; letter-spacing:-.3px; margin-top:1px}
+  .sub{font-size:14px; color:var(--ink2); margin-top:3px}
+  .tools{display:flex; gap:10px; align-items:center; margin-top:12px; flex-wrap:wrap}
+  .ghost{
+    border:1px solid var(--line); background:#fff; border-radius:9px;
+    padding:6px 13px; font:inherit; font-size:13.5px; color:var(--ink2); cursor:pointer;
+  }
+  .ghost:hover{border-color:#c4c9dd; color:var(--ink)}
+  .ghost.off{background:#f1f2f8; color:var(--muted)}
+  main{
+    flex:1; display:grid; grid-template-columns:minmax(0,1fr) 408px;
+    gap:16px; padding:16px 20px 8px; min-height:0;
+  }
+  .canvas-wrap{
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:6px; display:flex; min-height:0;
+  }
+  svg{width:100%; height:100%; display:block; min-height:0}
+  .panel{
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:18px 20px 24px; overflow:auto;
+  }
+  .panel h3{font-size:20px; font-weight:700; letter-spacing:-.2px}
+  .panel .step-no{
+    display:inline-block; font-size:12px; font-weight:700; color:#fff;
+    background:var(--brand); border-radius:6px; padding:1px 8px; margin-right:7px;
+    vertical-align:2px;
+  }
+  .panel .en{display:block; font-size:12.5px; color:var(--muted); font-style:italic; margin-top:1px}
+  .panel .tag{
+    display:inline-block; font-size:12px; font-weight:600; color:var(--brand);
+    background:var(--soft); border:1px solid #dedcfb; border-radius:6px;
+    padding:1px 8px; margin-top:7px;
+  }
+  .goal{
+    font-size:16px; color:var(--ink2); margin-top:11px;
+    background:#f7f7fe; border-left:3px solid var(--brand);
+    border-radius:0 8px 8px 0; padding:10px 13px;
+  }
+  .goal b{color:var(--ink)}
+  .p-sec{margin-top:14px}
+  .p-sec h4{font-size:12.5px; font-weight:700; color:var(--muted); letter-spacing:1.2px; margin-bottom:4px}
+  .p-sec p{font-size:16px; color:var(--ink2)}
+  .p-sec.warn{background:var(--warnbg); border:1px solid var(--warnline); border-radius:10px; padding:11px 14px}
+  .p-sec.warn h4{color:var(--warn)}
+  .p-sec.warn p{color:#7d3617}
+  .p-sec.ok{background:var(--okbg); border:1px solid var(--okline); border-radius:10px; padding:11px 14px}
+  .p-sec.ok h4{color:var(--ok)}
+  .p-sec.ok p{color:#2a5c40}
+  .ctrl{border-top:1px dashed var(--line); padding-top:13px; margin-top:14px}
+  .ctrl:first-of-type{border-top:0; padding-top:0; margin-top:10px}
+  .ctrl .lab{font-size:12.5px; font-weight:700; color:var(--muted); letter-spacing:1px; margin-bottom:7px}
+  .steps{display:flex; gap:6px; flex-wrap:wrap}
+  .steps button{
+    border:1px solid var(--line); background:#fff; border-radius:8px;
+    padding:5px 10px; font:inherit; font-size:13px; color:var(--ink2); cursor:pointer;
+    white-space:nowrap;
+  }
+  .steps button:hover{border-color:#c4c9dd}
+  .steps button.on{background:var(--soft); border-color:#c9c3f5; color:var(--brand); font-weight:700}
+  .btns{display:flex; gap:7px; flex-wrap:wrap}
+  .btns button{
+    border:1px solid var(--line); background:#fff; border-radius:8px;
+    padding:6px 13px; font:inherit; font-size:14px; color:var(--ink2); cursor:pointer;
+  }
+  .btns button:hover{border-color:#c4c9dd}
+  .btns button.on{background:var(--soft); border-color:#c9c3f5; color:var(--brand); font-weight:600}
+  .stats{display:flex; gap:8px; margin-top:12px}
+  .stat{
+    flex:1; background:#f7f8fc; border:1px solid var(--line); border-radius:10px;
+    padding:8px 10px; text-align:center;
+  }
+  .stat b{display:block; font-size:20px; line-height:1.3; font-variant-numeric:tabular-nums}
+  .stat span{font-size:11.5px; color:var(--muted)}
+  .stat.hi{background:#f2effe; border-color:#d9d3fa}
+  .stat.hi b{color:var(--brand)}
+  .legend{display:flex; flex-wrap:wrap; gap:7px 14px}
+  .legend .lg{display:inline-flex; align-items:center; gap:6px; font-size:13.5px; color:var(--ink2)}
+  .legend .lg i{width:12px; height:6px; border-radius:3px; display:inline-block; flex:none}
+  .keys{
+    margin-top:16px; padding-top:13px; border-top:1px dashed var(--line);
+    font-size:12.5px; color:var(--muted); line-height:1.9;
+  }
+  .keys span{display:inline-block; margin-right:12px; white-space:nowrap}
+  .keys kbd{
+    font-family:Consolas,monospace; font-size:11.5px; background:#f1f2f8;
+    border:1px solid #dde0ec; border-bottom-width:2px; border-radius:4px;
+    padding:0 5px; color:var(--ink2);
+  }
+  footer{
+    padding:6px 24px 14px; font-size:12.5px; color:var(--muted);
+    display:flex; gap:18px; flex-wrap:wrap;
+  }
+  footer b{color:var(--ink2); font-weight:600}
+
+  [data-part]{cursor:pointer; transition:opacity .18s}
+  [data-part]:hover{opacity:.86}
+  svg.hide-lb .lb{display:none}
+  .cap text{pointer-events:none}
+
+  @media (max-width:1180px){
+    main{grid-template-columns:1fr; grid-template-rows:minmax(300px,1fr) auto}
+    .panel{max-height:350px}
+    h1{font-size:21px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <a class="back" href="../../index.html">← 全部模型</a>
+    <span class="crumb">生物 · 七下 · 第四单元 人体生理与健康（一） · 4.4.3</span>
+  </div>
+  <h1>心脏与血液循环</h1>
+  <p class="sub">心脏是双泵：右半边送血去肺，左半边送血去全身。跟着流动的血细胞，把两条循环走一遍——顺便看清血在哪两处变色。</p>
+  <div class="tools">
+    <button type="button" class="ghost" id="btnLabel">隐藏标注　L</button>
+    <button type="button" class="ghost" id="btnFull">全屏　F</button>
+  </div>
+</header>
+
+<main>
+  <div class="canvas-wrap">
+    <svg id="cv" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+  <aside class="panel" id="panel"></aside>
+</main>
+
+<footer>
+  <span><b>教材位置</b>　七下 · 第四单元 人体生理与健康（一） · 4.4.3</span>
+  <span><b>课标要求</b>　理解</span>
+  <span><b>建议用时</b>　15–20 分钟</span>
+</footer>
+
+<script>
+window.__APP__ = {"canvas":{"w":1000,"h":640},"legend":[{"color":"#d23c3c","text":"动脉血（含氧多）"},{"color":"#3f66c8","text":"静脉血（含氧少）"}],"parts":[{"id":"ra","name":"右心房","en":"right atrium","only":"接收全身的血","desc":"心脏左上方的腔（图左侧）。上、下腔静脉把全身各处回来的血送到这里。","role":"接收全身组织用完氧的血，再送进右心室。这里的血含氧少，是静脉血。","warn":"右心房是体循环的终点。肺循环的终点是左心房，不是这里。"},{"id":"rv","name":"右心室","en":"right ventricle","only":"肺循环的起点","desc":"右心房下方（图左下）的腔，壁比左心室薄。","role":"收缩时把血泵进肺动脉，送到肺里去换气。肺循环从这里出发。","warn":"肺循环的起点是右心室，终点是左心房——起点在心室、终点在心房。"},{"id":"la","name":"左心房","en":"left atrium","only":"肺循环的终点","desc":"心脏右上方（图右侧）的腔，和肺静脉相连。","role":"接收肺里换好气的血，再送进左心室。这里的血含氧多，是动脉血。","warn":"肺静脉里流的是动脉血——血管名字叫「静脉」，血却是动脉血。这是本节第一大坑。"},{"id":"lv","name":"左心室","en":"left ventricle","only":"体循环的起点","desc":"左心房下方的腔（图右下），四个腔里壁最厚的一个。","role":"收缩时把血泵进主动脉，送到全身。因为要把血送到全身，路径最长，所以壁最厚、力量最大。","warn":"「左心室壁最厚」考的是原因：路程最远，需要最大压力。不要只背结论。"},{"id":"valve","name":"瓣膜","en":"valve","only":"防止倒流","desc":"心房和心室之间、心室和动脉之间的膜状结构，像单向门。","role":"只允许血液朝一个方向走：心房 → 心室 → 动脉。心室收缩时，瓣膜关闭，血不会倒回心房。","warn":"瓣膜保证血液单向流动。心跳的「咚」声，一部分就是瓣膜关闭造成的。"},{"id":"lung","name":"肺","en":"lung","only":"静脉血 → 动脉血","desc":"心脏上方的两个器官，里面有大量肺泡，外面缠满毛细血管。","role":"气体交换站。血液在这里放出二氧化碳、获得氧气，于是从静脉血变成动脉血。","warn":"这是全身唯一「静脉血变动脉血」的地方；相反方向的变化发生在全身组织。"},{"id":"body","name":"全身组织","en":"body tissue","only":"动脉血 → 静脉血","desc":"头、四肢、内脏等全身各处的组织和毛细血管网。","role":"氧气和养料在这里交给组织细胞，二氧化碳等废物被带走。血就从动脉血变成了静脉血。","warn":"组织处是「动脉血变成静脉血」，肺里是「静脉血变成动脉血」——两个方向别搞反。"}],"routes":[{"id":"pa","color":"#3f66c8","w":12,"speed":0.85,"pts":[[392,332],[356,308],[330,258],[306,200],[302,164],[330,132],[420,112],[520,106],[620,112],[676,122]]},{"id":"pv","color":"#d23c3c","w":12,"speed":0.9,"pts":[[700,140],[690,190],[668,230],[644,252]]},{"id":"sa","color":"#d23c3c","w":14,"speed":0.95,"pts":[[668,330],[700,300],[724,256],[744,300],[752,392],[744,470],[712,540]]},{"id":"sv","color":"#3f66c8","w":13,"speed":0.9,"pts":[[300,548],[250,498],[228,408],[236,318],[268,270],[322,252],[358,256]]}],"shapes":[{"t":"ellipse","cx":330,"cy":112,"rx":118,"ry":62,"fill":"#eaf3fb","stroke":"#8fb2cf","sw":2.5,"part":"lung"},{"t":"ellipse","cx":676,"cy":110,"rx":116,"ry":60,"fill":"#eaf3fb","stroke":"#8fb2cf","sw":2.5,"part":"lung"},{"t":"path","d":"M 268 90 q 22 24 6 46 M 300 80 q 20 26 4 52 M 344 84 q 16 22 2 40","fill":"none","stroke":"#b6cfe3","sw":2,"part":"lung"},{"t":"path","d":"M 608 84 q 20 26 4 50 M 648 76 q 18 28 2 54 M 706 84 q 14 22 2 38","fill":"none","stroke":"#b6cfe3","sw":2,"part":"lung"},{"t":"rect","x":230,"y":526,"w":560,"h":84,"rx":18,"fill":"#f2f4f9","stroke":"#a8b2c6","sw":2.5,"part":"body"},{"t":"path","d":"M 268 568 q 26 -24 52 0 q 26 24 52 0 q 26 -24 52 0 q 26 24 52 0 q 26 -24 52 0 q 26 24 52 0 q 26 -24 52 0","fill":"none","stroke":"#c2ccdd","sw":3,"part":"body"},{"t":"ellipse","cx":500,"cy":352,"rx":188,"ry":156,"fill":"#fdf4f5","stroke":"#d99aa6","sw":3},{"t":"line","x1":500,"y1":204,"x2":500,"y2":500,"stroke":"#d9c3c8","sw":3},{"t":"ellipse","cx":432,"cy":262,"rx":74,"ry":52,"fill":"#dbe7fb","stroke":"#6f93d6","sw":2.5,"part":"ra"},{"t":"ellipse","cx":420,"cy":402,"rx":82,"ry":86,"fill":"#dbe7fb","stroke":"#6f93d6","sw":4,"part":"rv"},{"t":"ellipse","cx":576,"cy":258,"rx":70,"ry":48,"fill":"#fbe1e1","stroke":"#d67474","sw":2.5,"part":"la"},{"t":"ellipse","cx":590,"cy":402,"rx":86,"ry":92,"fill":"#fbe1e1","stroke":"#d67474","sw":9,"part":"lv"},{"t":"line","x1":330,"y1":330,"x2":410,"y2":330,"stroke":"#d9c3c8","sw":2.5},{"t":"poly","smooth":false,"pts":[[414,334],[438,334],[426,356]],"close":true,"fill":"#7b8497","part":"valve"},{"t":"poly","smooth":false,"pts":[[568,334],[592,334],[580,356]],"close":true,"fill":"#7b8497","part":"valve"},{"t":"poly","smooth":false,"pts":[[381,344],[403,340],[392,320]],"close":true,"fill":"#7b8497","part":"valve"},{"t":"poly","smooth":false,"pts":[[654,334],[676,328],[665,308]],"close":true,"fill":"#7b8497","part":"valve"},{"t":"text","x":330,"y":32,"tx":"肺","size":16,"fill":"#4c7a9c","anchor":"middle","weight":700,"lbl":true},{"t":"text","x":676,"y":32,"tx":"肺","size":16,"fill":"#4c7a9c","anchor":"middle","weight":700,"lbl":true},{"t":"text","x":510,"y":588,"tx":"全身各处组织","size":14.5,"fill":"#5b6478","anchor":"middle","weight":600,"lbl":true},{"t":"line","x1":444,"y1":330,"x2":566,"y2":330,"stroke":"#d9c3c8","sw":2.5},{"t":"line","x1":598,"y1":330,"x2":672,"y2":330,"stroke":"#d9c3c8","sw":2.5}],"labels":[{"p":"ra","text":"右心房","from":[268,196],"to":[392,244],"anchor":"end"},{"p":"rv","text":"右心室","from":[236,468],"to":[356,432],"anchor":"end"},{"p":"la","text":"左心房","from":[824,202],"to":[616,236],"anchor":"start"},{"p":"lv","text":"左心室","from":[846,452],"to":[652,428],"anchor":"start"},{"text":"肺动脉","from":[206,236],"to":[330,258],"anchor":"end"},{"text":"肺静脉","from":[858,148],"to":[694,184],"anchor":"start"},{"text":"主动脉","from":[806,506],"to":[748,430],"anchor":"start"},{"text":"上、下腔静脉","from":[148,432],"to":[232,404],"anchor":"end"}],"steps":[{"name":"四个腔与瓣膜","say":"心脏就是一台<b>双泵</b>：右边一半把血送到肺，左边一半把血送到全身。先认清四个腔。","stats":[{"v":"4","label":"个腔"},{"v":"2","label":"条循环"},{"v":"单向","label":"血流方向"}],"ask":"点图中任意一个腔，看它接收谁的血、又泵到哪里去。注意中间那道隔板把左右两半完全分开——左半边和右半边的血不会直接混。","note":"血流只有一个方向：<b>心房 → 心室 → 动脉</b>。瓣膜就是这个方向的「单向门」。","parts":["ra","rv","la","lv","valve"],"routes":[],"caption":"右心房、右心室在图的左侧；左心房、左心室在图的右侧"},{"name":"肺循环","say":"<b>右心室 → 肺动脉 → 肺 → 肺静脉 → 左心房。</b>这条路短，只负责「去肺里换气」。","stats":[{"v":"右心室","label":"起点"},{"v":"左心房","label":"终点"},{"v":"静脉→动脉","label":"血的变化"}],"ask":"盯住白色的小球：它从右心室出发，沿<b>蓝色</b>的肺动脉进肺；回来时走的是<b>红色</b>的肺静脉。同一趟路，血的颜色变了。","note":"肺静脉里是<b>动脉血</b>——名字叫静脉，血却是含氧多的动脉血。这是考试第一大坑。","parts":["rv","la","lung"],"routes":["pa","pv"],"caption":"肺循环：右心室 → 肺动脉 → 肺 → 肺静脉 → 左心房"},{"name":"体循环","say":"<b>左心室 → 主动脉 → 全身组织 → 上、下腔静脉 → 右心房。</b>这条路长，负责把氧送到全身。","stats":[{"v":"左心室","label":"起点"},{"v":"右心房","label":"终点"},{"v":"动脉→静脉","label":"血的变化"}],"ask":"这次从左边出发：红色主动脉一路向下到全身组织，回来走蓝色的腔静脉。<b>左心室壁最厚</b>，就是因为这条路最长。","note":"动脉血变成静脉血发生在<b>组织处</b>：氧气被细胞拿走了。","parts":["lv","ra","body"],"routes":["sa","sv"],"caption":"体循环：左心室 → 主动脉 → 全身组织 → 上、下腔静脉 → 右心房"},{"name":"两条循环怎么接力","say":"两条循环<b>不是各走各的</b>——它们在心脏里首尾相接，拼成一个「8」字。","stats":[{"v":"8 字","label":"整体形状"},{"v":"同时","label":"两条一起流"}],"ask":"看四条路同时流动。找两个接点：<b>右心室</b>接上肺循环，<b>左心室</b>接上体循环；回来的血分别进左心房、右心房。图上两条蓝色血管在心脏左侧交叉——它们在解剖上确实是前后交错的，不是同一条。","note":"记忆口诀：<b>室出发、房回来</b>。肺循环「右室出、左房回」，体循环「左室出、右房回」。","parts":["ra","rv","la","lv"],"routes":["pa","pv","sa","sv"],"caption":"两条循环在心脏里首尾相接：心室出发，心房回来"},{"name":"血在哪变色","say":"全身只有<b>两个地方</b>能让血变色。找出来，这一节就不会再错了。","stats":[{"v":"2 处","label":"变色地点"},{"v":"含氧量","label":"唯一判据"}],"ask":"① <b>肺</b>：拿到氧气 → 静脉血变动脉血；② <b>全身组织</b>：交出氧气 → 动脉血变静脉血。","note":"判断动脉血还是静脉血，只看<b>含氧量</b>，不看血管叫什么名字。","parts":["lung","body"],"routes":["pa","pv","sa","sv"],"caption":"变色只发生在肺（静脉→动脉）和全身组织（动脉→静脉）"}]};
+(function(){
+  "use strict";
+  var D = window.__APP__;
+  var NS = "http://www.w3.org/2000/svg";
+  var svg = document.getElementById("cv");
+  var panel = document.getElementById("panel");
+  var S = { step:0, t:0, playing:true, sel:null };
+
+  svg.setAttribute("viewBox", "0 0 " + D.canvas.w + " " + D.canvas.h);
+
+  function mk(tag, a){
+    var e = document.createElementNS(NS, tag);
+    if(a){ for(var k in a){ if(a[k] !== null && a[k] !== undefined) e.setAttribute(k, a[k]); } }
+    return e;
+  }
+  function r1(v){ return Math.round(v * 10) / 10; }
+
+  // Catmull-Rom -> 三次贝塞尔，把折线点变成平滑路径（保证穿过每个控制点）
+  function smoothPath(pts, close){
+    if(!pts || pts.length < 2) return "";
+    var d = "M " + pts[0][0] + " " + pts[0][1];
+    var n = pts.length;
+    var lim = close ? n : n - 1;
+    for(var i=0;i<lim;i++){
+      var p0 = pts[(i - 1 + n) % n] || pts[i];
+      var p1 = pts[i];
+      var p2 = pts[(i + 1) % n];
+      var p3 = pts[(i + 2) % n] || p2;
+      if(!close){
+        p0 = pts[i - 1] || pts[i];
+        p3 = pts[i + 2] || p2;
+      }
+      var c1x = p1[0] + (p2[0] - p0[0]) / 6, c1y = p1[1] + (p2[1] - p0[1]) / 6;
+      var c2x = p2[0] - (p3[0] - p1[0]) / 6, c2y = p2[1] - (p3[1] - p1[1]) / 6;
+      d += " C " + r1(c1x) + " " + r1(c1y) + " " + r1(c2x) + " " + r1(c2y)
+         + " " + p2[0] + " " + p2[1];
+    }
+    if(close) d += " Z";
+    return d;
+  }
+
+  function shape(s){
+    var node = null;
+    if(s.t === "g"){
+      node = mk("g", null);
+      (s.items || []).forEach(function(c){ var n = shape(c); if(n) node.appendChild(n); });
+      return node;
+    }
+    if(s.pts){
+      var d = s.smooth === false
+        ? "M " + s.pts.map(function(p){ return p[0] + " " + p[1]; }).join(" L ")
+        : smoothPath(s.pts, !!s.close);
+      node = mk("path", {d:d, fill:s.fill || "none", stroke:s.stroke || "none",
+        "stroke-width":s.sw || 0, "stroke-linecap":"round", "stroke-linejoin":"round"});
+      if(s.close && !s.fill) node.setAttribute("fill", "none");
+      return node;
+    }
+    if(s.t === "rect"){
+      node = mk("rect", {x:s.x, y:s.y, width:s.w, height:s.h, rx:s.rx || 0,
+        fill:s.fill || "none", stroke:s.stroke || "none", "stroke-width":s.sw || 0});
+      if(s.rot) node.setAttribute("transform", "rotate(" + s.rot + " " + (s.x + s.w/2) + " " + (s.y + s.h/2) + ")");
+    } else if(s.t === "ellipse"){
+      node = mk("ellipse", {cx:s.cx, cy:s.cy, rx:s.rx, ry:s.ry,
+        fill:s.fill || "none", stroke:s.stroke || "none", "stroke-width":s.sw || 0});
+      if(s.rot) node.setAttribute("transform", "rotate(" + s.rot + " " + s.cx + " " + s.cy + ")");
+    } else if(s.t === "circle"){
+      node = mk("circle", {cx:s.cx, cy:s.cy, r:s.r,
+        fill:s.fill || "none", stroke:s.stroke || "none", "stroke-width":s.sw || 0});
+    } else if(s.t === "path"){
+      node = mk("path", {d:s.d, fill:s.fill || "none", stroke:s.stroke || "none",
+        "stroke-width":s.sw || 0, "stroke-linecap":"round", "stroke-linejoin":"round"});
+    } else if(s.t === "line"){
+      node = mk("line", {x1:s.x1, y1:s.y1, x2:s.x2, y2:s.y2,
+        stroke:s.stroke || "none", "stroke-width":s.sw || 1,
+        "stroke-dasharray":s.dash || null, "stroke-linecap":"round"});
+    } else if(s.t === "text"){
+      node = mk("text", {x:s.x, y:s.y, "font-size":s.size || 15, fill:s.fill || "#1d2333",
+        "text-anchor":s.anchor || "middle", "dominant-baseline":"middle",
+        "font-weight":s.weight || 400});
+      node.textContent = s.tx;
+    }
+    if(node && s.op !== undefined) node.setAttribute("opacity", s.op);
+    return node;
+  }
+
+  var routeEls = {};
+  var flow = [];
+  var flowLayer = null;
+  var capG = null;
+
+  function build(){
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    routeEls = {};
+    flow = [];
+
+    var base = mk("g", null);
+    (D.shapes || []).forEach(function(s){
+      var n = shape(s);
+      if(!n) return;
+      if(s.part) n.setAttribute("data-part", s.part);
+      if(s.lbl) n.setAttribute("class", "lb");
+      base.appendChild(n);
+    });
+    svg.appendChild(base);
+
+    var tube = mk("g", null);
+    (D.routes || []).forEach(function(rt){
+      var d = smoothPath(rt.pts, false);
+      var under = mk("path", {d:d, fill:"none", stroke:rt.color, "stroke-width":rt.w + 9,
+        "stroke-linecap":"round", "stroke-linejoin":"round", opacity:0.18});
+      var core = mk("path", {d:d, fill:"none", stroke:rt.color, "stroke-width":rt.w,
+        "stroke-linecap":"round", "stroke-linejoin":"round", opacity:0.42});
+      under.setAttribute("data-route", rt.id);
+      core.setAttribute("data-route", rt.id);
+      if(rt.part) core.setAttribute("data-hit", rt.part);
+      tube.appendChild(under);
+      tube.appendChild(core);
+      routeEls[rt.id] = core;
+    });
+    svg.appendChild(tube);
+
+    flowLayer = mk("g", null);
+    svg.appendChild(flowLayer);
+
+    (D.labels || []).forEach(function(L){
+      var g = mk("g", {"class":"lb"});
+      if(L.p) g.setAttribute("data-part", L.p);
+      var ln = mk("line", {x1:L.from[0], y1:L.from[1], x2:L.to[0], y2:L.to[1],
+        stroke:"#a4acc0", "stroke-width":1, "stroke-dasharray":"3 3"});
+      g.appendChild(ln);
+      g.appendChild(mk("circle", {cx:L.to[0], cy:L.to[1], r:3.2, fill:"#7b8497"}));
+      var t = mk("text", {
+        x:L.from[0] + (L.anchor === "end" ? -5 : 5), y:L.from[1],
+        "font-size":L.size || 14, fill:"#3c465c", "text-anchor":L.anchor || "end",
+        "dominant-baseline":"middle", "font-weight":500
+      });
+      t.textContent = L.text;
+      g.appendChild(t);
+      svg.appendChild(g);
+    });
+
+    // 底部图注层必须最后重建，否则会被上面的清空逻辑带走
+    capG = mk("g", {"class":"cap"});
+    svg.appendChild(capG);
+  }
+
+  function activeRoutes(){
+    var st = D.steps[S.step];
+    return (st && st.routes) ? st.routes : [];
+  }
+
+  function buildFlow(){
+    flow = [];
+    if(flowLayer){ flowLayer.innerHTML = ""; }
+    var on = activeRoutes();
+    (D.routes || []).forEach(function(rt){
+      var core = routeEls[rt.id];
+      if(!core) return;
+      var isOn = on.indexOf(rt.id) >= 0;
+      var ids = svg.querySelectorAll('[data-route="' + rt.id + '"]');
+      for(var i=0;i<ids.length;i++){
+        ids[i].setAttribute("opacity", isOn ? (i === 0 ? 0.26 : 0.95) : 0.14);
+      }
+      if(!isOn) return;
+      var len = core.getTotalLength();
+      if(!len || len < 2) return;
+      var n = Math.max(3, Math.min(11, Math.round(len / 78)));
+      for(var j=0;j<n;j++){
+        var c = mk("circle", {r:4.4, fill:"#ffffff", stroke:rt.color, "stroke-width":2.4, opacity:0.96});
+        flowLayer.appendChild(c);
+        flow.push({el:c, path:core, len:len, phase:j / n, speed:rt.speed || 0.9});
+      }
+    });
+  }
+
+  function tick(){
+    S.t += 0.0075;
+    if(S.t > 1000) S.t = 0;
+    if(!S.playing) return;
+    for(var i=0;i<flow.length;i++){
+      var f = flow[i];
+      var p = (S.t * f.speed + f.phase) % 1;
+      var pt = f.path.getPointAtLength(p * f.len);
+      f.el.setAttribute("cx", r1(pt.x));
+      f.el.setAttribute("cy", r1(pt.y));
+    }
+  }
+
+  function partById(id){
+    for(var i=0;i<(D.parts || []).length;i++){ if(D.parts[i].id === id) return D.parts[i]; }
+    return null;
+  }
+
+  function controls(){
+    var names = D.steps.map(function(s){ return s.name; });
+    return '<div class="ctrl"><div class="lab">讲解步骤</div><div class="steps">'
+      + names.map(function(nm, i){
+          return '<button type="button" data-go="' + i + '" class="' + (S.step === i ? "on" : "") + '">'
+            + (i + 1) + ". " + nm + '</button>';
+        }).join("")
+      + '</div></div>'
+      + '<div class="ctrl"><div class="lab">播放</div><div class="btns">'
+      + '<button type="button" id="btnPlay" class="' + (S.playing ? "on" : "") + '">'
+      + (S.playing ? "⏸ 暂停流动" : "▶ 播放流动") + '</button>'
+      + '<button type="button" id="btnPrev">上一步</button>'
+      + '<button type="button" id="btnNext">下一步</button>'
+      + '</div></div>';
+  }
+
+  function legendHtml(){
+    if(!D.legend || !D.legend.length) return "";
+    return '<div class="ctrl"><div class="lab">图例</div><div class="legend">'
+      + D.legend.map(function(x){
+          return '<span class="lg"><i style="background:' + x.color + '"></i>' + x.text + '</span>';
+        }).join("")
+      + '</div></div>';
+  }
+
+  function renderPart(id){
+    var p = partById(id);
+    if(!p) return;
+    var h = '<h3>' + p.name + '</h3>';
+    if(p.en) h += '<span class="en">' + p.en + '</span>';
+    if(p.only) h += '<span class="tag">' + p.only + '</span>';
+    h += '<div class="p-sec"><h4>是什么</h4><p>' + p.desc + '</p></div>';
+    h += '<div class="p-sec"><h4>作用</h4><p>' + p.role + '</p></div>';
+    if(p.warn) h += '<div class="p-sec warn"><h4>易错点</h4><p>' + p.warn + '</p></div>';
+    h += '<div class="ctrl"><div class="btns"><button type="button" id="btnBack">← 回到第 '
+      + (S.step + 1) + ' 步</button></div></div>';
+    panel.innerHTML = h;
+  }
+
+  function renderStep(){
+    var st = D.steps[S.step];
+    var h = '<h3><span class="step-no">' + (S.step + 1) + '</span>' + st.name + '</h3>';
+    if(st.say) h += '<p class="goal">' + st.say + '</p>';
+    if(st.stats && st.stats.length){
+      h += '<div class="stats">' + st.stats.map(function(x, i){
+        return '<div class="stat' + (i === 0 ? " hi" : "") + '"><b>' + x.v + '</b><span>' + x.label + '</span></div>';
+      }).join("") + '</div>';
+    }
+    if(st.ask) h += '<div class="p-sec"><h4>观察提示</h4><p>' + st.ask + '</p></div>';
+    if(st.note) h += '<div class="p-sec warn"><h4>关键结论</h4><p>' + st.note + '</p></div>';
+    h += controls() + legendHtml();
+    h += '<div class="keys"><span><kbd>空格</kbd> 暂停/播放</span>'
+      + '<span><kbd>←</kbd><kbd>→</kbd> 切换步骤</span>'
+      + '<span><kbd>1</kbd>–<kbd>' + D.steps.length + '</kbd> 跳步</span>'
+      + '<span><kbd>L</kbd> 标注</span><span><kbd>F</kbd> 全屏</span></div>';
+    panel.innerHTML = h;
+  }
+
+  function applyStep(){
+    var st = D.steps[S.step];
+    var keep = st.parts || null;
+    var ns = svg.querySelectorAll("[data-part]");
+    for(var i=0;i<ns.length;i++){
+      var p = ns[i].getAttribute("data-part");
+      ns[i].setAttribute("opacity", (keep && keep.indexOf(p) < 0) ? "0.32" : "1");
+    }
+    var cap = capG;
+    if(cap){
+      while(cap.firstChild) cap.removeChild(cap.firstChild);
+      if(st.caption){
+        var t = mk("text", {x:D.canvas.w / 2, y:D.canvas.h - 14, "font-size":13.5,
+          fill:"#6b7488", "text-anchor":"middle"});
+        t.textContent = st.caption;
+        cap.appendChild(t);
+      }
+    }
+  }
+
+  function go(i){
+    S.step = Math.max(0, Math.min(D.steps.length - 1, i));
+    S.sel = null;
+    build();
+    buildFlow();
+    applyStep();
+    renderStep();
+  }
+
+  function setPlaying(v){
+    S.playing = v;
+    var b = document.getElementById("btnPlay");
+    if(b){ b.classList.toggle("on", v); b.textContent = v ? "⏸ 暂停流动" : "▶ 播放流动"; }
+  }
+
+  panel.addEventListener("click", function(e){
+    var b = e.target.closest("button");
+    if(!b) return;
+    if(b.hasAttribute("data-go")){ go(+b.getAttribute("data-go")); return; }
+    if(b.id === "btnPlay"){ setPlaying(!S.playing); return; }
+    if(b.id === "btnPrev"){ go(S.step - 1); return; }
+    if(b.id === "btnNext"){ go(S.step + 1); return; }
+    if(b.id === "btnBack"){ S.sel = null; renderStep(); return; }
+  });
+
+  svg.addEventListener("click", function(e){
+    var n = e.target.closest("[data-part],[data-hit]");
+    if(!n){ return; }
+    S.sel = n.getAttribute("data-part") || n.getAttribute("data-hit");
+    renderPart(S.sel);
+  });
+
+  var lbBtn = document.getElementById("btnLabel");
+  lbBtn.addEventListener("click", function(){
+    var off = svg.classList.toggle("hide-lb");
+    lbBtn.classList.toggle("off", off);
+    lbBtn.textContent = off ? "显示标注　L" : "隐藏标注　L";
+  });
+
+  var fullBtn = document.getElementById("btnFull");
+  function toggleFull(){
+    if(!document.fullscreenElement){
+      if(document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+    } else if(document.exitFullscreen){
+      document.exitFullscreen();
+    }
+  }
+  fullBtn.addEventListener("click", toggleFull);
+
+  document.addEventListener("keydown", function(e){
+    var k = e.key;
+    if(k === " "){ e.preventDefault(); setPlaying(!S.playing); }
+    else if(k === "ArrowRight" || k === "ArrowDown"){ e.preventDefault(); go(S.step + 1); }
+    else if(k === "ArrowLeft" || k === "ArrowUp"){ e.preventDefault(); go(S.step - 1); }
+    else if(k === "Escape" || k === "Backspace"){ S.sel = null; renderStep(); }
+    else if(k === "l" || k === "L"){ lbBtn.click(); }
+    else if(k === "f" || k === "F"){ toggleFull(); }
+    else if(k >= "1" && k <= "9"){
+      var idx = +k - 1;
+      if(idx < D.steps.length) go(idx);
+    }
+  });
+
+  go(0);
+  setInterval(tick, 30);
+
+  window.__SELFTEST__ = function(){
+    var errs = [];
+    var W = D.canvas.w, H = D.canvas.h;
+    if(!D.steps || D.steps.length < 3) errs.push("步骤应不少于 3 步");
+    if(!D.routes || !D.routes.length) errs.push("routes 为空");
+    if(!D.parts || !D.parts.length) errs.push("parts 为空");
+
+    var ids = {}, rids = {};
+    (D.parts || []).forEach(function(p){
+      ids[p.id] = 1;
+      if(!p.name || !p.desc || !p.role) errs.push("部位字段缺失: " + p.id);
+    });
+    (D.routes || []).forEach(function(rt){
+      if(rids[rt.id]) errs.push("route id 重复: " + rt.id);
+      rids[rt.id] = 1;
+      if(!rt.color) errs.push("route 缺少颜色: " + rt.id);
+      if(!rt.pts || rt.pts.length < 2) errs.push("route 控制点不足: " + rt.id);
+      (rt.pts || []).forEach(function(pt){
+        if(pt[0] < 0 || pt[0] > W || pt[1] < 0 || pt[1] > H){
+          errs.push("route「" + rt.id + "」有点跑出画布: " + pt[0] + "," + pt[1]);
+        }
+      });
+    });
+    (D.shapes || []).forEach(function(s){
+      if(s.part && !ids[s.part]) errs.push("shape 引用了未知部位: " + s.part);
+    });
+    (D.labels || []).forEach(function(l){
+      if(l.p && !ids[l.p]) errs.push("label 引用了未知部位: " + l.p);
+    });
+    D.steps.forEach(function(st, i){
+      if(!st.name) errs.push("步骤缺少名称: " + (i + 1));
+      (st.routes || []).forEach(function(rid){
+        if(!rids[rid]) errs.push("步骤「" + st.name + "」引用了未知路径: " + rid);
+      });
+      (st.parts || []).forEach(function(pid){
+        if(!ids[pid]) errs.push("步骤「" + st.name + "」引用了未知部位: " + pid);
+      });
+    });
+    // 路径必须真的渲染出长度（防退化成一个点）
+    Object.keys(routeEls).forEach(function(k){
+      var el = routeEls[k];
+      if(!el) return;
+      var L = el.getTotalLength();
+      if(!L || L < 60) errs.push("路径「" + k + "」长度异常: " + Math.round(L || 0));
+    });
+    if(flow.length === 0 && S.step > 0 && D.steps[S.step].routes && D.steps[S.step].routes.length){
+      errs.push("当前步骤配置了路径却没有流动粒子");
+    }
+    var anyFlow = false;
+    D.steps.forEach(function(st){ if(st.routes && st.routes.length) anyFlow = true; });
+    if(!anyFlow) errs.push("没有任何步骤配置流动路径");
+    if(svg.querySelectorAll("[data-part]").length === 0) errs.push("没有渲染出任何部位");
+    return errs;
+  };
+
+  if(!window.__QUIET__){
+    var e = window.__SELFTEST__();
+    if(e.length) console.log("SELFTEST FAIL: " + e.join(" | "));
+    else console.log("SELFTEST PASS");
+  }
+})();
+</script>
+</body>
+</html>

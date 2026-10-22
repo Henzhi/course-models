@@ -81,6 +81,12 @@ def build_model(model):
     return out
 
 
+def sec_key(s):
+    """把 1.2.2 / 4.4.3 / 3.2.2 / 2.3.2 – 2.3.4 这类节号转成可排序的数字元组。"""
+    nums = re.findall(r"\d+", str(s or ""))
+    return [int(x) for x in nums[:4]] or [9999]
+
+
 def build_index(catalog):
     tpl = open(os.path.join(TPL_DIR, "index.html"), "r", encoding="utf-8").read()
     models = catalog["models"]
@@ -89,7 +95,8 @@ def build_index(catalog):
     total = 0
     for subj in catalog["subjects"]:
         for grade in subj["grades"]:
-            items = [m for m in models if m["subject"] == subj["key"] and m["grade"] == grade]
+            items = sorted([m for m in models if m["subject"] == subj["key"] and m["grade"] == grade],
+                           key=lambda m: sec_key(m.get("section")))
             total += len(items)
             rows = []
             for m in items:

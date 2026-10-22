@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>肺泡与气体交换 · 七下 · 生物</title>
+<style>
+  :root{
+    --bg:#f4f6fb; --panel:#fff; --ink:#1d2333; --ink2:#4b5468; --muted:#8b93a7;
+    --line:#e3e6f0; --brand:#5b5bd6; --soft:#eeedfd;
+    --warn:#a8461f; --warnbg:#fff5f0; --warnline:#f6d3c2;
+    --shadow:0 1px 2px rgba(29,35,51,.05),0 10px 30px -20px rgba(29,35,51,.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC","Segoe UI",system-ui,sans-serif;
+    background:var(--bg); color:var(--ink); font-size:16px; line-height:1.65;
+    min-height:100vh; display:flex; flex-direction:column;
+    -webkit-font-smoothing:antialiased;
+  }
+  header{padding:14px 24px 12px; background:#fff; border-bottom:1px solid var(--line)}
+  .topbar{display:flex; align-items:center; gap:14px; font-size:13px}
+  .back{
+    color:var(--brand); text-decoration:none; font-weight:600;
+    border:1px solid #dedcfb; background:var(--soft); border-radius:7px;
+    padding:2px 10px; white-space:nowrap;
+  }
+  .back:hover{background:#e4e3fc}
+  .crumb{font-size:13px; color:var(--muted); letter-spacing:.2px}
+  h1{font-size:25px; font-weight:700; letter-spacing:-.3px; margin-top:1px}
+  .sub{font-size:14px; color:var(--ink2); margin-top:3px}
+  .tools{display:flex; gap:10px; align-items:center; margin-top:12px; flex-wrap:wrap}
+  .seg{display:inline-flex; background:#eef0f7; border-radius:10px; padding:3px}
+  .seg button{
+    border:0; background:transparent; font:inherit; font-size:14px; font-weight:500;
+    color:var(--ink2); padding:6px 15px; border-radius:8px; cursor:pointer;
+    transition:background .15s,color .15s;
+  }
+  .seg button:hover{color:var(--ink)}
+  .seg button.on{background:#fff; color:var(--brand); box-shadow:0 1px 3px rgba(29,35,51,.13)}
+  .ghost{
+    border:1px solid var(--line); background:#fff; border-radius:9px;
+    padding:6px 13px; font:inherit; font-size:13.5px; color:var(--ink2); cursor:pointer;
+  }
+  .ghost:hover{border-color:#c4c9dd; color:var(--ink)}
+  .ghost.off{background:#f1f2f8; color:var(--muted)}
+  main{
+    flex:1; display:grid; grid-template-columns:minmax(0,1fr) 396px;
+    gap:16px; padding:16px 20px 8px; min-height:0;
+  }
+  .canvas-wrap{
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:6px; display:flex; min-height:0;
+  }
+  svg{width:100%; height:100%; display:block; min-height:0}
+  .panel{
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:20px 20px 26px; overflow:auto;
+  }
+  .panel h3{font-size:21px; font-weight:700; letter-spacing:-.2px}
+  .panel .en{display:block; font-size:12.5px; color:var(--muted); font-style:italic; margin-top:1px}
+  .panel .tag{
+    display:inline-block; font-size:12px; font-weight:600; color:var(--brand);
+    background:var(--soft); border:1px solid #dedcfb; border-radius:6px;
+    padding:1px 8px; margin-top:8px;
+  }
+  .p-sec{margin-top:18px}
+  .p-sec h4{
+    font-size:12.5px; font-weight:700; color:var(--muted); letter-spacing:1.2px;
+    margin-bottom:5px;
+  }
+  .p-sec p{font-size:16px; color:var(--ink2)}
+  .p-sec.warn{
+    background:var(--warnbg); border:1px solid var(--warnline);
+    border-radius:10px; padding:12px 14px;
+  }
+  .p-sec.warn h4{color:var(--warn); letter-spacing:1px}
+  .p-sec.warn p{color:#7d3617}
+  .hero p.goal{
+    font-size:16px; color:var(--ink2); margin-top:12px;
+    background:#f7f7fe; border-left:3px solid var(--brand);
+    border-radius:0 8px 8px 0; padding:10px 14px;
+  }
+  .hero p.goal b{color:var(--ink)}
+  .hero .tips{margin:16px 0 0 20px; font-size:14.5px; color:var(--ink2)}
+  .hero .tips li{margin-bottom:6px}
+  .keys{
+    margin-top:18px; padding-top:14px; border-top:1px dashed var(--line);
+    font-size:12.5px; color:var(--muted); line-height:1.9;
+  }
+  .keys span{display:inline-block; margin-right:12px; white-space:nowrap}
+  .keys kbd{
+    font-family:Consolas,monospace; font-size:11.5px; background:#f1f2f8;
+    border:1px solid #dde0ec; border-bottom-width:2px; border-radius:4px;
+    padding:0 5px; color:var(--ink2);
+  }
+  .cmp{width:100%; border-collapse:collapse; margin-top:16px; font-size:13.5px}
+  .cmp th,.cmp td{border-bottom:1px solid var(--line); padding:5px 6px; text-align:left}
+  .cmp th{font-size:11.5px; color:var(--muted); font-weight:700; letter-spacing:.5px; padding-bottom:6px}
+  .cmp td:first-child{font-weight:600; color:var(--ink)}
+  .cmp .yes{color:#2f6b45}
+  .cmp .no{color:#b9c0d0}
+  footer{
+    padding:6px 24px 14px; font-size:12.5px; color:var(--muted);
+    display:flex; gap:18px; flex-wrap:wrap;
+  }
+  footer b{color:var(--ink2); font-weight:600}
+
+  [data-part]{cursor:pointer; transition:opacity .18s}
+  [data-part]:hover{opacity:.84}
+  [data-part].dim{opacity:.13}
+  body.has-sel [data-part]{opacity:.22}
+  body.has-sel [data-part].sel{opacity:1}
+  .lb text{pointer-events:none}
+  svg.hide-lb .lb{display:none}
+
+  @media (max-width:1180px){
+    main{grid-template-columns:1fr; grid-template-rows:minmax(280px,1fr) auto}
+    .panel{max-height:330px}
+    h1{font-size:21px}
+  }
+  @media print{
+    header .tools,footer{display:none}
+    body{background:#fff}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <a class="back" href="../../index.html">← 全部模型</a>
+    <span class="crumb">生物 · 七下 · 第四单元 人体生理与健康（一） · 4.3.2</span>
+  </div>
+  <h1>肺泡与气体交换</h1>
+  <p class="sub">一次交换只隔两层细胞。看清氧气和二氧化碳为什么朝相反方向走——驱动它们的不是「吸」，是浓度差。</p>
+  <div class="tools">
+    <div class="seg" id="mode"></div>
+    <button type="button" class="ghost" id="btnLabel">隐藏标注　L</button>
+    <button type="button" class="ghost" id="btnFull">全屏　F</button>
+  </div>
+</header>
+
+<main>
+  <div class="canvas-wrap">
+    <svg id="cv" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+  <aside class="panel" id="panel"></aside>
+</main>
+
+<footer>
+  <span><b>教材位置</b>　七下 · 第四单元 人体生理与健康（一） · 4.3.2</span>
+  <span><b>课标要求</b>　理解</span>
+  <span><b>建议用时</b>　10–15 分钟</span>
+</footer>
+
+<script>
+window.__APP__ = {"canvas":{"w":900,"h":560},"hero":{"title":"肺泡：一次交换，只隔两层细胞","goal":"肺泡里的氧气比血液里多，血液里的二氧化碳比肺泡里多——所以氧气自己往血里走，二氧化碳自己往肺泡里走。这叫扩散，不靠「吸」。","tips":["先点「结构基础」：看清肺泡壁和毛细血管壁各只有一层细胞","再点「气体怎么走」：两个箭头方向相反，原因只有一个——浓度差","注意箭头是「自己走」的，肺没有把氧气「抽」进血液"]},"groups":[{"label":"两层壁","title":"为什么能交换：只隔两层细胞","lead":"气体要过的「墙」只有两堵：肺泡壁、毛细血管壁，各一层细胞。","items":"肺泡壁 · 毛细血管壁","tip":"两层都只有一层细胞——这是肺泡适于气体交换最关键的结构特点，也是常考原话。","ids":["wall","capillary"]},{"label":"氧气方向","title":"氧气：肺泡 → 血液","lead":"肺泡里氧气多，血液里氧气少，所以氧气自己往血液里走，被红细胞装走。","items":"氧气扩散 · 红细胞","tip":"不是肺把氧气「吸」进血液。肺只负责让空气进出，进血液靠扩散。","ids":["o2","rbc"]},{"label":"二氧化碳方向","title":"二氧化碳：血液 → 肺泡","lead":"血液里二氧化碳多，肺泡里少，所以二氧化碳往肺泡里走，随呼气排出。","items":"二氧化碳扩散","tip":"两个方向同时发生，不是「先吸氧、再排二氧化碳」。","ids":["co2"]}],"parts":[{"id":"alveolus","name":"肺泡","en":"alveolus","only":"气体交换的场所","desc":"肺里像小气球一样的囊泡，数量极多（成人约 3 亿个），里面装着吸入的空气。","role":"气体交换的场所。空气中的氧气在这里进入血液，血液里的二氧化碳在这里排出去。","warn":"肺泡不是「一个一个分开工作」的——它们数量极多、总面积很大（约 70 平方米），才够全身用。"},{"id":"wall","name":"肺泡壁","en":"alveolar wall","only":"只有一层细胞","desc":"肺泡最外面的一层扁平细胞。","role":"极薄，气体容易穿过。这是「适合气体交换」的第一个结构特点。","warn":"肺泡壁只有<b>一层</b>细胞——不是「很薄的一层组织」，就是一层细胞。这是常考原话。"},{"id":"capillary","name":"毛细血管","en":"capillary","only":"紧贴肺泡，也只有一层细胞","desc":"缠绕在肺泡外面的极细血管，管壁只有一层细胞，血流很慢。","role":"把血液送到肺泡旁边。管壁薄、血流慢，给气体交换留出时间。","warn":"毛细血管壁同样只有一层细胞。两层细胞加起来，气体只走极短的一段距离。"},{"id":"rbc","name":"红细胞","en":"red blood cell","only":"运氧的主力","desc":"血液里数量最多的血细胞，里面有一种红色的蛋白质，专门和氧结合。","role":"把进入血液的氧气装走，运到全身各处。红细胞里的血红蛋白是氧气的主要携带者。","warn":"氧气进入血液后，绝大部分是由红细胞装的，不是「溶在血浆里」。"},{"id":"o2","name":"氧气扩散（O₂）","en":"oxygen diffusion","only":"肺泡 → 血液","desc":"氧气从肺泡穿过肺泡壁和毛细血管壁，进入血液。","role":"因为肺泡里氧气多、血液里氧气少，氧气就自己往血液里走。这就是扩散。","warn":"不是肺「把氧气吸进血液」。肺只负责让空气进出，氧气进血液靠的是<b>扩散</b>。"},{"id":"co2","name":"二氧化碳扩散（CO₂）","en":"carbon dioxide diffusion","only":"血液 → 肺泡","desc":"二氧化碳从血液穿过两层壁，进入肺泡，随呼气排出体外。","role":"因为血液里二氧化碳多、肺泡里少，二氧化碳就往肺泡里走，方向正好和氧气相反。","warn":"两个方向同时发生，不是「先吸氧再排二氧化碳」。一次呼吸，两件事一起完成。"}],"compare":{"head":["","肺泡里","血液里"],"rows":[["氧气","多","少"],["二氧化碳","少","多"]]},"shapes":[{"t":"circle","cx":400,"cy":250,"r":180,"fill":"#eff6fd","part":"alveolus"},{"t":"path","d":"M 207 320 A 205 205 0 0 0 400 455","fill":"none","stroke":"#8fa9c6","sw":58,"cap":"round"},{"t":"path","d":"M 400 455 A 205 205 0 0 0 592 320","fill":"none","stroke":"#c98a89","sw":58,"cap":"round"},{"t":"path","d":"M 207 320 A 205 205 0 0 0 400 455","fill":"none","stroke":"#d9e6f7","sw":42,"cap":"round","part":"capillary"},{"t":"path","d":"M 400 455 A 205 205 0 0 0 592 320","fill":"none","stroke":"#f7dede","sw":42,"cap":"round","part":"capillary"},{"t":"circle","cx":400,"cy":250,"r":180,"fill":"none","stroke":"#7fa2c0","sw":5,"part":"wall"},{"t":"circle","cx":400,"cy":250,"r":172,"fill":"none","stroke":"#b9d3e8","sw":1.6},{"t":"ellipse","cx":545,"cy":395,"rx":15,"ry":9,"rot":-45,"fill":"#d9534f","stroke":"#a83a37","sw":1.5,"part":"rbc"},{"t":"ellipse","cx":470,"cy":442,"rx":15,"ry":9,"rot":-20,"fill":"#d9534f","stroke":"#a83a37","sw":1.5,"part":"rbc"},{"t":"ellipse","cx":382,"cy":454,"rx":15,"ry":9,"rot":5,"fill":"#d9534f","stroke":"#a83a37","sw":1.5,"part":"rbc"},{"t":"ellipse","cx":298,"cy":427,"rx":15,"ry":9,"rot":30,"fill":"#d9534f","stroke":"#a83a37","sw":1.5,"part":"rbc"},{"t":"ellipse","cx":232,"cy":367,"rx":15,"ry":9,"rot":55,"fill":"#d9534f","stroke":"#a83a37","sw":1.5,"part":"rbc"},{"t":"text","x":400,"y":150,"tx":"肺泡（里面是空气）","size":16,"fill":"#3d6a8f","anchor":"middle","weight":600},{"t":"text","x":210,"y":452,"tx":"静脉血来","size":13.5,"fill":"#5b7fa6","anchor":"middle","lbl":true},{"t":"text","x":596,"y":452,"tx":"动脉血走","size":13.5,"fill":"#a8504f","anchor":"middle","lbl":true},{"t":"line","x1":430,"y1":344,"x2":500,"y2":428,"stroke":"#2f6bb5","sw":4.5,"cap":"round","part":"o2"},{"t":"line","x1":500,"y1":428,"x2":496.6,"y2":408.3,"stroke":"#2f6bb5","sw":4.5,"cap":"round","part":"o2"},{"t":"line","x1":500,"y1":428,"x2":481.2,"y2":421.1,"stroke":"#2f6bb5","sw":4.5,"cap":"round","part":"o2"},{"t":"line","x1":338,"y1":432,"x2":300,"y2":352,"stroke":"#5b6478","sw":4.5,"cap":"round","part":"co2"},{"t":"line","x1":300,"y1":352,"x2":298.4,"y2":371.9,"stroke":"#5b6478","sw":4.5,"cap":"round","part":"co2"},{"t":"line","x1":300,"y1":352,"x2":316.5,"y2":363.4,"stroke":"#5b6478","sw":4.5,"cap":"round","part":"co2"},{"t":"text","x":434,"y":306,"tx":"O₂","size":16,"fill":"#2f6bb5","anchor":"start","weight":700,"part":"o2"},{"t":"text","x":300,"y":326,"tx":"CO₂","size":16,"fill":"#4b5468","anchor":"end","weight":700,"part":"co2"}],"labels":[{"p":"wall","text":"肺泡壁：一层细胞","from":[622,96],"to":[455,155],"anchor":"start"},{"p":"capillary","text":"毛细血管壁：一层细胞","from":[700,300],"to":[590,318],"anchor":"start"},{"p":"rbc","text":"红细胞","from":[742,470],"to":[560,398],"anchor":"start"},{"p":"alveolus","text":"肺泡","from":[140,120],"to":[300,180],"anchor":"end"}]};
+(function(){
+  "use strict";
+  var D = window.__APP__;
+  var NS = "http://www.w3.org/2000/svg";
+  var svg = document.getElementById("cv");
+  var panel = document.getElementById("panel");
+  var mode = "all";
+
+  svg.setAttribute("viewBox", "0 0 " + D.canvas.w + " " + D.canvas.h);
+
+  function mk(tag, a){
+    var e = document.createElementNS(NS, tag);
+    if(a){ for(var k in a){ if(a[k] !== null && a[k] !== undefined) e.setAttribute(k, a[k]); } }
+    return e;
+  }
+
+  function shape(s){
+    var node;
+    if(s.t === "rect"){
+      node = mk("rect", {x:s.x, y:s.y, width:s.w, height:s.h, rx:s.rx||0,
+        fill:s.fill||"none", stroke:s.stroke||"none", "stroke-width":s.sw||0});
+    } else if(s.t === "ellipse"){
+      node = mk("ellipse", {cx:s.cx, cy:s.cy, rx:s.rx, ry:s.ry,
+        fill:s.fill||"none", stroke:s.stroke||"none", "stroke-width":s.sw||0});
+      if(s.rot) node.setAttribute("transform", "rotate(" + s.rot + " " + s.cx + " " + s.cy + ")");
+    } else if(s.t === "circle"){
+      node = mk("circle", {cx:s.cx, cy:s.cy, r:s.r,
+        fill:s.fill||"none", stroke:s.stroke||"none", "stroke-width":s.sw||0});
+    } else if(s.t === "path"){
+      node = mk("path", {d:s.d, fill:s.fill||"none", stroke:s.stroke||"none", "stroke-width":s.sw||0});
+    } else if(s.t === "line"){
+      node = mk("line", {x1:s.x1, y1:s.y1, x2:s.x2, y2:s.y2,
+        stroke:s.stroke||"none", "stroke-width":s.sw||1, "stroke-dasharray":s.dash||null});
+      node.setAttribute("fill", "none");
+    } else if(s.t === "text"){
+      node = mk("text", {x:s.x, y:s.y, "font-size":s.size||15, fill:s.fill||"#1d2333",
+        "text-anchor":s.anchor||"middle", "dominant-baseline":"middle",
+        "font-weight":s.weight||400});
+      node.textContent = s.tx;
+    }
+    return node;
+  }
+
+  function buildFringe(f){
+    var g = mk("g", {"data-part": f.part});
+    var n = f.n || 36;
+    for(var i=0;i<n;i++){
+      var a = i * 2 * Math.PI / n;
+      var x = f.cx + f.rx * Math.cos(a);
+      var y = f.cy + f.ry * Math.sin(a);
+      var nx = Math.cos(a) / f.rx, ny = Math.sin(a) / f.ry;
+      var len = Math.sqrt(nx*nx + ny*ny);
+      nx /= len; ny /= len;
+      var ln = mk("line", {x1:x, y1:y, x2:x + nx*f.len, y2:y + ny*f.len,
+        stroke:f.color || "#8a94a8", "stroke-width":f.sw || 2.2, "stroke-linecap":"round"});
+      ln.setAttribute("fill", "none");
+      g.appendChild(ln);
+      if(f.dot){
+        g.appendChild(mk("circle", {cx:x + nx*f.len, cy:y + ny*f.len, r:f.dot, fill:f.color}));
+      }
+    }
+    return g;
+  }
+
+  var groups = {};
+  (D.shapes || []).forEach(function(s){
+    var node = shape(s);
+    if(!node) return;
+    if(s.part){
+      if(!groups[s.part]){
+        groups[s.part] = mk("g", {"data-part":s.part});
+        svg.appendChild(groups[s.part]);
+        groups[s.part]._part = s.part;
+      }
+      groups[s.part].appendChild(node);
+    } else {
+      svg.appendChild(node);
+    }
+  });
+
+  if(D.fringe){ svg.appendChild(buildFringe(D.fringe)); }
+
+  (D.labels || []).forEach(function(L){
+    var g = mk("g", {"class":"lb"});
+    g.setAttribute("data-part", L.p);
+    var from = L.from, to = L.to;
+    var line = mk("line", {x1:from[0], y1:from[1], x2:to[0], y2:to[1],
+      stroke:"#a4acc0", "stroke-width":1, "stroke-dasharray":"3 3"});
+    line.setAttribute("fill", "none");
+    g.appendChild(line);
+    g.appendChild(mk("circle", {cx:to[0], cy:to[1], r:3.2, fill:"#7b8497"}));
+    var t = mk("text", {
+      x: from[0] + (L.anchor === "end" ? -5 : (L.anchor === "start" ? 5 : 0)),
+      y: from[1],
+      "font-size": L.size || 14,
+      fill: "#3c465c",
+      "text-anchor": L.anchor || "end",
+      "dominant-baseline": "middle",
+      "font-weight": 500
+    });
+    t.textContent = L.text;
+    g.appendChild(t);
+    svg.appendChild(g);
+  });
+
+  function clearSel(){
+    document.body.classList.remove("has-sel");
+    var on = svg.querySelectorAll(".sel");
+    for(var i=0;i<on.length;i++) on[i].classList.remove("sel");
+  }
+
+  function markSel(id){
+    clearSel();
+    document.body.classList.add("has-sel");
+    var ns = svg.querySelectorAll('[data-part="' + id + '"]');
+    for(var i=0;i<ns.length;i++) ns[i].classList.add("sel");
+  }
+
+  function partById(id){
+    for(var i=0;i<D.parts.length;i++){ if(D.parts[i].id === id) return D.parts[i]; }
+    return null;
+  }
+
+  function renderPart(id){
+    var p = partById(id);
+    if(!p) return renderHero();
+    var html = '<h3>' + p.name + '</h3>';
+    if(p.en) html += '<span class="en">' + p.en + '</span>';
+    if(p.only) html += '<span class="tag">' + p.only + '</span>';
+    html += '<div class="p-sec"><h4>是什么</h4><p>' + p.desc + '</p></div>';
+    html += '<div class="p-sec"><h4>作用</h4><p>' + p.role + '</p></div>';
+    if(p.warn) html += '<div class="p-sec warn"><h4>易错点</h4><p>' + p.warn + '</p></div>';
+    panel.innerHTML = html;
+  }
+
+  function renderHero(){
+    var cmp = "";
+    if(D.compare && D.compare.rows){
+      var rows = D.compare.rows.map(function(r){
+        var cells = r.slice(1).map(function(v){
+          return '<td class="' + (v === "无" ? "no" : "yes") + '">' + v + "</td>";
+        }).join("");
+        return "<tr><td>" + r[0] + "</td>" + cells + "</tr>";
+      }).join("");
+      cmp = '<table class="cmp"><thead><tr>' +
+        D.compare.head.map(function(h){ return "<th>" + h + "</th>"; }).join("") +
+        "</tr></thead><tbody>" + rows + "</tbody></table>";
+    }
+    panel.innerHTML =
+      '<h3>' + D.hero.title + '</h3>' +
+      '<p class="goal">看完这一页，你要能说出：<b>' + D.hero.goal + '</b></p>' +
+      '<ol class="tips">' + D.hero.tips.map(function(x){ return '<li>' + x + '</li>'; }).join('') + '</ol>' +
+      cmp +
+      '<div class="keys">' +
+        '<span><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> 切模式</span>' +
+        '<span><kbd>L</kbd> 隐藏标注</span>' +
+        '<span><kbd>F</kbd> 全屏</span>' +
+        '<span><kbd>Esc</kbd> 取消选择</span>' +
+      '</div>';
+  }
+
+  function getGroups(){
+    if(D.groups && D.groups.length) return D.groups;
+    var g = [];
+    if(D.same) g.push({ label:"共同结构", title:D.groupSame.title, lead:D.groupSame.lead,
+      items:D.groupSame.items, tip:D.groupSame.tip, ids:D.same });
+    if(D.diff) g.push({ label:"不同结构", title:D.groupDiff.title, lead:D.groupDiff.lead,
+      items:D.groupDiff.items, tip:D.groupDiff.tip, ids:D.diff });
+    return g;
+  }
+
+  function buildModeButtons(){
+    var gs = getGroups();
+    var h = '<button type="button" data-mode="all" class="on">全部结构</button>';
+    gs.forEach(function(g, i){
+      h += '<button type="button" data-mode="g' + i + '">' + g.label + '</button>';
+    });
+    document.getElementById("mode").innerHTML = h;
+  }
+
+  function renderGroupData(g){
+    panel.innerHTML =
+      '<h3>' + g.title + '</h3>' +
+      '<p class="goal">' + g.lead + '</p>' +
+      (g.items ? '<div class="p-sec"><h4>包含</h4><p>' + g.items + '</p></div>' : '') +
+      (g.tip ? '<div class="p-sec warn"><h4>记法</h4><p>' + g.tip + '</p></div>' : '');
+  }
+
+  function applyDim(keep){
+    var ns = svg.querySelectorAll("[data-part]");
+    for(var i=0;i<ns.length;i++){
+      var p = ns[i].getAttribute("data-part");
+      var off = keep && keep.indexOf(p) < 0;
+      ns[i].classList.toggle("dim", !!off);
+    }
+  }
+
+  function setMode(m){
+    mode = m;
+    var btns = document.querySelectorAll("#mode button");
+    for(var i=0;i<btns.length;i++) btns[i].classList.toggle("on", btns[i].getAttribute("data-mode") === m);
+    clearSel();
+    if(m === "all"){ applyDim(null); renderHero(); return; }
+    var g = getGroups()[+m.slice(1)];
+    if(!g){ applyDim(null); renderHero(); return; }
+    applyDim(g.ids);
+    renderGroupData(g);
+  }
+
+  svg.addEventListener("click", function(e){
+    var n = e.target.closest("[data-part]");
+    if(!n){ clearSel(); renderHero(); return; }
+    var id = n.getAttribute("data-part");
+    markSel(id);
+    renderPart(id);
+  });
+
+  var br = document.getElementById("mode");
+  br.addEventListener("click", function(e){
+    var b = e.target.closest("button[data-mode]");
+    if(b) setMode(b.getAttribute("data-mode"));
+  });
+
+  var lbBtn = document.getElementById("btnLabel");
+  lbBtn.addEventListener("click", function(){
+    var off = svg.classList.toggle("hide-lb");
+    lbBtn.classList.toggle("off", off);
+    lbBtn.textContent = off ? "显示标注　L" : "隐藏标注　L";
+  });
+
+  var fullBtn = document.getElementById("btnFull");
+  function toggleFull(){
+    if(!document.fullscreenElement){
+      if(document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+    } else if(document.exitFullscreen){
+      document.exitFullscreen();
+    }
+  }
+  fullBtn.addEventListener("click", toggleFull);
+
+  document.addEventListener("keydown", function(e){
+    var k = e.key;
+    if(k >= "1" && k <= "9"){
+      var idx = +k - 1;
+      if(idx === 0) setMode("all");
+      else if(idx - 1 < getGroups().length) setMode("g" + (idx - 1));
+    }
+    else if(k === "Escape"){ clearSel(); renderHero(); setMode("all"); }
+    else if(k === "l" || k === "L") lbBtn.click();
+    else if(k === "f" || k === "F") toggleFull();
+  });
+
+  buildModeButtons();
+  setMode("all");
+
+  window.__SELFTEST__ = function(){
+    var errs = [];
+    if(!D.parts || !D.parts.length) errs.push("parts 为空");
+    if(!D.shapes || !D.shapes.length) errs.push("shapes 为空");
+    var ids = {};
+    (D.parts||[]).forEach(function(p){ ids[p.id] = 1; if(!p.name || !p.desc || !p.role) errs.push("部位字段缺失: " + p.id); });
+    (D.shapes||[]).forEach(function(s){ if(s.part && !ids[s.part]) errs.push("shape 引用了未知部位: " + s.part); });
+    (D.labels||[]).forEach(function(l){ if(!ids[l.p]) errs.push("label 引用了未知部位: " + l.p); });
+    (D.same||[]).forEach(function(p){ if(!ids[p]) errs.push("same 引用了未知部位: " + p); });
+    (D.diff||[]).forEach(function(p){ if(!ids[p]) errs.push("diff 引用了未知部位: " + p); });
+    getGroups().forEach(function(g){
+      (g.ids||[]).forEach(function(p){ if(!ids[p]) errs.push("分组「" + g.label + "」引用了未知部位: " + p); });
+    });
+    if(svg.querySelectorAll("[data-part]").length === 0) errs.push("SVG 没有渲染出任何部位");
+    return errs;
+  };
+
+  if(!window.__QUIET__){
+    var e = window.__SELFTEST__();
+    if(e.length) console.log("SELFTEST FAIL: " + e.join(" | "));
+    else console.log("SELFTEST PASS");
+  }
+})();
+</script>
+</body>
+</html>
