@@ -1,0 +1,514 @@
+{
+  "canvas": {
+    "w": 900,
+    "h": 560
+  },
+  "hero": {
+    "title": "关节与肌肉：一个动作，两组配合",
+    "goal": "肌肉只能收缩、不能推开，所以每个动作都需要两组肌肉对着干：一组收缩，另一组就舒张。屈肘时肱二头肌收缩，伸肘时肱三头肌收缩。",
+    "tips": [
+      "先对比左右两栏：同一个手臂，两个姿态",
+      "点任意一块肌肉，看它在屈肘和伸肘时分别干什么",
+      "最后看中间的关节放大：关节头、关节窝、软骨、关节腔各管什么"
+    ]
+  },
+  "groups": [
+    {
+      "label": "骨骼与肌肉",
+      "title": "一个动作，两组配合",
+      "lead": "左右两栏是同一只手臂的两个姿态。注意每块肌肉的粗细——粗的是收缩状态。",
+      "items": "肱骨 · 前臂骨 · 肱二头肌 · 肱三头肌",
+      "tip": "肌肉只能「拉」，不能「推」。所以要有对抗的一组：一组收缩把骨头拉过去，另一组舒张让开。",
+      "ids": [
+        "humerus",
+        "forearm",
+        "biceps",
+        "triceps"
+      ]
+    },
+    {
+      "label": "关节结构",
+      "title": "关节：既灵活又牢固",
+      "lead": "关节由关节头、关节窝、关节软骨、关节囊和关节腔组成。",
+      "items": "关节头 · 关节窝 · 关节软骨 · 关节囊 · 关节腔",
+      "tip": "关节软骨和关节腔里的滑液<b>减少摩擦</b>，关节囊把关节<b>加固</b>——灵活和牢固是一对矛盾，关节两头都占。",
+      "ids": [
+        "joint_head",
+        "joint_fossa",
+        "cartilage",
+        "capsule",
+        "cavity"
+      ]
+    }
+  ],
+  "parts": [
+    {
+      "id": "humerus",
+      "name": "肱骨",
+      "en": "humerus",
+      "only": "上臂的骨",
+      "desc": "上臂里的一根长骨，上端连着肩，下端参与构成肘关节。",
+      "role": "作为杠杆，肌肉收缩时拉动它，才产生动作。",
+      "warn": "骨本身不会动，是<b>肌肉收缩</b>拉动骨、骨绕着关节转，才有动作。"
+    },
+    {
+      "id": "forearm",
+      "name": "前臂骨",
+      "en": "radius & ulna",
+      "only": "前臂的两根骨",
+      "desc": "桡骨和尺骨，上端与肱骨构成肘关节。",
+      "role": "被肌肉拉动后绕肘关节转动，手就抬起来或放下去。",
+      "warn": "肘关节是<b>肱骨和前臂骨</b>构成的，不是「两块肌肉构成的关节」。"
+    },
+    {
+      "id": "biceps",
+      "name": "肱二头肌",
+      "en": "biceps brachii",
+      "only": "屈肘时收缩",
+      "desc": "上臂前侧（图左侧）的一块骨骼肌，有两个头起于肩部。",
+      "role": "<b>屈肘时收缩</b>，变短变粗，把前臂拉起来；<b>伸肘时舒张</b>，让前臂放下去。",
+      "warn": "屈肘时肱二头肌<b>收缩</b>，不是「两组都收缩」。这是本节最高频的错。"
+    },
+    {
+      "id": "triceps",
+      "name": "肱三头肌",
+      "en": "triceps brachii",
+      "only": "伸肘时收缩",
+      "desc": "上臂后侧（图右侧）的一块骨骼肌，有三个头。",
+      "role": "<b>伸肘时收缩</b>，把前臂推下去；<b>屈肘时舒张</b>，让前臂能抬起来。",
+      "warn": "两块肌肉永远一紧一松。同时收缩会「僵住」，同时舒张则动不了。"
+    },
+    {
+      "id": "joint_head",
+      "name": "关节头",
+      "en": "articular head",
+      "only": "凸出的那一端",
+      "desc": "上方骨末端膨大的球状部分。",
+      "role": "嵌进关节窝里，让骨能绕着它转动。",
+      "warn": "关节头是<b>骨的一端</b>，不是独立的一块小骨头。"
+    },
+    {
+      "id": "joint_fossa",
+      "name": "关节窝",
+      "en": "glenoid fossa",
+      "only": "凹进去的那一端",
+      "desc": "下方骨末端凹陷的部分，正好接住关节头。",
+      "role": "与关节头配合，形成可以转动的连接。",
+      "warn": "「关节头凸、关节窝凹」——一凸一凹才扣得上，记的时候成对记。"
+    },
+    {
+      "id": "cartilage",
+      "name": "关节软骨",
+      "en": "articular cartilage",
+      "only": "减少摩擦",
+      "desc": "覆盖在关节头和关节窝表面的一层光滑软骨。",
+      "role": "表面光滑有弹性，减少骨与骨之间的摩擦，还能缓冲震动。",
+      "warn": "关节软骨是覆盖在骨的<b>表面</b>的一层，不是「骨里面的一块软骨」。"
+    },
+    {
+      "id": "cavity",
+      "name": "关节腔",
+      "en": "joint cavity",
+      "only": "装着滑液",
+      "desc": "关节头和关节窝之间的空隙。",
+      "role": "腔内有滑液，起润滑作用，让关节转动更灵活。",
+      "warn": "关节腔是<b>空隙</b>，里面是滑液，不是「一块软骨」也不是「空的什么都没有」。"
+    },
+    {
+      "id": "capsule",
+      "name": "关节囊",
+      "en": "joint capsule",
+      "only": "把关节加固",
+      "desc": "包在关节外面的一层结缔组织膜。",
+      "role": "把关节头和关节窝牢牢包在一起，使关节既灵活又牢固。",
+      "warn": "关节囊负责「<b>牢固</b>」，关节软骨和滑液负责「<b>灵活</b>」——分工别混。"
+    }
+  ],
+  "compare": {
+    "head": [
+      "动作",
+      "肱二头肌",
+      "肱三头肌"
+    ],
+    "rows": [
+      [
+        "屈肘",
+        "收缩",
+        "舒张"
+      ],
+      [
+        "伸肘",
+        "舒张",
+        "收缩"
+      ]
+    ]
+  },
+  "shapes": [
+    {
+      "t": "text",
+      "x": 180,
+      "y": 40,
+      "tx": "屈肘",
+      "size": 17,
+      "fill": "#1d2333",
+      "anchor": "middle",
+      "weight": 700
+    },
+    {
+      "t": "text",
+      "x": 720,
+      "y": 40,
+      "tx": "伸肘",
+      "size": 17,
+      "fill": "#1d2333",
+      "anchor": "middle",
+      "weight": 700
+    },
+    {
+      "t": "text",
+      "x": 450,
+      "y": 40,
+      "tx": "关节（放大）",
+      "size": 17,
+      "fill": "#1d2333",
+      "anchor": "middle",
+      "weight": 700
+    },
+    {
+      "t": "circle",
+      "cx": 180,
+      "cy": 82,
+      "r": 15,
+      "fill": "#d8dbe6",
+      "stroke": "#9aa3b8",
+      "sw": 2
+    },
+    {
+      "t": "line",
+      "x1": 180,
+      "y1": 82,
+      "x2": 180,
+      "y2": 246,
+      "stroke": "#f2eee4",
+      "sw": 22,
+      "cap": "round",
+      "part": "humerus"
+    },
+    {
+      "t": "line",
+      "x1": 180,
+      "y1": 82,
+      "x2": 180,
+      "y2": 246,
+      "stroke": "#c3b89c",
+      "sw": 2,
+      "cap": "round",
+      "part": "humerus"
+    },
+    {
+      "t": "circle",
+      "cx": 180,
+      "cy": 248,
+      "r": 17,
+      "fill": "#e7e9f1",
+      "stroke": "#9aa3b8",
+      "sw": 2
+    },
+    {
+      "t": "line",
+      "x1": 180,
+      "y1": 248,
+      "x2": 92,
+      "y2": 168,
+      "stroke": "#f2eee4",
+      "sw": 18,
+      "cap": "round",
+      "part": "forearm"
+    },
+    {
+      "t": "line",
+      "x1": 180,
+      "y1": 248,
+      "x2": 92,
+      "y2": 168,
+      "stroke": "#c3b89c",
+      "sw": 2,
+      "cap": "round",
+      "part": "forearm"
+    },
+    {
+      "t": "path",
+      "d": "M 168 104 Q 126 160 132 232",
+      "fill": "none",
+      "stroke": "#c94f4f",
+      "sw": 26,
+      "cap": "round",
+      "part": "biceps"
+    },
+    {
+      "t": "path",
+      "d": "M 196 104 Q 208 168 200 240",
+      "fill": "none",
+      "stroke": "#e9b9b9",
+      "sw": 13,
+      "cap": "round",
+      "part": "triceps"
+    },
+    {
+      "t": "text",
+      "x": 108,
+      "y": 258,
+      "tx": "肱二头肌 收缩",
+      "size": 13,
+      "fill": "#b03f3f",
+      "anchor": "middle",
+      "weight": 600
+    },
+    {
+      "t": "text",
+      "x": 246,
+      "y": 258,
+      "tx": "肱三头肌 舒张",
+      "size": 13,
+      "fill": "#a08888",
+      "anchor": "middle",
+      "weight": 600
+    },
+    {
+      "t": "circle",
+      "cx": 720,
+      "cy": 82,
+      "r": 15,
+      "fill": "#d8dbe6",
+      "stroke": "#9aa3b8",
+      "sw": 2
+    },
+    {
+      "t": "line",
+      "x1": 720,
+      "y1": 82,
+      "x2": 720,
+      "y2": 246,
+      "stroke": "#f2eee4",
+      "sw": 22,
+      "cap": "round",
+      "part": "humerus"
+    },
+    {
+      "t": "line",
+      "x1": 720,
+      "y1": 82,
+      "x2": 720,
+      "y2": 246,
+      "stroke": "#c3b89c",
+      "sw": 2,
+      "cap": "round",
+      "part": "humerus"
+    },
+    {
+      "t": "circle",
+      "cx": 720,
+      "cy": 248,
+      "r": 17,
+      "fill": "#e7e9f1",
+      "stroke": "#9aa3b8",
+      "sw": 2
+    },
+    {
+      "t": "line",
+      "x1": 720,
+      "y1": 248,
+      "x2": 720,
+      "y2": 412,
+      "stroke": "#f2eee4",
+      "sw": 18,
+      "cap": "round",
+      "part": "forearm"
+    },
+    {
+      "t": "line",
+      "x1": 720,
+      "y1": 248,
+      "x2": 720,
+      "y2": 412,
+      "stroke": "#c3b89c",
+      "sw": 2,
+      "cap": "round",
+      "part": "forearm"
+    },
+    {
+      "t": "path",
+      "d": "M 706 104 Q 694 168 702 240",
+      "fill": "none",
+      "stroke": "#e9b9b9",
+      "sw": 13,
+      "cap": "round",
+      "part": "biceps"
+    },
+    {
+      "t": "path",
+      "d": "M 738 104 Q 750 160 744 236",
+      "fill": "none",
+      "stroke": "#c94f4f",
+      "sw": 26,
+      "cap": "round",
+      "part": "triceps"
+    },
+    {
+      "t": "text",
+      "x": 648,
+      "y": 258,
+      "tx": "肱二头肌 舒张",
+      "size": 13,
+      "fill": "#a08888",
+      "anchor": "middle",
+      "weight": 600
+    },
+    {
+      "t": "text",
+      "x": 786,
+      "y": 258,
+      "tx": "肱三头肌 收缩",
+      "size": 13,
+      "fill": "#b03f3f",
+      "anchor": "middle",
+      "weight": 600
+    },
+    {
+      "t": "rect",
+      "x": 430,
+      "y": 150,
+      "w": 40,
+      "h": 106,
+      "rx": 6,
+      "fill": "#f2eee4",
+      "stroke": "#c3b89c",
+      "sw": 2.4,
+      "part": "humerus"
+    },
+    {
+      "t": "circle",
+      "cx": 450,
+      "cy": 292,
+      "r": 34,
+      "fill": "#f2eee4",
+      "stroke": "#c3b89c",
+      "sw": 2.4,
+      "part": "joint_head"
+    },
+    {
+      "t": "rect",
+      "x": 430,
+      "y": 356,
+      "w": 40,
+      "h": 110,
+      "rx": 6,
+      "fill": "#f2eee4",
+      "stroke": "#c3b89c",
+      "sw": 2.4,
+      "part": "forearm"
+    },
+    {
+      "t": "path",
+      "d": "M 408 358 C 408 312 492 312 492 358 Z",
+      "fill": "#f2eee4",
+      "stroke": "#c3b89c",
+      "sw": 2.4,
+      "part": "joint_fossa"
+    },
+    {
+      "t": "path",
+      "d": "M 416 314 A 34 34 0 0 0 484 314",
+      "fill": "none",
+      "stroke": "#8fb8d8",
+      "sw": 7,
+      "cap": "round",
+      "part": "cartilage"
+    },
+    {
+      "t": "path",
+      "d": "M 411 326 A 40 40 0 0 0 489 326",
+      "fill": "none",
+      "stroke": "#f2d69f",
+      "sw": 6,
+      "cap": "round",
+      "part": "cavity"
+    },
+    {
+      "t": "path",
+      "d": "M 404 246 C 394 292 394 330 408 358 M 496 246 C 506 292 506 330 492 358",
+      "fill": "none",
+      "stroke": "#c98a9a",
+      "sw": 4,
+      "cap": "round",
+      "part": "capsule"
+    }
+  ],
+  "labels": [
+    {
+      "p": "joint_head",
+      "text": "关节头",
+      "from": [
+        336,
+        216
+      ],
+      "to": [
+        420,
+        274
+      ],
+      "anchor": "end"
+    },
+    {
+      "p": "joint_fossa",
+      "text": "关节窝",
+      "from": [
+        566,
+        384
+      ],
+      "to": [
+        494,
+        352
+      ],
+      "anchor": "start"
+    },
+    {
+      "p": "cartilage",
+      "text": "关节软骨",
+      "from": [
+        336,
+        344
+      ],
+      "to": [
+        416,
+        320
+      ],
+      "anchor": "end"
+    },
+    {
+      "p": "cavity",
+      "text": "关节腔（滑液）",
+      "from": [
+        566,
+        292
+      ],
+      "to": [
+        488,
+        312
+      ],
+      "anchor": "start"
+    },
+    {
+      "p": "capsule",
+      "text": "关节囊",
+      "from": [
+        336,
+        276
+      ],
+      "to": [
+        400,
+        258
+      ],
+      "anchor": "end"
+    }
+  ]
+}

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>关节与肌肉的配合 · 八上 · 生物</title>
+<style>
+  :root{
+    --bg:#f4f6fb; --panel:#fff; --ink:#1d2333; --ink2:#4b5468; --muted:#8b93a7;
+    --line:#e3e6f0; --brand:#5b5bd6; --soft:#eeedfd;
+    --warn:#a8461f; --warnbg:#fff5f0; --warnline:#f6d3c2;
+    --shadow:0 1px 2px rgba(29,35,51,.05),0 10px 30px -20px rgba(29,35,51,.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC","Segoe UI",system-ui,sans-serif;
+    background:var(--bg); color:var(--ink); font-size:16px; line-height:1.65;
+    min-height:100vh; display:flex; flex-direction:column;
+    -webkit-font-smoothing:antialiased;
+  }
+  header{padding:14px 24px 12px; background:#fff; border-bottom:1px solid var(--line)}
+  .topbar{display:flex; align-items:center; gap:14px; font-size:13px}
+  .back{
+    color:var(--brand); text-decoration:none; font-weight:600;
+    border:1px solid #dedcfb; background:var(--soft); border-radius:7px;
+    padding:2px 10px; white-space:nowrap;
+  }
+  .back:hover{background:#e4e3fc}
+  .crumb{font-size:13px; color:var(--muted); letter-spacing:.2px}
+  h1{font-size:25px; font-weight:700; letter-spacing:-.3px; margin-top:1px}
+  .sub{font-size:14px; color:var(--ink2); margin-top:3px}
+  .tools{display:flex; gap:10px; align-items:center; margin-top:12px; flex-wrap:wrap}
+  .seg{display:inline-flex; background:#eef0f7; border-radius:10px; padding:3px}
+  .seg button{
+    border:0; background:transparent; font:inherit; font-size:14px; font-weight:500;
+    color:var(--ink2); padding:6px 15px; border-radius:8px; cursor:pointer;
+    transition:background .15s,color .15s;
+  }
+  .seg button:hover{color:var(--ink)}
+  .seg button.on{background:#fff; color:var(--brand); box-shadow:0 1px 3px rgba(29,35,51,.13)}
+  .ghost{
+    border:1px solid var(--line); background:#fff; border-radius:9px;
+    padding:6px 13px; font:inherit; font-size:13.5px; color:var(--ink2); cursor:pointer;
+  }
+  .ghost:hover{border-color:#c4c9dd; color:var(--ink)}
+  .ghost.off{background:#f1f2f8; color:var(--muted)}
+  main{
+    flex:1; display:grid; grid-template-columns:minmax(0,1fr) 396px;
+    grid-template-rows:minmax(0,1fr);
+    gap:16px; padding:16px 20px 8px; min-height:0;
+  }
+  .canvas-wrap{
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:6px; display:flex; min-height:0;
+  }
+  svg{width:100%; height:100%; display:block; min-height:0}
+  .panel{
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:20px 20px 26px; overflow:auto;
+  }
+  .panel h3{font-size:21px; font-weight:700; letter-spacing:-.2px}
+  .panel .en{display:block; font-size:12.5px; color:var(--muted); font-style:italic; margin-top:1px}
+  .panel .tag{
+    display:inline-block; font-size:12px; font-weight:600; color:var(--brand);
+    background:var(--soft); border:1px solid #dedcfb; border-radius:6px;
+    padding:1px 8px; margin-top:8px;
+  }
+  .p-sec{margin-top:18px}
+  .p-sec h4{
+    font-size:12.5px; font-weight:700; color:var(--muted); letter-spacing:1.2px;
+    margin-bottom:5px;
+  }
+  .p-sec p{font-size:16px; color:var(--ink2)}
+  .p-sec.warn{
+    background:var(--warnbg); border:1px solid var(--warnline);
+    border-radius:10px; padding:12px 14px;
+  }
+  .p-sec.warn h4{color:var(--warn); letter-spacing:1px}
+  .p-sec.warn p{color:#7d3617}
+  .hero p.goal{
+    font-size:16px; color:var(--ink2); margin-top:12px;
+    background:#f7f7fe; border-left:3px solid var(--brand);
+    border-radius:0 8px 8px 0; padding:10px 14px;
+  }
+  .hero p.goal b{color:var(--ink)}
+  .hero .tips{margin:16px 0 0 20px; font-size:14.5px; color:var(--ink2)}
+  .hero .tips li{margin-bottom:6px}
+  .keys{
+    margin-top:18px; padding-top:14px; border-top:1px dashed var(--line);
+    font-size:12.5px; color:var(--muted); line-height:1.9;
+  }
+  .keys span{display:inline-block; margin-right:12px; white-space:nowrap}
+  .keys kbd{
+    font-family:Consolas,monospace; font-size:11.5px; background:#f1f2f8;
+    border:1px solid #dde0ec; border-bottom-width:2px; border-radius:4px;
+    padding:0 5px; color:var(--ink2);
+  }
+  .cmp{width:100%; border-collapse:collapse; margin-top:16px; font-size:13.5px}
+  .cmp th,.cmp td{border-bottom:1px solid var(--line); padding:5px 6px; text-align:left}
+  .cmp th{font-size:11.5px; color:var(--muted); font-weight:700; letter-spacing:.5px; padding-bottom:6px}
+  .cmp td:first-child{font-weight:600; color:var(--ink)}
+  .cmp .yes{color:#2f6b45}
+  .cmp .no{color:#b9c0d0}
+  footer{
+    padding:6px 24px 14px; font-size:12.5px; color:var(--muted);
+    display:flex; gap:18px; flex-wrap:wrap;
+  }
+  footer b{color:var(--ink2); font-weight:600}
+
+  [data-part]{cursor:pointer; transition:opacity .18s}
+  [data-part]:hover{opacity:.84}
+  [data-part].dim{opacity:.13}
+  body.has-sel [data-part]{opacity:.22}
+  body.has-sel [data-part].sel{opacity:1}
+  .lb text{pointer-events:none}
+  svg.hide-lb .lb{display:none}
+
+  @media (max-width:1180px){
+    body{height:auto; overflow:auto}
+    main{grid-template-columns:1fr; grid-template-rows:minmax(280px,1fr) auto}
+    .panel{max-height:330px}
+    h1{font-size:21px}
+  }
+  @media print{
+    header .tools,footer{display:none}
+    body{background:#fff}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <a class="back" href="../../index.html">← 全部模型</a>
+    <span class="crumb">生物 · 八上 · 第四单元 人体生理与健康（二） · 6.3</span>
+  </div>
+  <h1>关节与肌肉的配合</h1>
+  <p class="sub">同一只手臂，两个姿态并排摆着。看清哪块肌肉粗、哪块细——肌肉只能拉不能推，所以每个动作都要两组对着干。</p>
+  <div class="tools">
+    <div class="seg" id="mode"></div>
+    <button type="button" class="ghost" id="btnLabel">隐藏标注　L</button>
+    <button type="button" class="ghost" id="btnFull">全屏　F</button>
+  </div>
+</header>
+
+<main>
+  <div class="canvas-wrap">
+    <svg id="cv" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+  <aside class="panel" id="panel"></aside>
+</main>
+
+<footer>
+  <span><b>教材位置</b>　八上 · 第四单元 人体生理与健康（二） · 6.3</span>
+  <span><b>课标要求</b>　理解</span>
+  <span><b>建议用时</b>　15–20 分钟</span>
+</footer>
+
+<script>
+window.__APP__ = {"canvas":{"w":900,"h":560},"hero":{"title":"关节与肌肉：一个动作，两组配合","goal":"肌肉只能收缩、不能推开，所以每个动作都需要两组肌肉对着干：一组收缩，另一组就舒张。屈肘时肱二头肌收缩，伸肘时肱三头肌收缩。","tips":["先对比左右两栏：同一个手臂，两个姿态","点任意一块肌肉，看它在屈肘和伸肘时分别干什么","最后看中间的关节放大：关节头、关节窝、软骨、关节腔各管什么"]},"groups":[{"label":"骨骼与肌肉","title":"一个动作，两组配合","lead":"左右两栏是同一只手臂的两个姿态。注意每块肌肉的粗细——粗的是收缩状态。","items":"肱骨 · 前臂骨 · 肱二头肌 · 肱三头肌","tip":"肌肉只能「拉」，不能「推」。所以要有对抗的一组：一组收缩把骨头拉过去，另一组舒张让开。","ids":["humerus","forearm","biceps","triceps"]},{"label":"关节结构","title":"关节：既灵活又牢固","lead":"关节由关节头、关节窝、关节软骨、关节囊和关节腔组成。","items":"关节头 · 关节窝 · 关节软骨 · 关节囊 · 关节腔","tip":"关节软骨和关节腔里的滑液<b>减少摩擦</b>，关节囊把关节<b>加固</b>——灵活和牢固是一对矛盾，关节两头都占。","ids":["joint_head","joint_fossa","cartilage","capsule","cavity"]}],"parts":[{"id":"humerus","name":"肱骨","en":"humerus","only":"上臂的骨","desc":"上臂里的一根长骨，上端连着肩，下端参与构成肘关节。","role":"作为杠杆，肌肉收缩时拉动它，才产生动作。","warn":"骨本身不会动，是<b>肌肉收缩</b>拉动骨、骨绕着关节转，才有动作。"},{"id":"forearm","name":"前臂骨","en":"radius & ulna","only":"前臂的两根骨","desc":"桡骨和尺骨，上端与肱骨构成肘关节。","role":"被肌肉拉动后绕肘关节转动，手就抬起来或放下去。","warn":"肘关节是<b>肱骨和前臂骨</b>构成的，不是「两块肌肉构成的关节」。"},{"id":"biceps","name":"肱二头肌","en":"biceps brachii","only":"屈肘时收缩","desc":"上臂前侧（图左侧）的一块骨骼肌，有两个头起于肩部。","role":"<b>屈肘时收缩</b>，变短变粗，把前臂拉起来；<b>伸肘时舒张</b>，让前臂放下去。","warn":"屈肘时肱二头肌<b>收缩</b>，不是「两组都收缩」。这是本节最高频的错。"},{"id":"triceps","name":"肱三头肌","en":"triceps brachii","only":"伸肘时收缩","desc":"上臂后侧（图右侧）的一块骨骼肌，有三个头。","role":"<b>伸肘时收缩</b>，把前臂推下去；<b>屈肘时舒张</b>，让前臂能抬起来。","warn":"两块肌肉永远一紧一松。同时收缩会「僵住」，同时舒张则动不了。"},{"id":"joint_head","name":"关节头","en":"articular head","only":"凸出的那一端","desc":"上方骨末端膨大的球状部分。","role":"嵌进关节窝里，让骨能绕着它转动。","warn":"关节头是<b>骨的一端</b>，不是独立的一块小骨头。"},{"id":"joint_fossa","name":"关节窝","en":"glenoid fossa","only":"凹进去的那一端","desc":"下方骨末端凹陷的部分，正好接住关节头。","role":"与关节头配合，形成可以转动的连接。","warn":"「关节头凸、关节窝凹」——一凸一凹才扣得上，记的时候成对记。"},{"id":"cartilage","name":"关节软骨","en":"articular cartilage","only":"减少摩擦","desc":"覆盖在关节头和关节窝表面的一层光滑软骨。","role":"表面光滑有弹性，减少骨与骨之间的摩擦，还能缓冲震动。","warn":"关节软骨是覆盖在骨的<b>表面</b>的一层，不是「骨里面的一块软骨」。"},{"id":"cavity","name":"关节腔","en":"joint cavity","only":"装着滑液","desc":"关节头和关节窝之间的空隙。","role":"腔内有滑液，起润滑作用，让关节转动更灵活。","warn":"关节腔是<b>空隙</b>，里面是滑液，不是「一块软骨」也不是「空的什么都没有」。"},{"id":"capsule","name":"关节囊","en":"joint capsule","only":"把关节加固","desc":"包在关节外面的一层结缔组织膜。","role":"把关节头和关节窝牢牢包在一起，使关节既灵活又牢固。","warn":"关节囊负责「<b>牢固</b>」，关节软骨和滑液负责「<b>灵活</b>」——分工别混。"}],"compare":{"head":["动作","肱二头肌","肱三头肌"],"rows":[["屈肘","收缩","舒张"],["伸肘","舒张","收缩"]]},"shapes":[{"t":"text","x":180,"y":40,"tx":"屈肘","size":17,"fill":"#1d2333","anchor":"middle","weight":700},{"t":"text","x":720,"y":40,"tx":"伸肘","size":17,"fill":"#1d2333","anchor":"middle","weight":700},{"t":"text","x":450,"y":40,"tx":"关节（放大）","size":17,"fill":"#1d2333","anchor":"middle","weight":700},{"t":"circle","cx":180,"cy":82,"r":15,"fill":"#d8dbe6","stroke":"#9aa3b8","sw":2},{"t":"line","x1":180,"y1":82,"x2":180,"y2":246,"stroke":"#f2eee4","sw":22,"cap":"round","part":"humerus"},{"t":"line","x1":180,"y1":82,"x2":180,"y2":246,"stroke":"#c3b89c","sw":2,"cap":"round","part":"humerus"},{"t":"circle","cx":180,"cy":248,"r":17,"fill":"#e7e9f1","stroke":"#9aa3b8","sw":2},{"t":"line","x1":180,"y1":248,"x2":92,"y2":168,"stroke":"#f2eee4","sw":18,"cap":"round","part":"forearm"},{"t":"line","x1":180,"y1":248,"x2":92,"y2":168,"stroke":"#c3b89c","sw":2,"cap":"round","part":"forearm"},{"t":"path","d":"M 168 104 Q 126 160 132 232","fill":"none","stroke":"#c94f4f","sw":26,"cap":"round","part":"biceps"},{"t":"path","d":"M 196 104 Q 208 168 200 240","fill":"none","stroke":"#e9b9b9","sw":13,"cap":"round","part":"triceps"},{"t":"text","x":108,"y":258,"tx":"肱二头肌 收缩","size":13,"fill":"#b03f3f","anchor":"middle","weight":600},{"t":"text","x":246,"y":258,"tx":"肱三头肌 舒张","size":13,"fill":"#a08888","anchor":"middle","weight":600},{"t":"circle","cx":720,"cy":82,"r":15,"fill":"#d8dbe6","stroke":"#9aa3b8","sw":2},{"t":"line","x1":720,"y1":82,"x2":720,"y2":246,"stroke":"#f2eee4","sw":22,"cap":"round","part":"humerus"},{"t":"line","x1":720,"y1":82,"x2":720,"y2":246,"stroke":"#c3b89c","sw":2,"cap":"round","part":"humerus"},{"t":"circle","cx":720,"cy":248,"r":17,"fill":"#e7e9f1","stroke":"#9aa3b8","sw":2},{"t":"line","x1":720,"y1":248,"x2":720,"y2":412,"stroke":"#f2eee4","sw":18,"cap":"round","part":"forearm"},{"t":"line","x1":720,"y1":248,"x2":720,"y2":412,"stroke":"#c3b89c","sw":2,"cap":"round","part":"forearm"},{"t":"path","d":"M 706 104 Q 694 168 702 240","fill":"none","stroke":"#e9b9b9","sw":13,"cap":"round","part":"biceps"},{"t":"path","d":"M 738 104 Q 750 160 744 236","fill":"none","stroke":"#c94f4f","sw":26,"cap":"round","part":"triceps"},{"t":"text","x":648,"y":258,"tx":"肱二头肌 舒张","size":13,"fill":"#a08888","anchor":"middle","weight":600},{"t":"text","x":786,"y":258,"tx":"肱三头肌 收缩","size":13,"fill":"#b03f3f","anchor":"middle","weight":600},{"t":"rect","x":430,"y":150,"w":40,"h":106,"rx":6,"fill":"#f2eee4","stroke":"#c3b89c","sw":2.4,"part":"humerus"},{"t":"circle","cx":450,"cy":292,"r":34,"fill":"#f2eee4","stroke":"#c3b89c","sw":2.4,"part":"joint_head"},{"t":"rect","x":430,"y":356,"w":40,"h":110,"rx":6,"fill":"#f2eee4","stroke":"#c3b89c","sw":2.4,"part":"forearm"},{"t":"path","d":"M 408 358 C 408 312 492 312 492 358 Z","fill":"#f2eee4","stroke":"#c3b89c","sw":2.4,"part":"joint_fossa"},{"t":"path","d":"M 416 314 A 34 34 0 0 0 484 314","fill":"none","stroke":"#8fb8d8","sw":7,"cap":"round","part":"cartilage"},{"t":"path","d":"M 411 326 A 40 40 0 0 0 489 326","fill":"none","stroke":"#f2d69f","sw":6,"cap":"round","part":"cavity"},{"t":"path","d":"M 404 246 C 394 292 394 330 408 358 M 496 246 C 506 292 506 330 492 358","fill":"none","stroke":"#c98a9a","sw":4,"cap":"round","part":"capsule"}],"labels":[{"p":"joint_head","text":"关节头","from":[336,216],"to":[420,274],"anchor":"end"},{"p":"joint_fossa","text":"关节窝","from":[566,384],"to":[494,352],"anchor":"start"},{"p":"cartilage","text":"关节软骨","from":[336,344],"to":[416,320],"anchor":"end"},{"p":"cavity","text":"关节腔（滑液）","from":[566,292],"to":[488,312],"anchor":"start"},{"p":"capsule","text":"关节囊","from":[336,276],"to":[400,258],"anchor":"end"}]};
+(function(){
+  "use strict";
+  var D = window.__APP__;
+  var NS = "http://www.w3.org/2000/svg";
+  var svg = document.getElementById("cv");
+  var panel = document.getElementById("panel");
+  var mode = "all";
+
+  svg.setAttribute("viewBox", "0 0 " + D.canvas.w + " " + D.canvas.h);
+
+  function mk(tag, a){
+    var e = document.createElementNS(NS, tag);
+    if(a){ for(var k in a){ if(a[k] !== null && a[k] !== undefined) e.setAttribute(k, a[k]); } }
+    return e;
+  }
+
+  function shape(s){
+    var node;
+    if(s.t === "rect"){
+      node = mk("rect", {x:s.x, y:s.y, width:s.w, height:s.h, rx:s.rx||0,
+        fill:s.fill||"none", stroke:s.stroke||"none", "stroke-width":s.sw||0});
+    } else if(s.t === "ellipse"){
+      node = mk("ellipse", {cx:s.cx, cy:s.cy, rx:s.rx, ry:s.ry,
+        fill:s.fill||"none", stroke:s.stroke||"none", "stroke-width":s.sw||0});
+      if(s.rot) node.setAttribute("transform", "rotate(" + s.rot + " " + s.cx + " " + s.cy + ")");
+    } else if(s.t === "circle"){
+      node = mk("circle", {cx:s.cx, cy:s.cy, r:s.r,
+        fill:s.fill||"none", stroke:s.stroke||"none", "stroke-width":s.sw||0});
+    } else if(s.t === "path"){
+      node = mk("path", {d:s.d, fill:s.fill||"none", stroke:s.stroke||"none", "stroke-width":s.sw||0});
+    } else if(s.t === "line"){
+      node = mk("line", {x1:s.x1, y1:s.y1, x2:s.x2, y2:s.y2,
+        stroke:s.stroke||"none", "stroke-width":s.sw||1, "stroke-dasharray":s.dash||null});
+      node.setAttribute("fill", "none");
+    } else if(s.t === "text"){
+      node = mk("text", {x:s.x, y:s.y, "font-size":s.size||15, fill:s.fill||"#1d2333",
+        "text-anchor":s.anchor||"middle", "dominant-baseline":"middle",
+        "font-weight":s.weight||400});
+      node.textContent = s.tx;
+    }
+    return node;
+  }
+
+  function buildFringe(f){
+    var g = mk("g", {"data-part": f.part});
+    var n = f.n || 36;
+    for(var i=0;i<n;i++){
+      var a = i * 2 * Math.PI / n;
+      var x = f.cx + f.rx * Math.cos(a);
+      var y = f.cy + f.ry * Math.sin(a);
+      var nx = Math.cos(a) / f.rx, ny = Math.sin(a) / f.ry;
+      var len = Math.sqrt(nx*nx + ny*ny);
+      nx /= len; ny /= len;
+      var ln = mk("line", {x1:x, y1:y, x2:x + nx*f.len, y2:y + ny*f.len,
+        stroke:f.color || "#8a94a8", "stroke-width":f.sw || 2.2, "stroke-linecap":"round"});
+      ln.setAttribute("fill", "none");
+      g.appendChild(ln);
+      if(f.dot){
+        g.appendChild(mk("circle", {cx:x + nx*f.len, cy:y + ny*f.len, r:f.dot, fill:f.color}));
+      }
+    }
+    return g;
+  }
+
+  var groups = {};
+  (D.shapes || []).forEach(function(s){
+    var node = shape(s);
+    if(!node) return;
+    if(s.part){
+      if(!groups[s.part]){
+        groups[s.part] = mk("g", {"data-part":s.part});
+        svg.appendChild(groups[s.part]);
+        groups[s.part]._part = s.part;
+      }
+      groups[s.part].appendChild(node);
+    } else {
+      svg.appendChild(node);
+    }
+  });
+
+  if(D.fringe){ svg.appendChild(buildFringe(D.fringe)); }
+
+  (D.labels || []).forEach(function(L){
+    var g = mk("g", {"class":"lb"});
+    g.setAttribute("data-part", L.p);
+    var from = L.from, to = L.to;
+    var line = mk("line", {x1:from[0], y1:from[1], x2:to[0], y2:to[1],
+      stroke:"#a4acc0", "stroke-width":1, "stroke-dasharray":"3 3"});
+    line.setAttribute("fill", "none");
+    g.appendChild(line);
+    g.appendChild(mk("circle", {cx:to[0], cy:to[1], r:3.2, fill:"#7b8497"}));
+    var t = mk("text", {
+      x: from[0] + (L.anchor === "end" ? -5 : (L.anchor === "start" ? 5 : 0)),
+      y: from[1],
+      "font-size": L.size || 14,
+      fill: "#3c465c",
+      "text-anchor": L.anchor || "end",
+      "dominant-baseline": "middle",
+      "font-weight": 500
+    });
+    t.textContent = L.text;
+    g.appendChild(t);
+    svg.appendChild(g);
+  });
+
+  function clearSel(){
+    document.body.classList.remove("has-sel");
+    var on = svg.querySelectorAll(".sel");
+    for(var i=0;i<on.length;i++) on[i].classList.remove("sel");
+  }
+
+  function markSel(id){
+    clearSel();
+    document.body.classList.add("has-sel");
+    var ns = svg.querySelectorAll('[data-part="' + id + '"]');
+    for(var i=0;i<ns.length;i++) ns[i].classList.add("sel");
+  }
+
+  function partById(id){
+    for(var i=0;i<D.parts.length;i++){ if(D.parts[i].id === id) return D.parts[i]; }
+    return null;
+  }
+
+  function renderPart(id){
+    var p = partById(id);
+    if(!p) return renderHero();
+    var html = '<h3>' + p.name + '</h3>';
+    if(p.en) html += '<span class="en">' + p.en + '</span>';
+    if(p.only) html += '<span class="tag">' + p.only + '</span>';
+    html += '<div class="p-sec"><h4>是什么</h4><p>' + p.desc + '</p></div>';
+    html += '<div class="p-sec"><h4>作用</h4><p>' + p.role + '</p></div>';
+    if(p.warn) html += '<div class="p-sec warn"><h4>易错点</h4><p>' + p.warn + '</p></div>';
+    panel.innerHTML = html;
+  }
+
+  function renderHero(){
+    var cmp = "";
+    if(D.compare && D.compare.rows){
+      var rows = D.compare.rows.map(function(r){
+        var cells = r.slice(1).map(function(v){
+          return '<td class="' + (v === "无" ? "no" : "yes") + '">' + v + "</td>";
+        }).join("");
+        return "<tr><td>" + r[0] + "</td>" + cells + "</tr>";
+      }).join("");
+      cmp = '<table class="cmp"><thead><tr>' +
+        D.compare.head.map(function(h){ return "<th>" + h + "</th>"; }).join("") +
+        "</tr></thead><tbody>" + rows + "</tbody></table>";
+    }
+    panel.innerHTML =
+      '<h3>' + D.hero.title + '</h3>' +
+      '<p class="goal">看完这一页，你要能说出：<b>' + D.hero.goal + '</b></p>' +
+      '<ol class="tips">' + D.hero.tips.map(function(x){ return '<li>' + x + '</li>'; }).join('') + '</ol>' +
+      cmp +
+      '<div class="keys">' +
+        '<span><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> 切模式</span>' +
+        '<span><kbd>L</kbd> 隐藏标注</span>' +
+        '<span><kbd>F</kbd> 全屏</span>' +
+        '<span><kbd>Esc</kbd> 取消选择</span>' +
+      '</div>';
+  }
+
+  function getGroups(){
+    if(D.groups && D.groups.length) return D.groups;
+    var g = [];
+    if(D.same) g.push({ label:"共同结构", title:D.groupSame.title, lead:D.groupSame.lead,
+      items:D.groupSame.items, tip:D.groupSame.tip, ids:D.same });
+    if(D.diff) g.push({ label:"不同结构", title:D.groupDiff.title, lead:D.groupDiff.lead,
+      items:D.groupDiff.items, tip:D.groupDiff.tip, ids:D.diff });
+    return g;
+  }
+
+  function buildModeButtons(){
+    var gs = getGroups();
+    var h = '<button type="button" data-mode="all" class="on">全部结构</button>';
+    gs.forEach(function(g, i){
+      h += '<button type="button" data-mode="g' + i + '">' + g.label + '</button>';
+    });
+    document.getElementById("mode").innerHTML = h;
+  }
+
+  function renderGroupData(g){
+    panel.innerHTML =
+      '<h3>' + g.title + '</h3>' +
+      '<p class="goal">' + g.lead + '</p>' +
+      (g.items ? '<div class="p-sec"><h4>包含</h4><p>' + g.items + '</p></div>' : '') +
+      (g.tip ? '<div class="p-sec warn"><h4>记法</h4><p>' + g.tip + '</p></div>' : '');
+  }
+
+  function applyDim(keep){
+    var ns = svg.querySelectorAll("[data-part]");
+    for(var i=0;i<ns.length;i++){
+      var p = ns[i].getAttribute("data-part");
+      var off = keep && keep.indexOf(p) < 0;
+      ns[i].classList.toggle("dim", !!off);
+    }
+  }
+
+  function setMode(m){
+    mode = m;
+    var btns = document.querySelectorAll("#mode button");
+    for(var i=0;i<btns.length;i++) btns[i].classList.toggle("on", btns[i].getAttribute("data-mode") === m);
+    clearSel();
+    if(m === "all"){ applyDim(null); renderHero(); return; }
+    var g = getGroups()[+m.slice(1)];
+    if(!g){ applyDim(null); renderHero(); return; }
+    applyDim(g.ids);
+    renderGroupData(g);
+  }
+
+  svg.addEventListener("click", function(e){
+    var n = e.target.closest("[data-part]");
+    if(!n){ clearSel(); renderHero(); return; }
+    var id = n.getAttribute("data-part");
+    markSel(id);
+    renderPart(id);
+  });
+
+  var br = document.getElementById("mode");
+  br.addEventListener("click", function(e){
+    var b = e.target.closest("button[data-mode]");
+    if(b) setMode(b.getAttribute("data-mode"));
+  });
+
+  var lbBtn = document.getElementById("btnLabel");
+  lbBtn.addEventListener("click", function(){
+    var off = svg.classList.toggle("hide-lb");
+    lbBtn.classList.toggle("off", off);
+    lbBtn.textContent = off ? "显示标注　L" : "隐藏标注　L";
+  });
+
+  var fullBtn = document.getElementById("btnFull");
+  function toggleFull(){
+    if(!document.fullscreenElement){
+      if(document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+    } else if(document.exitFullscreen){
+      document.exitFullscreen();
+    }
+  }
+  fullBtn.addEventListener("click", toggleFull);
+
+  document.addEventListener("keydown", function(e){
+    var k = e.key;
+    if(k >= "1" && k <= "9"){
+      var idx = +k - 1;
+      if(idx === 0) setMode("all");
+      else if(idx - 1 < getGroups().length) setMode("g" + (idx - 1));
+    }
+    else if(k === "Escape"){ clearSel(); renderHero(); setMode("all"); }
+    else if(k === "l" || k === "L") lbBtn.click();
+    else if(k === "f" || k === "F") toggleFull();
+  });
+
+  buildModeButtons();
+  setMode("all");
+
+  window.__SELFTEST__ = function(){
+    var errs = [];
+    if(!D.parts || !D.parts.length) errs.push("parts 为空");
+    if(!D.shapes || !D.shapes.length) errs.push("shapes 为空");
+    var ids = {};
+    (D.parts||[]).forEach(function(p){ ids[p.id] = 1; if(!p.name || !p.desc || !p.role) errs.push("部位字段缺失: " + p.id); });
+    (D.shapes||[]).forEach(function(s){ if(s.part && !ids[s.part]) errs.push("shape 引用了未知部位: " + s.part); });
+    (D.labels||[]).forEach(function(l){ if(!ids[l.p]) errs.push("label 引用了未知部位: " + l.p); });
+    (D.same||[]).forEach(function(p){ if(!ids[p]) errs.push("same 引用了未知部位: " + p); });
+    (D.diff||[]).forEach(function(p){ if(!ids[p]) errs.push("diff 引用了未知部位: " + p); });
+    getGroups().forEach(function(g){
+      (g.ids||[]).forEach(function(p){ if(!ids[p]) errs.push("分组「" + g.label + "」引用了未知部位: " + p); });
+    });
+    if(svg.querySelectorAll("[data-part]").length === 0) errs.push("SVG 没有渲染出任何部位");
+    return errs;
+  };
+
+  if(!window.__QUIET__){
+    var e = window.__SELFTEST__();
+    if(e.length) console.log("SELFTEST FAIL: " + e.join(" | "));
+    else console.log("SELFTEST PASS");
+  }
+})();
+</script>
+</body>
+</html>
