@@ -446,10 +446,13 @@ window.__APP__ = {"canvas":{"w":1000,"h":680},"legend":[{"color":"#d24b4b","text
   function applyStep(){
     var st = D.steps[S.step];
     var keep = st.parts || null;
+    var hide = st.hide || [];
     var ns = svg.querySelectorAll("[data-part]");
     for(var i=0;i<ns.length;i++){
       var p = ns[i].getAttribute("data-part");
-      ns[i].setAttribute("opacity", (keep && keep.indexOf(p) < 0) ? "0.32" : "1");
+      var op = (keep && keep.indexOf(p) < 0) ? 0.32 : 1;
+      if(hide.indexOf(p) >= 0) op = 0;   // hide 里的部分本步完全不出现
+      ns[i].setAttribute("opacity", op);
     }
     var cap = capG;
     if(cap){

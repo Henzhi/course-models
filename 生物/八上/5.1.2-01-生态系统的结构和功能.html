@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生态系统的结构和功能 · 八上 · 生物</title>
+<style>
+  :root{
+    --bg:#f4f6fb; --panel:#fff; --ink:#1d2333; --ink2:#4b5468; --muted:#8b93a7;
+    --line:#e3e6f0; --brand:#5b5bd6; --soft:#eeedfd;
+    --warn:#a8461f; --warnbg:#fff5f0; --warnline:#f6d3c2;
+    --ok:#2f6b45; --okbg:#eef7f1; --okline:#cbe5d5;
+    --shadow:0 1px 2px rgba(29,35,51,.05),0 10px 30px -20px rgba(29,35,51,.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC","Segoe UI",system-ui,sans-serif;
+    background:var(--bg); color:var(--ink); font-size:16px; line-height:1.65;
+    height:100vh; overflow:hidden;
+    display:flex; flex-direction:column; -webkit-font-smoothing:antialiased;
+  }
+  header{padding:14px 24px 12px; background:#fff; border-bottom:1px solid var(--line)}
+  .topbar{display:flex; align-items:center; gap:14px; font-size:13px}
+  .back{
+    color:var(--brand); text-decoration:none; font-weight:600;
+    border:1px solid #dedcfb; background:var(--soft); border-radius:7px;
+    padding:2px 10px; white-space:nowrap;
+  }
+  .back:hover{background:#e4e3fc}
+  .crumb{font-size:13px; color:var(--muted); letter-spacing:.2px}
+  h1{font-size:25px; font-weight:700; letter-spacing:-.3px; margin-top:1px}
+  .sub{font-size:14px; color:var(--ink2); margin-top:3px}
+  .tools{display:flex; gap:10px; align-items:center; margin-top:12px; flex-wrap:wrap}
+  .ghost{
+    border:1px solid var(--line); background:#fff; border-radius:9px;
+    padding:6px 13px; font:inherit; font-size:13.5px; color:var(--ink2); cursor:pointer;
+  }
+  .ghost:hover{border-color:#c4c9dd; color:var(--ink)}
+  .ghost.off{background:#f1f2f8; color:var(--muted)}
+  main{
+    flex:1; display:grid; grid-template-columns:minmax(0,1fr) 408px;
+    grid-template-rows:minmax(0,1fr);
+    gap:16px; padding:16px 20px 8px; min-height:0;
+  }
+  .canvas-wrap{
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:6px; display:flex; min-height:0;
+  }
+  svg{width:100%; height:100%; display:block; min-height:0}
+  .panel{
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:18px 20px 24px; overflow:auto; min-height:0;
+  }
+  .panel h3{font-size:20px; font-weight:700; letter-spacing:-.2px}
+  .panel .step-no{
+    display:inline-block; font-size:12px; font-weight:700; color:#fff;
+    background:var(--brand); border-radius:6px; padding:1px 8px; margin-right:7px;
+    vertical-align:2px;
+  }
+  .panel .en{display:block; font-size:12.5px; color:var(--muted); font-style:italic; margin-top:1px}
+  .panel .tag{
+    display:inline-block; font-size:12px; font-weight:600; color:var(--brand);
+    background:var(--soft); border:1px solid #dedcfb; border-radius:6px;
+    padding:1px 8px; margin-top:7px;
+  }
+  .goal{
+    font-size:16px; color:var(--ink2); margin-top:11px;
+    background:#f7f7fe; border-left:3px solid var(--brand);
+    border-radius:0 8px 8px 0; padding:10px 13px;
+  }
+  .goal b{color:var(--ink)}
+  .p-sec{margin-top:14px}
+  .p-sec h4{font-size:12.5px; font-weight:700; color:var(--muted); letter-spacing:1.2px; margin-bottom:4px}
+  .p-sec p{font-size:16px; color:var(--ink2)}
+  .p-sec.warn{background:var(--warnbg); border:1px solid var(--warnline); border-radius:10px; padding:11px 14px}
+  .p-sec.warn h4{color:var(--warn)}
+  .p-sec.warn p{color:#7d3617}
+  .p-sec.ok{background:var(--okbg); border:1px solid var(--okline); border-radius:10px; padding:11px 14px}
+  .p-sec.ok h4{color:var(--ok)}
+  .p-sec.ok p{color:#2a5c40}
+  .ctrl{border-top:1px dashed var(--line); padding-top:13px; margin-top:14px}
+  .ctrl:first-of-type{border-top:0; padding-top:0; margin-top:10px}
+  .ctrl .lab{font-size:12.5px; font-weight:700; color:var(--muted); letter-spacing:1px; margin-bottom:7px}
+  .steps{display:flex; gap:6px; flex-wrap:wrap}
+  .steps button{
+    border:1px solid var(--line); background:#fff; border-radius:8px;
+    padding:5px 10px; font:inherit; font-size:13px; color:var(--ink2); cursor:pointer;
+    white-space:nowrap;
+  }
+  .steps button:hover{border-color:#c4c9dd}
+  .steps button.on{background:var(--soft); border-color:#c9c3f5; color:var(--brand); font-weight:700}
+  .stepnav{display:flex; gap:7px; flex-wrap:wrap; margin:12px 0 2px}
+  .stepnav button{
+    width:40px; height:34px; border:1px solid var(--line); background:#fff; border-radius:8px;
+    font:inherit; font-size:14px; font-weight:600; color:var(--ink2); cursor:pointer;
+  }
+  .stepnav button:hover{border-color:#c4c9dd}
+  .stepnav button.on{background:var(--brand); border-color:var(--brand); color:#fff}
+  .btns{display:flex; gap:7px; flex-wrap:wrap}
+  .btns button{
+    border:1px solid var(--line); background:#fff; border-radius:8px;
+    padding:6px 13px; font:inherit; font-size:14px; color:var(--ink2); cursor:pointer;
+  }
+  .btns button:hover{border-color:#c4c9dd}
+  .btns button.on{background:var(--soft); border-color:#c9c3f5; color:var(--brand); font-weight:600}
+  .stats{display:flex; gap:8px; margin-top:12px}
+  .stat{
+    flex:1; background:#f7f8fc; border:1px solid var(--line); border-radius:10px;
+    padding:8px 10px; text-align:center;
+  }
+  .stat b{display:block; font-size:20px; line-height:1.3; font-variant-numeric:tabular-nums}
+  .stat span{font-size:11.5px; color:var(--muted)}
+  .stat.hi{background:#f2effe; border-color:#d9d3fa}
+  .stat.hi b{color:var(--brand)}
+  .legend{display:flex; flex-wrap:wrap; gap:7px 14px}
+  .legend .lg{display:inline-flex; align-items:center; gap:6px; font-size:13.5px; color:var(--ink2)}
+  .legend .lg i{width:12px; height:6px; border-radius:3px; display:inline-block; flex:none}
+  .cmp{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}
+  .cmp th,.cmp td{border-bottom:1px solid var(--line);padding:5px 6px;text-align:left;vertical-align:top}
+  .cmp th{font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.5px;padding-bottom:7px}
+  .cmp td:first-child{font-weight:600;color:var(--ink);white-space:nowrap}
+  .cmp td{color:var(--ink2)}
+  .keys{
+    margin-top:16px; padding-top:13px; border-top:1px dashed var(--line);
+    font-size:12.5px; color:var(--muted); line-height:1.9;
+  }
+  .keys span{display:inline-block; margin-right:12px; white-space:nowrap}
+  .keys kbd{
+    font-family:Consolas,monospace; font-size:11.5px; background:#f1f2f8;
+    border:1px solid #dde0ec; border-bottom-width:2px; border-radius:4px;
+    padding:0 5px; color:var(--ink2);
+  }
+  footer{
+    padding:6px 24px 14px; font-size:12.5px; color:var(--muted);
+    display:flex; gap:18px; flex-wrap:wrap;
+  }
+  footer b{color:var(--ink2); font-weight:600}
+
+  [data-part]{cursor:pointer; transition:opacity .18s}
+  [data-part]:hover{opacity:.86}
+  svg.hide-lb .lb{display:none}
+  .cap text{pointer-events:none}
+
+  @media (max-width:1180px){
+    body{height:auto; overflow:auto}
+    main{grid-template-columns:1fr; grid-template-rows:minmax(300px,1fr) auto}
+    .panel{max-height:350px}
+    h1{font-size:21px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <a class="back" href="../../index.html">← 全部模型</a>
+    <span class="crumb">生物 · 八上 · 第五单元 生物与环境 · 5.1.2</span>
+  </div>
+  <h1>生态系统的结构和功能</h1>
+  <p class="sub">三个角色加上阳光水土，织成一张食物网。再看两件方向相反的事：能量越往上越少，毒性越往上越浓。</p>
+  <div class="tools">
+    <button type="button" class="ghost" id="btnLabel">隐藏标注　L</button>
+    <button type="button" class="ghost" id="btnFull">全屏　F</button>
+  </div>
+</header>
+
+<main>
+  <div class="canvas-wrap">
+    <svg id="cv" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+  <aside class="panel" id="panel"></aside>
+</main>
+
+<footer>
+  <span><b>教材位置</b>　八上 · 第五单元 生物与环境 · 5.1.2</span>
+  <span><b>课标要求</b>　理解</span>
+  <span><b>建议用时</b>　20–25 分钟</span>
+</footer>
+
+<script>
+window.__APP__ = {"canvas":{"w":1000,"h":692},"legend":[{"color":"#4c9a6a","text":"物质与能量流动的方向"},{"color":"#c0392b","text":"有毒物质富集（越往上越浓）"}],"parts":[{"id":"grass","name":"生产者","en":"producer","only":"绿色植物","desc":"能进行光合作用、自己制造有机物的生物，主要是绿色植物。","role":"把光能变成化学能，为整个生态系统提供有机物和能量的<b>源头</b>。","warn":"食物链<b>必须从生产者开始</b>。没有草，就没有后面所有的动物。"},{"id":"rabbit","name":"初级消费者","en":"primary consumer","only":"直接吃植物","desc":"以生产者为食的动物，如兔、鼠、昆虫。","role":"把生产者制造的有机物变成动物体的有机物，是食物链的第二环。","warn":"初级消费者吃的是<b>植物</b>。它不叫「第一级」也不叫「二级」——按「第几营养级」数，它才是第二营养级。"},{"id":"fox","name":"次级消费者","en":"secondary consumer","only":"吃初级消费者","desc":"以初级消费者为食的动物，如狐、蛇、鸟。","role":"处在食物链的第三环，营养级更高，获得的能量更少。","warn":"营养级越高，<b>能量越少、数量通常也越少</b>——这就是能量金字塔下宽上窄的原因。"},{"id":"decomposer","name":"分解者","en":"decomposer","only":"细菌和真菌","desc":"营腐生生活的细菌和真菌（部分动物如蚯蚓也起分解作用）。","role":"把动植物遗体和排泄物中的有机物分解成无机物，<b>归还</b>给无机环境，供生产者再利用。","warn":"分解者<b>不写进食物链</b>。食物链写的是「谁吃谁」，分解者不吃活的生物。"},{"id":"abiotic","name":"非生物部分","en":"abiotic component","only":"阳光、空气、水、温度","desc":"生态系统中没有生命的部分。","role":"为生物提供物质和能量：阳光是能量的最终来源，水和无机盐是光合作用的原料。","warn":"非生物部分<b>也不是食物链的环节</b>，但它是生态系统不可缺少的组成。"},{"id":"pyramid","name":"能量金字塔","en":"energy pyramid","only":"下宽上窄","desc":"把各营养级所含的能量按顺序叠起来画成的图形。","role":"能量沿食物链流动时<b>逐级递减</b>，每一级只有约 10%–20% 传给下一级。","warn":"能量流动是<b>单向</b>的、<b>不能循环</b>的。这一点和物质循环正好相反。"},{"id":"bioacc","name":"生物富集","en":"biological magnification","only":"越往上越浓","desc":"有毒物质（如重金属、农药）沿食物链不断积累的现象。","role":"有毒物质难分解、难排出，会随食物链<b>逐级增多</b>，营养级越高浓度越大。","warn":"能量是<b>递减</b>的，有毒物质是<b>递增</b>的——两个方向正好相反，这是本节最容易记混的一对。"}],"routes":[{"id":"c1a","color":"#4c9a6a","w":10,"speed":0.8,"part":"grass","pts":[[282,518],[240,484],[206,452],[190,434]]},{"id":"c1b","color":"#4c9a6a","w":10,"speed":0.8,"part":"rabbit","pts":[[186,366],[164,336],[136,300]]},{"id":"c2a","color":"#4c9a6a","w":10,"speed":0.8,"part":"grass","pts":[[312,514],[324,470],[330,432]]},{"id":"c2b","color":"#4c9a6a","w":10,"speed":0.8,"part":"rabbit","pts":[[332,366],[332,330],[332,296]]},{"id":"c3a","color":"#4c9a6a","w":10,"speed":0.8,"part":"grass","pts":[[340,520],[394,492],[452,452]]},{"id":"c3b","color":"#4c9a6a","w":10,"speed":0.8,"part":"rabbit","pts":[[488,382],[498,342],[506,300]]},{"id":"c4","color":"#4c9a6a","w":10,"speed":0.8,"part":"fox","pts":[[478,268],[424,268],[366,268]]}],"shapes":[{"t":"circle","cx":100,"cy":108,"r":30,"fill":"#ffe9a8","stroke":"#e8b93c","sw":2.6,"part":"abiotic"},{"t":"path","d":"M 142 108 L 156 108 M 132 138 L 142 148 M 100 152 L 100 166 M 68 138 L 58 148 M 58 108 L 44 108 M 68 78 L 58 68 M 100 64 L 100 50 M 132 78 L 142 68","fill":"none","stroke":"#e8b93c","sw":2.6,"cap":"round","part":"abiotic"},{"t":"text","x":100,"y":196,"tx":"阳光","size":13,"fill":"#a8802f","anchor":"middle","weight":600,"lbl":true},{"t":"path","d":"M 168 210 q 14 -10 28 0 q 14 10 28 0 M 168 226 q 14 -10 28 0 q 14 10 28 0","fill":"none","stroke":"#9ec4dc","sw":3,"cap":"round","part":"abiotic"},{"t":"text","x":196,"y":250,"tx":"空气","size":13,"fill":"#6f93ad","anchor":"middle","weight":600,"lbl":true},{"t":"ellipse","cx":300,"cy":546,"rx":74,"ry":38,"fill":"#cfe6b4","stroke":"#5f8c3e","sw":2.6,"part":"grass"},{"t":"path","d":"M 268 528 q -8 -26 4 -38 M 300 522 q 0 -30 6 -44 M 332 528 q 8 -26 -2 -38","fill":"none","stroke":"#4f7a35","sw":3,"cap":"round","part":"grass"},{"t":"text","x":300,"y":552,"tx":"草","size":15,"fill":"#2f5a22","anchor":"middle","weight":700},{"t":"circle","cx":184,"cy":400,"r":36,"fill":"#e6e2da","stroke":"#a89e8c","sw":2.4,"part":"rabbit"},{"t":"path","d":"M 166 372 q -6 -26 6 -32 q 12 4 8 28 M 202 372 q 6 -26 -6 -32 q -12 4 -8 28","fill":"#e6e2da","stroke":"#a89e8c","sw":2.2,"part":"rabbit"},{"t":"text","x":184,"y":404,"tx":"兔","size":15,"fill":"#5c5346","anchor":"middle","weight":700},{"t":"circle","cx":332,"cy":400,"r":31,"fill":"#e2e6ec","stroke":"#9aa6b8","sw":2.4,"part":"rabbit"},{"t":"path","d":"M 356 414 q 26 10 22 26 q -4 12 -16 8","fill":"none","stroke":"#9aa6b8","sw":2.6,"cap":"round","part":"rabbit"},{"t":"text","x":332,"y":404,"tx":"鼠","size":15,"fill":"#4b5566","anchor":"middle","weight":700},{"t":"circle","cx":480,"cy":404,"r":26,"fill":"#f0e2c6","stroke":"#c0a878","sw":2.4,"part":"rabbit"},{"t":"path","d":"M 462 388 q -14 -16 -2 -22 q 12 -2 12 14 M 496 386 q 14 -16 2 -22 q -12 -2 -12 14","fill":"#f7eed9","stroke":"#c0a878","sw":1.8,"part":"rabbit"},{"t":"text","x":480,"y":408,"tx":"虫","size":14,"fill":"#87714a","anchor":"middle","weight":700},{"t":"circle","cx":112,"cy":268,"r":33,"fill":"#f2c9a0","stroke":"#c08a52","sw":2.4,"part":"fox"},{"t":"path","d":"M 92 244 q -8 -20 4 -22 q 12 0 10 18 M 132 244 q 8 -20 -4 -22 q -12 0 -10 18","fill":"#f2c9a0","stroke":"#c08a52","sw":2.2,"part":"fox"},{"t":"text","x":112,"y":272,"tx":"狐","size":15,"fill":"#8a5a28","anchor":"middle","weight":700},{"t":"ellipse","cx":332,"cy":268,"rx":40,"ry":26,"fill":"#cfe0d4","stroke":"#6f9a80","sw":2.4,"part":"fox"},{"t":"text","x":332,"y":272,"tx":"蛇","size":15,"fill":"#3f6a52","anchor":"middle","weight":700},{"t":"circle","cx":508,"cy":268,"r":30,"fill":"#dfe7f2","stroke":"#8fa4c0","sw":2.4,"part":"fox"},{"t":"path","d":"M 486 252 q -18 -14 -6 -24 q 14 -6 18 12 M 530 252 q 18 -14 6 -24 q -14 -6 -18 12","fill":"#eef3fa","stroke":"#8fa4c0","sw":1.8,"part":"fox"},{"t":"text","x":508,"y":272,"tx":"鸟","size":15,"fill":"#4a6180","anchor":"middle","weight":700},{"t":"path","d":"M 268 604 q 10 -12 20 0 q 10 12 20 0 M 316 604 q 10 -12 20 0 q 10 12 20 0 M 292 624 q 10 -12 20 0 q 10 12 20 0","fill":"none","stroke":"#b08a6a","sw":3,"cap":"round","part":"decomposer"},{"t":"circle","cx":262,"cy":620,"r":5,"fill":"#c9a88a","part":"decomposer"},{"t":"circle","cx":350,"cy":618,"r":5,"fill":"#c9a88a","part":"decomposer"},{"t":"text","x":368,"y":612,"tx":"细菌、真菌","size":13,"fill":"#8a6a4a","anchor":"start","weight":600,"lbl":true},{"t":"path","d":"M 690 552 L 952 552 L 918 476 L 724 476 Z","fill":"#e8f2dd","stroke":"#7aa05a","sw":2,"part":"pyramid"},{"t":"path","d":"M 724 476 L 918 476 L 884 400 L 758 400 Z","fill":"#dcecd0","stroke":"#7aa05a","sw":2,"part":"pyramid"},{"t":"path","d":"M 758 400 L 884 400 L 850 324 L 792 324 Z","fill":"#d2e6c4","stroke":"#7aa05a","sw":2,"part":"pyramid"},{"t":"path","d":"M 792 324 L 850 324 L 834 248 L 808 248 Z","fill":"#c8e0b8","stroke":"#7aa05a","sw":2,"part":"pyramid"},{"t":"text","x":821,"y":514,"tx":"100%","size":14,"fill":"#3d5f28","anchor":"middle","weight":700,"lbl":true,"part":"evlabel"},{"t":"text","x":821,"y":438,"tx":"10–20%","size":14,"fill":"#3d5f28","anchor":"middle","weight":700,"lbl":true,"part":"evlabel"},{"t":"text","x":821,"y":362,"tx":"1–2%","size":14,"fill":"#3d5f28","anchor":"middle","weight":700,"lbl":true,"part":"evlabel"},{"t":"text","x":821,"y":286,"tx":"0.1–0.2%","size":13,"fill":"#3d5f28","anchor":"middle","weight":700,"lbl":true,"part":"evlabel"},{"t":"path","d":"M 690 552 L 952 552 L 918 476 L 724 476 Z","fill":"#f3c9c4","stroke":"none","opacity":0.5,"part":"bioacc"},{"t":"path","d":"M 724 476 L 918 476 L 884 400 L 758 400 Z","fill":"#e79b92","stroke":"none","opacity":0.6,"part":"bioacc"},{"t":"path","d":"M 758 400 L 884 400 L 850 324 L 792 324 Z","fill":"#cf6a5e","stroke":"none","opacity":0.7,"part":"bioacc"},{"t":"path","d":"M 792 324 L 850 324 L 834 248 L 808 248 Z","fill":"#a83226","stroke":"none","opacity":0.85,"part":"bioacc"}],"labels":[{"p":"grass","text":"生产者","from":[176,566],"to":[258,552],"anchor":"end"},{"p":"rabbit","text":"初级消费者","from":[96,466],"to":[168,424],"anchor":"end"},{"p":"fox","text":"次级消费者","from":[46,332],"to":[92,294],"anchor":"start"},{"p":"decomposer","text":"分解者","from":[438,626],"to":[358,620],"anchor":"start"},{"p":"pyramid","text":"能量金字塔","from":[920,214],"to":[862,252],"anchor":"end"},{"p":"bioacc","text":"有毒物质富集","from":[560,596],"to":[688,562],"anchor":"end"}],"steps":[{"name":"生态系统由四部分组成","say":"生态系统 = <b>生物部分</b>（生产者、消费者、分解者）+ <b>非生物部分</b>（阳光、空气、水、温度）。四样缺一不可。","stats":[{"v":"4 类","label":"组成"},{"v":"光合作用","label":"生产者的本事"},{"v":"细菌真菌","label":"分解者主体"}],"ask":"点图中的草、兔、狐、细菌真菌、太阳，看各自属于哪一类、起什么作用。","note":"生产者是<b>源头</b>——它把光能变成化学能，后面所有生物的能量都从这里来。","parts":["grass","rabbit","fox","decomposer","abiotic"],"routes":[],"caption":"生产者 + 消费者 + 分解者 + 非生物部分","hide":["bioacc"]},{"name":"一条食物链","say":"食物链写的是「<b>谁吃谁</b>」：草 → 兔 → 狐。箭头指向<b>捕食者</b>，也就是物质和能量流动的方向。","stats":[{"v":"3 环","label":"这条链"},{"v":"生产者","label":"必须从它开始"},{"v":"指向捕食者","label":"箭头方向"}],"ask":"注意箭头是「草 → 兔」而不是「兔 → 草」：<b>箭头指向吃的一方</b>。这个方向记反，后面能量流动就全错了。","note":"食物链<b>不从分解者开始、也不写分解者</b>，不写非生物部分。它只写「谁被谁吃」。","parts":["grass","rabbit","fox"],"routes":["c1a","c1b"],"caption":"草 → 兔 → 狐（箭头指向捕食者）","hide":["bioacc"]},{"name":"多条链织成食物网","say":"真实的生态系统里，一种生物往往不只吃一种、也不只被一种吃。多条食物链<b>交错连接</b>，就是食物网。","stats":[{"v":"3 条","label":"图中的链"},{"v":"交错","label":"为什么叫网"},{"v":"越复杂越稳","label":"一般规律"}],"ask":"找一下蛇：它既吃鼠、又吃鸟——同一种动物可以在<b>不同的链</b>里处在不同位置。","note":"食物网越复杂，生态系统的<b>自我调节能力越强</b>。某一种生物消失，还有别的路径替补。","parts":["grass","rabbit","fox"],"routes":["c1a","c1b","c2a","c2b","c3a","c3b","c4"],"caption":"草 → 兔 → 狐 / 草 → 鼠 → 蛇 / 草 → 虫 → 鸟 → 蛇","hide":["bioacc"]},{"name":"能量：单向、逐级递减","say":"能量沿食物链<b>只往一个方向走</b>，而且每一级只有约 <b>10%–20%</b> 传给下一级，其余都在呼吸作用、被分解中散失了。","stats":[{"v":"单向","label":"能量流动"},{"v":"10–20%","label":"每级传递率"},{"v":"不能循环","label":"关键区别"}],"ask":"看右边的金字塔：为什么它一定是<b>下宽上窄</b>？因为越往上，能拿到的能量越少，养得起的生物也越少。","note":"<b>能量不能循环</b>，<b>物质可以循环</b>——这是本节最容易混的一对。能量最终以热能散失，回不来。","parts":["grass","rabbit","fox","pyramid"],"routes":["c1a","c1b"],"caption":"能量流动：单向、逐级递减（10%–20%）","hide":["bioacc"]},{"name":"有毒物质：正好反过来","say":"有毒物质（重金属、农药）难分解、难排出，会沿食物链<b>逐级积累</b>——营养级越高，浓度越大。","stats":[{"v":"逐级递增","label":"有毒物质"},{"v":"逐级递减","label":"能量"},{"v":"相反","label":"两个方向"}],"ask":"同一个金字塔，这一页它变红了：<b>越往上颜色越深</b>。所以人吃大型肉食鱼，摄入的重金属反而更多。","note":"记这一对：<b>能量往下减，毒性往上增</b>。两者方向相反，是命题人最喜欢设的坑。","parts":["pyramid","bioacc"],"routes":[],"caption":"生物富集：有毒物质沿食物链逐级增多（与能量方向相反）","hide":["evlabel"]}]};
+(function(){
+  "use strict";
+  var D = window.__APP__;
+  var NS = "http://www.w3.org/2000/svg";
+  var svg = document.getElementById("cv");
+  var panel = document.getElementById("panel");
+  var S = { step:0, t:0, playing:true, sel:null };
+
+  svg.setAttribute("viewBox", "0 0 " + D.canvas.w + " " + D.canvas.h);
+
+  function mk(tag, a){
+    var e = document.createElementNS(NS, tag);
+    if(a){ for(var k in a){ if(a[k] !== null && a[k] !== undefined) e.setAttribute(k, a[k]); } }
+    return e;
+  }
+  function r1(v){ return Math.round(v * 10) / 10; }
+
+  // Catmull-Rom -> 三次贝塞尔，把折线点变成平滑路径（保证穿过每个控制点）
+  function smoothPath(pts, close){
+    if(!pts || pts.length < 2) return "";
+    var d = "M " + pts[0][0] + " " + pts[0][1];
+    var n = pts.length;
+    var lim = close ? n : n - 1;
+    for(var i=0;i<lim;i++){
+      var p0 = pts[(i - 1 + n) % n] || pts[i];
+      var p1 = pts[i];
+      var p2 = pts[(i + 1) % n];
+      var p3 = pts[(i + 2) % n] || p2;
+      if(!close){
+        p0 = pts[i - 1] || pts[i];
+        p3 = pts[i + 2] || p2;
+      }
+      var c1x = p1[0] + (p2[0] - p0[0]) / 6, c1y = p1[1] + (p2[1] - p0[1]) / 6;
+      var c2x = p2[0] - (p3[0] - p1[0]) / 6, c2y = p2[1] - (p3[1] - p1[1]) / 6;
+      d += " C " + r1(c1x) + " " + r1(c1y) + " " + r1(c2x) + " " + r1(c2y)
+         + " " + p2[0] + " " + p2[1];
+    }
+    if(close) d += " Z";
+    return d;
+  }
+
+  function shape(s){
+    var node = null;
+    if(s.t === "g"){
+      node = mk("g", null);
+      (s.items || []).forEach(function(c){ var n = shape(c); if(n) node.appendChild(n); });
+      return node;
+    }
+    if(s.pts){
+      var d = s.smooth === false
+        ? "M " + s.pts.map(function(p){ return p[0] + " " + p[1]; }).join(" L ")
+        : smoothPath(s.pts, !!s.close);
+      node = mk("path", {d:d, fill:s.fill || "none", stroke:s.stroke || "none",
+        "stroke-width":s.sw || 0, "stroke-linecap":"round", "stroke-linejoin":"round"});
+      if(s.close && !s.fill) node.setAttribute("fill", "none");
+      return node;
+    }
+    if(s.t === "rect"){
+      node = mk("rect", {x:s.x, y:s.y, width:s.w, height:s.h, rx:s.rx || 0,
+        fill:s.fill || "none", stroke:s.stroke || "none", "stroke-width":s.sw || 0});
+      if(s.rot) node.setAttribute("transform", "rotate(" + s.rot + " " + (s.x + s.w/2) + " " + (s.y + s.h/2) + ")");
+    } else if(s.t === "ellipse"){
+      node = mk("ellipse", {cx:s.cx, cy:s.cy, rx:s.rx, ry:s.ry,
+        fill:s.fill || "none", stroke:s.stroke || "none", "stroke-width":s.sw || 0});
+      if(s.rot) node.setAttribute("transform", "rotate(" + s.rot + " " + s.cx + " " + s.cy + ")");
+    } else if(s.t === "circle"){
+      node = mk("circle", {cx:s.cx, cy:s.cy, r:s.r,
+        fill:s.fill || "none", stroke:s.stroke || "none", "stroke-width":s.sw || 0});
+    } else if(s.t === "path"){
+      node = mk("path", {d:s.d, fill:s.fill || "none", stroke:s.stroke || "none",
+        "stroke-width":s.sw || 0, "stroke-linecap":"round", "stroke-linejoin":"round"});
+    } else if(s.t === "line"){
+      node = mk("line", {x1:s.x1, y1:s.y1, x2:s.x2, y2:s.y2,
+        stroke:s.stroke || "none", "stroke-width":s.sw || 1,
+        "stroke-dasharray":s.dash || null, "stroke-linecap":"round"});
+    } else if(s.t === "text"){
+      node = mk("text", {x:s.x, y:s.y, "font-size":s.size || 15, fill:s.fill || "#1d2333",
+        "text-anchor":s.anchor || "middle", "dominant-baseline":"middle",
+        "font-weight":s.weight || 400});
+      node.textContent = s.tx;
+    }
+    if(node && s.op !== undefined) node.setAttribute("opacity", s.op);
+    return node;
+  }
+
+  var routeEls = {};
+  var flow = [];
+  var flowLayer = null;
+  var capG = null;
+
+  function build(){
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    routeEls = {};
+    flow = [];
+
+    var base = mk("g", null);
+    (D.shapes || []).forEach(function(s){
+      var n = shape(s);
+      if(!n) return;
+      if(s.part) n.setAttribute("data-part", s.part);
+      if(s.lbl) n.setAttribute("class", "lb");
+      base.appendChild(n);
+    });
+    svg.appendChild(base);
+
+    var tube = mk("g", null);
+    (D.routes || []).forEach(function(rt){
+      var d = smoothPath(rt.pts, false);
+      var under = mk("path", {d:d, fill:"none", stroke:rt.color, "stroke-width":rt.w + 9,
+        "stroke-linecap":"round", "stroke-linejoin":"round", opacity:0.18});
+      var core = mk("path", {d:d, fill:"none", stroke:rt.color, "stroke-width":rt.w,
+        "stroke-linecap":"round", "stroke-linejoin":"round", opacity:0.42});
+      under.setAttribute("data-route", rt.id);
+      core.setAttribute("data-route", rt.id);
+      if(rt.part) core.setAttribute("data-hit", rt.part);
+      tube.appendChild(under);
+      tube.appendChild(core);
+      routeEls[rt.id] = core;
+    });
+    svg.appendChild(tube);
+
+    flowLayer = mk("g", null);
+    svg.appendChild(flowLayer);
+
+    (D.labels || []).forEach(function(L){
+      var g = mk("g", {"class":"lb"});
+      if(L.p) g.setAttribute("data-part", L.p);
+      var ln = mk("line", {x1:L.from[0], y1:L.from[1], x2:L.to[0], y2:L.to[1],
+        stroke:"#a4acc0", "stroke-width":1, "stroke-dasharray":"3 3"});
+      g.appendChild(ln);
+      g.appendChild(mk("circle", {cx:L.to[0], cy:L.to[1], r:3.2, fill:"#7b8497"}));
+      var t = mk("text", {
+        x:L.from[0] + (L.anchor === "end" ? -5 : 5), y:L.from[1],
+        "font-size":L.size || 14, fill:"#3c465c", "text-anchor":L.anchor || "end",
+        "dominant-baseline":"middle", "font-weight":500
+      });
+      t.textContent = L.text;
+      g.appendChild(t);
+      svg.appendChild(g);
+    });
+
+    // 底部图注层必须最后重建，否则会被上面的清空逻辑带走
+    capG = mk("g", {"class":"cap"});
+    svg.appendChild(capG);
+  }
+
+  function activeRoutes(){
+    var st = D.steps[S.step];
+    return (st && st.routes) ? st.routes : [];
+  }
+
+  function buildFlow(){
+    flow = [];
+    if(flowLayer){ flowLayer.innerHTML = ""; }
+    var on = activeRoutes();
+    (D.routes || []).forEach(function(rt){
+      var core = routeEls[rt.id];
+      if(!core) return;
+      var isOn = on.indexOf(rt.id) >= 0;
+      var ids = svg.querySelectorAll('[data-route="' + rt.id + '"]');
+      for(var i=0;i<ids.length;i++){
+        var offOp = (rt.off === undefined || rt.off === null) ? 0.14 : rt.off;
+        ids[i].setAttribute("opacity", isOn ? (i === 0 ? 0.26 : 0.95) : offOp);
+      }
+      if(!isOn) return;
+      var len = core.getTotalLength();
+      if(!len || len < 2) return;
+      var n = Math.max(3, Math.min(11, Math.round(len / 78)));
+      for(var j=0;j<n;j++){
+        var c = mk("circle", {r:4.4, fill:"#ffffff", stroke:rt.color, "stroke-width":2.4, opacity:0.96});
+        flowLayer.appendChild(c);
+        flow.push({el:c, path:core, len:len, phase:j / n, speed:rt.speed || 0.9});
+      }
+    });
+  }
+
+  function tick(){
+    S.t += 0.0075;
+    if(S.t > 1000) S.t = 0;
+    if(!S.playing) return;
+    for(var i=0;i<flow.length;i++){
+      var f = flow[i];
+      var p = (S.t * f.speed + f.phase) % 1;
+      var pt = f.path.getPointAtLength(p * f.len);
+      f.el.setAttribute("cx", r1(pt.x));
+      f.el.setAttribute("cy", r1(pt.y));
+    }
+  }
+
+  function partById(id){
+    for(var i=0;i<(D.parts || []).length;i++){ if(D.parts[i].id === id) return D.parts[i]; }
+    return null;
+  }
+
+  function stepsNav(){
+    return '<div class="stepnav">'
+      + D.steps.map(function(st, i){
+          return '<button type="button" data-go="' + i + '" title="' + st.name + '" class="'
+            + (S.step === i ? "on" : "") + '">' + (i + 1) + '</button>';
+        }).join("")
+      + '</div>';
+  }
+
+  function controls(){
+    return '<div class="ctrl"><div class="lab">播放</div><div class="btns">'
+      + '<button type="button" id="btnPlay" class="' + (S.playing ? "on" : "") + '">'
+      + (S.playing ? "⏸ 暂停流动" : "▶ 播放流动") + '</button>'
+      + '<button type="button" id="btnPrev">上一步</button>'
+      + '<button type="button" id="btnNext">下一步</button>'
+      + '</div></div>';
+  }
+
+  function legendHtml(){
+    if(!D.legend || !D.legend.length) return "";
+    return '<div class="ctrl"><div class="lab">图例</div><div class="legend">'
+      + D.legend.map(function(x){
+          return '<span class="lg"><i style="background:' + x.color + '"></i>' + x.text + '</span>';
+        }).join("")
+      + '</div></div>';
+  }
+
+  function renderPart(id){
+    var p = partById(id);
+    if(!p) return;
+    var h = '<h3>' + p.name + '</h3>';
+    if(p.en) h += '<span class="en">' + p.en + '</span>';
+    if(p.only) h += '<span class="tag">' + p.only + '</span>';
+    h += '<div class="p-sec"><h4>是什么</h4><p>' + p.desc + '</p></div>';
+    h += '<div class="p-sec"><h4>作用</h4><p>' + p.role + '</p></div>';
+    if(p.warn) h += '<div class="p-sec warn"><h4>易错点</h4><p>' + p.warn + '</p></div>';
+    h += '<div class="ctrl"><div class="btns"><button type="button" id="btnBack">← 回到第 '
+      + (S.step + 1) + ' 步</button></div></div>';
+    panel.innerHTML = h;
+  }
+
+  function renderStep(){
+    var st = D.steps[S.step];
+    var h = '<h3><span class="step-no">' + (S.step + 1) + '</span>' + st.name + '</h3>'
+      + stepsNav();
+    if(st.say) h += '<p class="goal">' + st.say + '</p>';
+    if(st.stats && st.stats.length){
+      h += '<div class="stats">' + st.stats.map(function(x, i){
+        return '<div class="stat' + (i === 0 ? " hi" : "") + '"><b>' + x.v + '</b><span>' + x.label + '</span></div>';
+      }).join("") + '</div>';
+    }
+    if(st.ask) h += '<div class="p-sec"><h4>观察提示</h4><p>' + st.ask + '</p></div>';
+    if(st.note) h += '<div class="p-sec warn"><h4>关键结论</h4><p>' + st.note + '</p></div>';
+    if(st.table && st.table.head && st.table.rows){
+      h += '<table class="cmp"><thead><tr>'
+        + st.table.head.map(function(x){ return '<th>' + x + '</th>'; }).join('')
+        + '</tr></thead><tbody>'
+        + st.table.rows.map(function(r){
+            return '<tr>' + r.map(function(c){ return '<td>' + c + '</td>'; }).join('') + '</tr>';
+          }).join('')
+        + '</tbody></table>';
+    }
+    h += controls() + legendHtml();
+    h += '<div class="keys"><span><kbd>空格</kbd> 暂停/播放</span>'
+      + '<span><kbd>←</kbd><kbd>→</kbd> 切换步骤</span>'
+      + '<span><kbd>1</kbd>–<kbd>' + D.steps.length + '</kbd> 跳步</span>'
+      + '<span><kbd>L</kbd> 标注</span><span><kbd>F</kbd> 全屏</span></div>';
+    panel.innerHTML = h;
+  }
+
+  function applyStep(){
+    var st = D.steps[S.step];
+    var keep = st.parts || null;
+    var hide = st.hide || [];
+    var ns = svg.querySelectorAll("[data-part]");
+    for(var i=0;i<ns.length;i++){
+      var p = ns[i].getAttribute("data-part");
+      var op = (keep && keep.indexOf(p) < 0) ? 0.32 : 1;
+      if(hide.indexOf(p) >= 0) op = 0;   // hide 里的部分本步完全不出现
+      ns[i].setAttribute("opacity", op);
+    }
+    var cap = capG;
+    if(cap){
+      while(cap.firstChild) cap.removeChild(cap.firstChild);
+      if(st.caption){
+        var t = mk("text", {x:D.canvas.w / 2, y:D.canvas.h - 22, "font-size":13.5,
+          fill:"#6b7488", "text-anchor":"middle"});
+        t.textContent = st.caption;
+        cap.appendChild(t);
+      }
+    }
+  }
+
+  function go(i){
+    S.step = Math.max(0, Math.min(D.steps.length - 1, i));
+    S.sel = null;
+    build();
+    buildFlow();
+    applyStep();
+    renderStep();
+  }
+
+  function setPlaying(v){
+    S.playing = v;
+    var b = document.getElementById("btnPlay");
+    if(b){ b.classList.toggle("on", v); b.textContent = v ? "⏸ 暂停流动" : "▶ 播放流动"; }
+  }
+
+  panel.addEventListener("click", function(e){
+    var b = e.target.closest("button");
+    if(!b) return;
+    if(b.hasAttribute("data-go")){ go(+b.getAttribute("data-go")); return; }
+    if(b.id === "btnPlay"){ setPlaying(!S.playing); return; }
+    if(b.id === "btnPrev"){ go(S.step - 1); return; }
+    if(b.id === "btnNext"){ go(S.step + 1); return; }
+    if(b.id === "btnBack"){ S.sel = null; renderStep(); return; }
+  });
+
+  svg.addEventListener("click", function(e){
+    var n = e.target.closest("[data-part],[data-hit]");
+    if(!n){ return; }
+    S.sel = n.getAttribute("data-part") || n.getAttribute("data-hit");
+    renderPart(S.sel);
+  });
+
+  var lbBtn = document.getElementById("btnLabel");
+  lbBtn.addEventListener("click", function(){
+    var off = svg.classList.toggle("hide-lb");
+    lbBtn.classList.toggle("off", off);
+    lbBtn.textContent = off ? "显示标注　L" : "隐藏标注　L";
+  });
+
+  var fullBtn = document.getElementById("btnFull");
+  function toggleFull(){
+    if(!document.fullscreenElement){
+      if(document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+    } else if(document.exitFullscreen){
+      document.exitFullscreen();
+    }
+  }
+  fullBtn.addEventListener("click", toggleFull);
+
+  document.addEventListener("keydown", function(e){
+    var k = e.key;
+    if(k === " "){ e.preventDefault(); setPlaying(!S.playing); }
+    else if(k === "ArrowRight" || k === "ArrowDown"){ e.preventDefault(); go(S.step + 1); }
+    else if(k === "ArrowLeft" || k === "ArrowUp"){ e.preventDefault(); go(S.step - 1); }
+    else if(k === "Escape" || k === "Backspace"){ S.sel = null; renderStep(); }
+    else if(k === "l" || k === "L"){ lbBtn.click(); }
+    else if(k === "f" || k === "F"){ toggleFull(); }
+    else if(k >= "1" && k <= "9"){
+      var idx = +k - 1;
+      if(idx < D.steps.length) go(idx);
+    }
+  });
+
+  go(0);
+  setInterval(tick, 30);
+
+  window.__SELFTEST__ = function(){
+    var errs = [];
+    var W = D.canvas.w, H = D.canvas.h;
+    if(!D.steps || D.steps.length < 3) errs.push("步骤应不少于 3 步");
+    if(!D.routes || !D.routes.length) errs.push("routes 为空");
+    if(!D.parts || !D.parts.length) errs.push("parts 为空");
+
+    var ids = {}, rids = {};
+    (D.parts || []).forEach(function(p){
+      ids[p.id] = 1;
+      if(!p.name || !p.desc || !p.role) errs.push("部位字段缺失: " + p.id);
+    });
+    (D.routes || []).forEach(function(rt){
+      if(rids[rt.id]) errs.push("route id 重复: " + rt.id);
+      rids[rt.id] = 1;
+      if(!rt.color) errs.push("route 缺少颜色: " + rt.id);
+      if(!rt.pts || rt.pts.length < 2) errs.push("route 控制点不足: " + rt.id);
+      (rt.pts || []).forEach(function(pt){
+        if(pt[0] < 0 || pt[0] > W || pt[1] < 0 || pt[1] > H){
+          errs.push("route「" + rt.id + "」有点跑出画布: " + pt[0] + "," + pt[1]);
+        }
+      });
+    });
+    (D.shapes || []).forEach(function(s){
+      if(s.part && !ids[s.part]) errs.push("shape 引用了未知部位: " + s.part);
+    });
+    (D.labels || []).forEach(function(l){
+      if(l.p && !ids[l.p]) errs.push("label 引用了未知部位: " + l.p);
+    });
+    D.steps.forEach(function(st, i){
+      if(!st.name) errs.push("步骤缺少名称: " + (i + 1));
+      (st.routes || []).forEach(function(rid){
+        if(!rids[rid]) errs.push("步骤「" + st.name + "」引用了未知路径: " + rid);
+      });
+      (st.parts || []).forEach(function(pid){
+        if(!ids[pid]) errs.push("步骤「" + st.name + "」引用了未知部位: " + pid);
+      });
+    });
+    // 路径必须真的渲染出长度（防退化成一个点）
+    Object.keys(routeEls).forEach(function(k){
+      var el = routeEls[k];
+      if(!el) return;
+      var L = el.getTotalLength();
+      if(!L || L < 60) errs.push("路径「" + k + "」长度异常: " + Math.round(L || 0));
+    });
+    if(flow.length === 0 && S.step > 0 && D.steps[S.step].routes && D.steps[S.step].routes.length){
+      errs.push("当前步骤配置了路径却没有流动粒子");
+    }
+    var anyFlow = false;
+    D.steps.forEach(function(st){ if(st.routes && st.routes.length) anyFlow = true; });
+    if(!anyFlow) errs.push("没有任何步骤配置流动路径");
+    if(svg.querySelectorAll("[data-part]").length === 0) errs.push("没有渲染出任何部位");
+    return errs;
+  };
+
+  if(!window.__QUIET__){
+    var e = window.__SELFTEST__();
+    if(e.length) console.log("SELFTEST FAIL: " + e.join(" | "));
+    else console.log("SELFTEST PASS");
+  }
+})();
+</script>
+</body>
+</html>
