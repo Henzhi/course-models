@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>课程教学模型 · 总览</title>
+<style>
+  :root{
+    --bg:#f4f6fb; --panel:#fff; --ink:#1d2333; --ink2:#4b5468; --muted:#8b93a7;
+    --line:#e3e6f0; --brand:#5b5bd6; --soft:#eeedfd;
+    --shadow:0 1px 2px rgba(29,35,51,.05),0 12px 34px -22px rgba(29,35,51,.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC","Segoe UI",system-ui,sans-serif;
+    background:var(--bg); color:var(--ink); font-size:16px; line-height:1.65;
+    -webkit-font-smoothing:antialiased; padding:44px 24px 56px;
+  }
+  .wrap{max-width:1000px;margin:0 auto}
+  .crumb{font-size:13px;color:var(--muted);letter-spacing:.3px}
+  h1{font-size:30px;font-weight:700;letter-spacing:-.6px;margin-top:4px}
+  .sub{font-size:14.5px;color:var(--ink2);margin-top:6px}
+  .bar{display:flex;gap:12px;align-items:center;margin-top:22px;flex-wrap:wrap}
+  .bar input{
+    flex:1; min-width:240px; max-width:420px; font:inherit; font-size:15px;
+    padding:9px 14px; border:1px solid var(--line); border-radius:10px;
+    background:#fff; color:var(--ink); outline:none;
+  }
+  .bar input:focus{border-color:#c3c0f2; box-shadow:0 0 0 3px rgba(91,91,214,.1)}
+  .count{font-size:13px;color:var(--muted)}
+  section.grade{margin-top:34px}
+  .g-head{display:flex;align-items:baseline;gap:12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  .g-head h2{font-size:19px;font-weight:700}
+  .g-head .n{font-size:12.5px;color:var(--muted)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:14px}
+  a.card{
+    display:block;text-decoration:none;color:inherit;background:var(--panel);
+    border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);
+    padding:16px 18px 15px;position:relative;overflow:hidden;transition:.18s;
+  }
+  a.card::after{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+    background:linear-gradient(180deg,#7b6ce8,#4aa06a)}
+  a.card:hover{transform:translateY(-2px);border-color:#c9c3f5;
+    box-shadow:0 16px 36px -20px rgba(91,91,214,.5)}
+  a.card .sec{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.4px}
+  a.card h3{font-size:17px;font-weight:700;margin:4px 0 5px;letter-spacing:-.2px}
+  a.card p{font-size:13.5px;color:var(--ink2);line-height:1.6}
+  a.card .meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+  a.card .meta span{
+    font-size:11.5px;font-weight:600;color:#3f3fa8;background:var(--soft);
+    border:1px solid #dedcfb;border-radius:6px;padding:1px 7px;
+  }
+  a.card .meta span.g{color:#2f6b45;background:#eaf5ee;border-color:#c9e5d4}
+  .empty{
+    border:1px dashed #d3d8e8;border-radius:12px;padding:16px 18px;
+    color:var(--muted);font-size:13.5px;background:rgba(255,255,255,.45)
+  }
+  footer{margin-top:44px;border-top:1px solid var(--line);padding-top:14px;
+    font-size:12.5px;color:var(--muted);line-height:1.8}
+  code{font-family:Consolas,monospace;background:#eef0f7;border:1px solid #d3d8e8;
+    border-radius:5px;padding:1px 6px;font-size:11.5px;color:var(--ink2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="crumb">课程教学模型 · 总览</div>
+  <h1>{{SITE_TITLE}}</h1>
+  <p class="sub">{{TEXTBOOK}}　·　全部为单文件 HTML，双击即可离线使用，无需联网、无需安装。建议用 Chrome / Edge，窗口宽度 1100 以上。</p>
+
+  <div class="bar">
+    <input id="q" type="search" placeholder="搜索课题、章节或知识点…" autocomplete="off">
+    <span class="count" id="count">{{COUNT}}</span>
+  </div>
+
+  {{SECTIONS}}
+
+  <footer>
+    新增模型：在 <code>_src/data/</code> 写内容 JSON、在 <code>catalog.json</code> 登记，然后运行
+    <code>python _src/tools/build.py</code>，本页与模型页会一起生成。<br>
+    教材位置以人教版 2024 版为准；查不到的课标条目号一律标注「未核实」，不臆造。
+  </footer>
+</div>
+<script>
+(function(){
+  var q = document.getElementById("q");
+  var count = document.getElementById("count");
+  var secs = Array.prototype.slice.call(document.querySelectorAll("section.grade"));
+  var total = document.querySelectorAll("a.card").length;
+
+  function run(){
+    var k = q.value.trim().toLowerCase();
+    var shown = 0;
+    secs.forEach(function(s){
+      var hit = 0;
+      var cards = s.querySelectorAll("a.card");
+      Array.prototype.forEach.call(cards, function(c){
+        var txt = (c.getAttribute("data-text") || "").toLowerCase();
+        var ok = !k || txt.indexOf(k) >= 0;
+        c.style.display = ok ? "" : "none";
+        if(ok) hit++;
+      });
+      s.style.display = hit ? "" : "none";
+      shown += hit;
+    });
+    count.textContent = k ? ("找到 " + shown + " 个模型") : ("共 " + total + " 个模型");
+  }
+  q.addEventListener("input", run);
+})();
+</script>
+</body>
+</html>

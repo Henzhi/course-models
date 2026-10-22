@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{PAGE_TITLE}}</title>
+<style>
+  :root{
+    --bg:#f4f6fb; --panel:#fff; --ink:#1d2333; --ink2:#4b5468; --muted:#8b93a7;
+    --line:#e3e6f0; --brand:#5b5bd6; --soft:#eeedfd;
+    --warn:#a8461f; --warnbg:#fff5f0; --warnline:#f6d3c2;
+    --ok:#2f6b45; --okbg:#eef7f1; --okline:#cbe5d5;
+    --shadow:0 1px 2px rgba(29,35,51,.05),0 10px 30px -20px rgba(29,35,51,.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC","Segoe UI",system-ui,sans-serif;
+    background:var(--bg); color:var(--ink); font-size:16px; line-height:1.65;
+    min-height:100vh; display:flex; flex-direction:column; -webkit-font-smoothing:antialiased;
+  }
+  header{padding:14px 24px 12px; background:#fff; border-bottom:1px solid var(--line)}
+  .topbar{display:flex; align-items:center; gap:14px; font-size:13px}
+  .back{
+    color:var(--brand); text-decoration:none; font-weight:600;
+    border:1px solid #dedcfb; background:var(--soft); border-radius:7px;
+    padding:2px 10px; white-space:nowrap;
+  }
+  .back:hover{background:#e4e3fc}
+  .crumb{font-size:13px; color:var(--muted); letter-spacing:.2px}
+  h1{font-size:25px; font-weight:700; letter-spacing:-.3px; margin-top:1px}
+  .sub{font-size:14px; color:var(--ink2); margin-top:3px}
+  .tools{display:flex; gap:10px; align-items:center; margin-top:12px; flex-wrap:wrap}
+  .seg{display:inline-flex; background:#eef0f7; border-radius:10px; padding:3px; flex-wrap:wrap}
+  .seg button{
+    border:0; background:transparent; font:inherit; font-size:14px; font-weight:500;
+    color:var(--ink2); padding:6px 13px; border-radius:8px; cursor:pointer;
+    transition:background .15s,color .15s;
+  }
+  .seg button:hover{color:var(--ink)}
+  .seg button.on{background:#fff; color:var(--brand); box-shadow:0 1px 3px rgba(29,35,51,.13)}
+  .ghost{
+    border:1px solid var(--line); background:#fff; border-radius:9px;
+    padding:6px 13px; font:inherit; font-size:13.5px; color:var(--ink2); cursor:pointer;
+  }
+  .ghost:hover{border-color:#c4c9dd; color:var(--ink)}
+  .ghost.off{background:#f1f2f8; color:var(--muted)}
+  main{
+    flex:1; display:grid; grid-template-columns:minmax(0,1fr) 400px;
+    gap:16px; padding:16px 20px 8px; min-height:0;
+  }
+  .canvas-wrap{
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:6px; display:flex; min-height:0;
+  }
+  svg{width:100%; height:100%; display:block; min-height:0}
+  .panel{
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:18px 20px 24px; overflow:auto;
+  }
+  .panel h3{font-size:20px; font-weight:700; letter-spacing:-.2px}
+  .panel .en{display:block; font-size:12.5px; color:var(--muted); font-style:italic; margin-top:1px}
+  .panel .tag{
+    display:inline-block; font-size:12px; font-weight:600; color:var(--brand);
+    background:var(--soft); border:1px solid #dedcfb; border-radius:6px;
+    padding:1px 8px; margin-top:7px;
+  }
+  .p-sec{margin-top:16px}
+  .p-sec h4{font-size:12.5px; font-weight:700; color:var(--muted); letter-spacing:1.2px; margin-bottom:4px}
+  .p-sec p{font-size:16px; color:var(--ink2)}
+  .p-sec.warn{background:var(--warnbg); border:1px solid var(--warnline); border-radius:10px; padding:11px 14px}
+  .p-sec.warn h4{color:var(--warn)}
+  .p-sec.warn p{color:#7d3617}
+  .p-sec.ok{background:var(--okbg); border:1px solid var(--okline); border-radius:10px; padding:11px 14px}
+  .p-sec.ok h4{color:var(--ok)}
+  .p-sec.ok p{color:#2a5c40}
+  .hero p.goal{
+    font-size:16px; color:var(--ink2); margin-top:10px;
+    background:#f7f7fe; border-left:3px solid var(--brand);
+    border-radius:0 8px 8px 0; padding:10px 13px;
+  }
+  .hero p.goal b{color:var(--ink)}
+  .hero .tips{margin:14px 0 0 20px; font-size:14.5px; color:var(--ink2)}
+  .hero .tips li{margin-bottom:6px}
+
+  .ctrl{border-top:1px dashed var(--line); padding-top:14px; margin-top:4px}
+  .ctrl:first-child{border-top:0; padding-top:0; margin-top:0}
+  .ctrl .lab{font-size:12.5px; font-weight:700; color:var(--muted); letter-spacing:1px; margin-bottom:7px}
+  .btns{display:flex; gap:7px; flex-wrap:wrap}
+  .btns button{
+    border:1px solid var(--line); background:#fff; border-radius:8px;
+    padding:6px 12px; font:inherit; font-size:14px; color:var(--ink2); cursor:pointer;
+  }
+  .btns button:hover{border-color:#c4c9dd}
+  .btns button.on{background:var(--soft); border-color:#c9c3f5; color:var(--brand); font-weight:600}
+  .range{display:flex; align-items:center; gap:10px; margin-top:2px}
+  .range input[type=range]{flex:1; accent-color:#5b5bd6; height:22px}
+  .range .val{font-size:13.5px; color:var(--ink2); min-width:62px; text-align:right; font-variant-numeric:tabular-nums}
+  .meter{height:9px; border-radius:5px; background:#eef0f7; overflow:hidden; margin-top:9px}
+  .meter i{display:block; height:100%; background:linear-gradient(90deg,#f0b429,#f7d97a); transition:width .15s}
+  .hint{font-size:13.5px; color:var(--ink2); margin-top:9px; line-height:1.55}
+  .hint b{color:var(--ink)}
+  .keys{
+    margin-top:16px; padding-top:13px; border-top:1px dashed var(--line);
+    font-size:12.5px; color:var(--muted); line-height:1.9;
+  }
+  .keys span{display:inline-block; margin-right:12px; white-space:nowrap}
+  .keys kbd{
+    font-family:Consolas,monospace; font-size:11.5px; background:#f1f2f8;
+    border:1px solid #dde0ec; border-bottom-width:2px; border-radius:4px;
+    padding:0 5px; color:var(--ink2);
+  }
+  footer{
+    padding:6px 24px 14px; font-size:12.5px; color:var(--muted);
+    display:flex; gap:18px; flex-wrap:wrap;
+  }
+  footer b{color:var(--ink2); font-weight:600}
+
+  [data-part]{cursor:pointer; transition:opacity .18s}
+  [data-part]:hover{opacity:.82}
+  [data-part].dim{opacity:.2}
+  body.has-sel [data-part]{opacity:.28}
+  body.has-sel [data-part].sel{opacity:1}
+  svg.hide-lb .lb{display:none}
+
+  @media (max-width:1180px){
+    main{grid-template-columns:1fr; grid-template-rows:minmax(300px,1fr) auto}
+    .panel{max-height:340px}
+    h1{font-size:21px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <a class="back" href="../../index.html">← 全部模型</a>
+    <span class="crumb">生物 · {{GRADE}} · {{SECTION}}</span>
+  </div>
+  <h1>{{TITLE}}</h1>
+  <p class="sub">{{SUBTITLE}}</p>
+  <div class="tools">
+    <div class="seg" id="mode">
+      <button type="button" data-mode="struct" class="on">① 认结构</button>
+      <button type="button" data-mode="light">② 对光</button>
+      <button type="button" data-mode="focus">③ 调焦</button>
+      <button type="button" data-mode="power">④ 换倍数</button>
+      <button type="button" data-mode="move">⑤ 物像移动</button>
+    </div>
+    <button type="button" class="ghost" id="btnLabel">隐藏标注　L</button>
+    <button type="button" class="ghost" id="btnFull">全屏　F</button>
+  </div>
+</header>
+
+<main>
+  <div class="canvas-wrap">
+    <svg id="cv" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+  <aside class="panel" id="panel"></aside>
+</main>
+
+<footer>
+  <span><b>教材位置</b>　{{GRADE}} · {{SECTION}}</span>
+  <span><b>课标要求</b>　{{LEVEL}}</span>
+  <span><b>建议用时</b>　{{DURATION}}</span>
+</footer>
+
+<script>
+window.__APP__ = {{DATA}};
+(function(){
+  "use strict";
+  var D = window.__APP__;
+  var NS = "http://www.w3.org/2000/svg";
+  var svg = document.getElementById("cv");
+  var panel = document.getElementById("panel");
+  var O = D.instrument.optical;
+  var V = D.specimen;
+
+  var S = {
+    mode: "struct",
+    objective: 10,
+    eyepiece: 10,
+    aperture: 0.7,
+    mirror: 1.0,
+    focus: 0,
+    slideX: 0,
+    sel: null
+  };
+
+  svg.setAttribute("viewBox", "0 0 " + D.canvas.w + " " + D.canvas.h);
+
+  function mk(tag, a){
+    var e = document.createElementNS(NS, tag);
+    if(a){ for(var k in a){ if(a[k] !== null && a[k] !== undefined) e.setAttribute(k, a[k]); } }
+    return e;
+  }
+  function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+
+  function mag(){ return S.objective * S.eyepiece; }
+  function cellR(){ return V.cellR * mag() / 100; }
+  function spacing(){ return V.spacing * mag() / 100; }
+  function blurAmt(){ return Math.abs(S.focus) / 100 * 13; }
+  function imageShift(){ return -S.slideX * (mag() / 100) * 0.55; }
+  function baseLight(){ return S.objective >= 40 ? 0.58 : 1.0; }
+  function brightness(){
+    return clamp(baseLight() * (S.aperture / 0.7) * S.mirror, 0.04, 1.5);
+  }
+  function darken(){ return clamp(1 - brightness(), 0, 0.85); }
+
+  function visibleCells(){
+    var g = V.grid, sp = spacing(), r = cellR(), n = 0;
+    for(var i=0;i<g.length;i++){
+      for(var j=0;j<g.length;j++){
+        var x = g[i]*sp, y = g[j]*sp;
+        if(Math.sqrt(x*x + y*y) - r < V.viewR) n++;
+      }
+    }
+    return n;
+  }
+
+  var NSVG = {};
+
+  function shape(s){
+    var node;
+    if(s.t === "rect"){
+      node = mk("rect", {x:s.x, y:s.y, width:s.w, height:s.h, rx:s.rx||0,
+        fill:s.fill||"none", stroke:s.stroke||"none", "stroke-width":s.sw||0});
+    } else if(s.t === "ellipse"){
+      node = mk("ellipse", {cx:s.cx, cy:s.cy, rx:s.rx, ry:s.ry,
+        fill:s.fill||"none", stroke:s.stroke||"none", "stroke-width":s.sw||0});
+      if(s.rot) node.setAttribute("transform","rotate(" + s.rot + " " + s.cx + " " + s.cy + ")");
+    } else if(s.t === "circle"){
+      node = mk("circle", {cx:s.cx, cy:s.cy, r:s.r,
+        fill:s.fill||"none", stroke:s.stroke||"none", "stroke-width":s.sw||0});
+    } else if(s.t === "path"){
+      node = mk("path", {d:s.d, fill:s.fill||"none", stroke:s.stroke||"none", "stroke-width":s.sw||0});
+    } else if(s.t === "text"){
+      node = mk("text", {x:s.x, y:s.y, "font-size":s.size||15, fill:s.fill||"#1d2333",
+        "text-anchor":s.anchor||"middle", "dominant-baseline":"middle", "font-weight":s.weight||400});
+      node.textContent = s.tx;
+    }
+    return node;
+  }
+
+  function buildInstrument(){
+    var g = mk("g", {"class":"inst"});
+    var groups = {};
+    (D.instrument.shapes || []).forEach(function(s){
+      if(s.only && s.only !== S.objective) return;
+      var node = shape(s);
+      if(!node) return;
+      if(s.part){
+        if(!groups[s.part]){
+          groups[s.part] = mk("g", {"data-part":s.part});
+          g.appendChild(groups[s.part]);
+        }
+        groups[s.part].appendChild(node);
+      } else {
+        g.appendChild(node);
+      }
+    });
+    return g;
+  }
+
+  function buildRays(){
+    var g = mk("g", {"class":"rays"});
+    var oh = O.objHalf, eh = O.eyeHalf;
+    var strength = S.mode === "light" ? 1 : 0.58;
+    var col = "#f0b429";
+
+    var toSpecimen = mk("line", {x1:O.source[0], y1:O.source[1], x2:O.aperture[0], y2:O.aperture[1],
+      stroke:col, "stroke-width":2.4, opacity:clamp(brightness()*0.9, 0.12, 1)*strength});
+    toSpecimen.setAttribute("fill","none");
+    g.appendChild(toSpecimen);
+
+    [-1, 1].forEach(function(sgn){
+      var p = mk("polyline", {
+        points: [
+          O.specimen[0] + "," + O.specimen[1],
+          (O.objective[0] + sgn*oh) + "," + O.objective[1],
+          (O.eyepiece[0] + sgn*eh) + "," + O.eyepiece[1],
+          O.eye[0] + "," + O.eye[1]
+        ].join(" "),
+        fill: "none", stroke: col, "stroke-width": 2,
+        opacity: clamp(brightness()*0.85, 0.1, 1)*strength,
+        "stroke-linejoin": "round"
+      });
+      g.appendChild(p);
+    });
+
+    if(S.mode === "light"){
+      var lab = mk("text", {x:O.source[0], y:O.source[1] + 36, "font-size":13,
+        fill:"#a8760f", "text-anchor":"middle", "dominant-baseline":"middle", "font-weight":600});
+      lab.textContent = "进光 " + Math.round(brightness()*100) + "%";
+      g.appendChild(lab);
+    }
+    return g;
+  }
+
+  function cellAt(x, y, r){
+    var g = mk("g", {});
+    g.appendChild(mk("ellipse", {cx:x, cy:y, rx:r, ry:r*0.86, fill:"#dff0c6",
+      stroke:"#6f9c3f", "stroke-width":1.6}));
+    g.appendChild(mk("circle", {cx:x - r*0.18, cy:y - r*0.15, r:r*0.27,
+      fill:"#b79ce8", stroke:"#8f75d6", "stroke-width":1.1}));
+    if(r > 40){
+      g.appendChild(mk("ellipse", {cx:x + r*0.34, cy:y + r*0.28, rx:r*0.34, ry:r*0.26,
+        fill:"#dcefff", stroke:"#8fbde0", "stroke-width":1}));
+    }
+    return g;
+  }
+
+  function buildView(){
+    var g = mk("g", {"class":"view"});
+    var cx = V.center[0], cy = V.center[1], R = V.viewR;
+
+    var clipId = "clipview";
+    var defs = mk("defs", {});
+    var cp = mk("clipPath", {id: clipId});
+    cp.appendChild(mk("circle", {cx:cx, cy:cy, r:R - 2}));
+    defs.appendChild(cp);
+    var f = mk("filter", {id:"fuzz", x:"-20%", y:"-20%", width:"140%", height:"140%"});
+    var fb = mk("feGaussianBlur", {stdDeviation: blurAmt()});
+    f.appendChild(fb);
+    defs.appendChild(f);
+    g.appendChild(defs);
+
+    g.appendChild(mk("circle", {cx:cx, cy:cy, r:R + 7, fill:"#e7eaf2"}));
+    g.appendChild(mk("circle", {cx:cx, cy:cy, r:R, fill:"#fcfdf6", stroke:"#8b93a7", "stroke-width":2}));
+
+    var inner = mk("g", {"clip-path":"url(#" + clipId + ")"});
+    var cells = mk("g", {filter:"url(#fuzz)"});
+
+    var sp = spacing(), r = cellR();
+    var shift = imageShift();
+    V.grid.forEach(function(gx, i){
+      V.grid.forEach(function(gy, j){
+        var jx = ((i*7 + j*13) % 11 - 5) * 1.5;
+        var jy = ((i*5 + j*11) % 11 - 5) * 1.5;
+        var x = cx + gx*sp + shift + jx, y = cy + gy*sp + jy;
+        var dx = x - cx, dy = y - cy;
+        if(Math.sqrt(dx*dx + dy*dy) - r*1.1 < R){
+          cells.appendChild(cellAt(x, y, r));
+        }
+      });
+    });
+    inner.appendChild(cells);
+    g.appendChild(inner);
+
+    if(darken() > 0.01){
+      g.appendChild(mk("circle", {cx:cx, cy:cy, r:R, fill:"#1b2030", opacity:darken()}));
+    }
+    g.appendChild(mk("circle", {cx:cx, cy:cy, r:R, fill:"none", stroke:"#6f788c", "stroke-width":3}));
+
+    var cap = mk("text", {x:cx, y:cy + R + 46, "font-size":15, fill:"#4b5468",
+      "text-anchor":"middle", "dominant-baseline":"middle", "font-weight":600});
+    cap.textContent = S.eyepiece + "× 目镜 ＋ " + S.objective + "× 物镜 ＝ " + mag() + " 倍"
+      + "　·　视野内可见 " + visibleCells() + " 个细胞";
+    g.appendChild(cap);
+
+    if(S.mode === "move" && Math.abs(S.slideX) > 1){
+      var mt = mk("text", {x:cx, y:cy - R - 26, "font-size":15,
+        fill: S.slideX > 0 ? "#a8461f" : "#2f6b45", "text-anchor":"middle",
+        "dominant-baseline":"middle", "font-weight":700});
+      mt.textContent = "玻片向" + (S.slideX > 0 ? "右" : "左") + "移　→　物像向"
+        + (S.slideX > 0 ? "左" : "右") + "移";
+      g.appendChild(mt);
+    }
+    return g;
+  }
+
+  function buildLabels(){
+    var g = mk("g", {"class":"lb"});
+    (D.labels || []).forEach(function(L){
+      if(L.mode && L.mode !== S.mode) return;
+      var node = mk("g", {});
+      node.setAttribute("data-part", L.p);
+      var ln = mk("line", {x1:L.from[0], y1:L.from[1], x2:L.to[0], y2:L.to[1],
+        stroke:"#a4acc0", "stroke-width":1, "stroke-dasharray":"3 3"});
+      ln.setAttribute("fill","none");
+      node.appendChild(ln);
+      node.appendChild(mk("circle", {cx:L.to[0], cy:L.to[1], r:3.2, fill:"#7b8497"}));
+      var t = mk("text", {x:L.from[0] + (L.anchor === "end" ? -5 : 5), y:L.from[1],
+        "font-size":14, fill:"#3c465c", "text-anchor":L.anchor||"end",
+        "dominant-baseline":"middle", "font-weight":500});
+      t.textContent = L.text;
+      node.appendChild(t);
+      g.appendChild(node);
+    });
+    return g;
+  }
+
+  function render(){
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    svg.appendChild(buildInstrument());
+    svg.appendChild(buildView());
+    svg.appendChild(buildRays());
+    svg.appendChild(buildLabels());
+    if(svg.classList.contains("hide-lb")) { /* class 保留在 svg 上 */ }
+    applySel();
+  }
+
+  function applySel(){
+    var ns = svg.querySelectorAll("[data-part]");
+    for(var i=0;i<ns.length;i++){
+      ns[i].classList.toggle("sel", ns[i].getAttribute("data-part") === S.sel);
+      ns[i].classList.toggle("dim", S.mode === "struct" && S.sel && ns[i].getAttribute("data-part") !== S.sel);
+    }
+    document.body.classList.toggle("has-sel", !!S.sel);
+  }
+
+  function partById(id){
+    for(var i=0;i<D.parts.length;i++){ if(D.parts[i].id === id) return D.parts[i]; }
+    return null;
+  }
+
+  function controls(){
+    if(S.mode === "light"){
+      return '<div class="ctrl"><div class="lab">光圈（遮光器）</div><div class="btns" data-grp="ap">'
+        + [["0.4","小"],["0.7","中"],["1.0","大"]].map(function(x){
+            return '<button type="button" data-ap="' + x[0] + '" class="' + (Math.abs(S.aperture - +x[0]) < 0.01 ? "on" : "") + '">' + x[1] + '</button>';
+          }).join("")
+        + '</div></div>'
+        + '<div class="ctrl"><div class="lab">反光镜</div><div class="btns" data-grp="mi">'
+        + [["1.0","平面镜"],["1.3","凹面镜"]].map(function(x){
+            return '<button type="button" data-mi="' + x[0] + '" class="' + (Math.abs(S.mirror - +x[0]) < 0.01 ? "on" : "") + '">' + x[1] + '</button>';
+          }).join("")
+        + '</div><div class="meter"><i style="width:' + Math.round(clamp(brightness()/1.35,0,1)*100) + '%"></i></div>'
+        + '<div class="hint" id="lightHint">' + lightHint() + '</div></div>';
+    }
+    if(S.mode === "focus"){
+      return '<div class="ctrl"><div class="lab">粗准焦螺旋（升降镜筒）</div>'
+        + '<div class="range"><input type="range" id="rngFocus" min="-100" max="100" step="1" value="' + S.focus + '">'
+        + '<span class="val">' + focusWord() + '</span></div>'
+        + '<div class="hint" id="focusHint">' + focusHint() + '</div></div>';
+    }
+    if(S.mode === "power"){
+      return '<div class="ctrl"><div class="lab">物镜</div><div class="btns">'
+        + [10, 40].map(function(x){
+            return '<button type="button" data-obj="' + x + '" class="' + (S.objective === x ? "on" : "") + '">' + x + '×</button>';
+          }).join("")
+        + '</div>'
+        + '<div class="hint">目镜固定 <b>10×</b>　·　当前放大 <b>' + mag() + ' 倍</b>'
+        + '　·　视野内可见细胞 <b>' + visibleCells() + '</b> 个</div></div>'
+        + '<div class="ctrl"><div class="lab">换成高倍镜后，你会看到</div>'
+        + '<div class="hint">细胞<b>变大</b>、看到的细胞数目<b>变少</b>、视野<b>变暗</b>。'
+        + (S.objective === 40 ? '　（现在就是高倍）' : '　（现在还是低倍）') + '</div></div>';
+    }
+    if(S.mode === "move"){
+      return '<div class="ctrl"><div class="lab">移动玻片</div>'
+        + '<div class="range"><input type="range" id="rngSlide" min="-100" max="100" step="1" value="' + S.slideX + '">'
+        + '<span class="val">' + (S.slideX > 0 ? "向右 " + S.slideX : S.slideX < 0 ? "向左 " + (-S.slideX) : "居中") + '</span></div>'
+        + '<div class="hint">' + (Math.abs(S.slideX) < 3
+            ? "拖一下滑块，盯住视野里的细胞——它会往<b>反方向</b>跑。"
+            : "玻片向" + (S.slideX > 0 ? "右" : "左") + "移，物像向<b>" + (S.slideX > 0 ? "左" : "右") + "</b>移。想把物像移到中央，就往<b>物像偏的方向</b>推玻片。") + '</div></div>';
+    }
+    return "";
+  }
+
+  function focusWord(){
+    var a = Math.abs(S.focus);
+    if(a < 6) return "清晰";
+    if(a < 30) return "略微模糊";
+    if(a < 70) return "模糊";
+    return "完全模糊";
+  }
+  function focusHint(){
+    var a = Math.abs(S.focus);
+    if(a < 6) return "现在物像最清晰。<b>粗准焦螺旋</b>用来找物像，找到之后轻微模糊就用<b>细准焦螺旋</b>微调。";
+    return "物像不清晰。先转粗准焦螺旋把镜筒降下来（眼睛看物镜），再慢慢升上去（眼睛看目镜），物像会从模糊变清晰。";
+  }
+  function lightHint(){
+    var b = brightness();
+    if(b < 0.7) return "视野偏暗。光线弱时：换<b>大光圈</b>，并把反光镜换成<b>凹面镜</b>。";
+    if(b > 1.6) return "视野很亮。光线强时：换<b>小光圈</b>，用<b>平面镜</b>。";
+    return "亮度合适。对光三步：转低倍物镜 → 对准通光孔 → 反光镜对光，直到看到一个<b>明亮的白色视野</b>。";
+  }
+
+  function renderPanel(){
+    if(S.mode === "struct"){
+      if(S.sel && partById(S.sel)){
+        var p = partById(S.sel);
+        var h = '<h3>' + p.name + '</h3>';
+        if(p.en) h += '<span class="en">' + p.en + '</span>';
+        if(p.only) h += '<span class="tag">' + p.only + '</span>';
+        h += '<div class="p-sec"><h4>作用</h4><p>' + p.desc + '</p></div>';
+        if(p.warn) h += '<div class="p-sec warn"><h4>易错点</h4><p>' + p.warn + '</p></div>';
+        h += '<div class="keys"><span><kbd>1</kbd>~<kbd>5</kbd> 切步骤</span><span><kbd>Esc</kbd> 取消选中</span></div>';
+        panel.innerHTML = h;
+      } else {
+        panel.innerHTML = '<h3>' + D.hero.title + '</h3>'
+          + '<p class="goal">看完这一页，你要能说出：<b>' + D.hero.goal + '</b></p>'
+          + '<ol class="tips">' + D.hero.tips.map(function(x){ return '<li>' + x + '</li>'; }).join('') + '</ol>'
+          + '<div class="keys"><span><kbd>1</kbd>~<kbd>5</kbd> 切步骤</span><span><kbd>L</kbd> 隐藏标注</span>'
+          + '<span><kbd>F</kbd> 全屏</span><span><kbd>Esc</kbd> 取消</span></div>';
+      }
+      return;
+    }
+    var m = D.modes[S.mode];
+    panel.innerHTML = '<h3>' + m.title + '</h3>'
+      + '<p class="goal">' + m.lead + '</p>'
+      + controls()
+      + (m.note ? '<div class="p-sec warn"><h4>易错点</h4><p>' + m.note + '</p></div>' : '')
+      + '<div class="keys"><span><kbd>1</kbd>~<kbd>5</kbd> 切步骤</span><span><kbd>L</kbd> 隐藏标注</span>'
+      + '<span><kbd>F</kbd> 全屏</span></div>';
+  }
+
+  function fullRender(){ render(); renderPanel(); }
+
+  function setMode(m){
+    S.mode = m;
+    S.sel = null;
+    var bs = document.querySelectorAll("#mode button");
+    for(var i=0;i<bs.length;i++) bs[i].classList.toggle("on", bs[i].getAttribute("data-mode") === m);
+    fullRender();
+  }
+
+  svg.addEventListener("click", function(e){
+    var n = e.target.closest("[data-part]");
+    if(!n){ S.sel = null; render(); renderPanel(); return; }
+    S.sel = n.getAttribute("data-part");
+    if(S.mode !== "struct"){
+      S.mode = "struct";
+      var bs = document.querySelectorAll("#mode button");
+      for(var i=0;i<bs.length;i++) bs[i].classList.toggle("on", bs[i].getAttribute("data-mode") === "struct");
+    }
+    render(); renderPanel();
+  });
+
+  document.getElementById("mode").addEventListener("click", function(e){
+    var b = e.target.closest("button[data-mode]");
+    if(b) setMode(b.getAttribute("data-mode"));
+  });
+
+  panel.addEventListener("click", function(e){
+    var b = e.target.closest("button");
+    if(!b) return;
+    if(b.hasAttribute("data-ap")){ S.aperture = +b.getAttribute("data-ap"); fullRender(); return; }
+    if(b.hasAttribute("data-mi")){ S.mirror = +b.getAttribute("data-mi"); fullRender(); return; }
+    if(b.hasAttribute("data-obj")){ S.objective = +b.getAttribute("data-obj"); fullRender(); return; }
+  });
+
+  panel.addEventListener("input", function(e){
+    var t = e.target;
+    if(t.id === "rngFocus"){
+      S.focus = +t.value;
+      render();
+      var w = panel.querySelector(".range .val");
+      if(w) w.textContent = focusWord();
+      var h = document.getElementById("focusHint");
+      if(h) h.innerHTML = focusHint();
+    }
+    if(t.id === "rngSlide"){
+      S.slideX = +t.value;
+      render();
+      var w2 = panel.querySelector(".range .val");
+      if(w2) w2.textContent = (S.slideX > 0 ? "向右 " + S.slideX : S.slideX < 0 ? "向左 " + (-S.slideX) : "居中");
+    }
+  });
+
+  var lbBtn = document.getElementById("btnLabel");
+  lbBtn.addEventListener("click", function(){
+    var off = svg.classList.toggle("hide-lb");
+    lbBtn.classList.toggle("off", off);
+    lbBtn.textContent = off ? "显示标注　L" : "隐藏标注　L";
+  });
+
+  var fullBtn = document.getElementById("btnFull");
+  function toggleFull(){
+    if(!document.fullscreenElement){
+      if(document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+    } else if(document.exitFullscreen){
+      document.exitFullscreen();
+    }
+  }
+  fullBtn.addEventListener("click", toggleFull);
+
+  document.addEventListener("keydown", function(e){
+    var k = e.key;
+    if(k === "1") setMode("struct");
+    else if(k === "2") setMode("light");
+    else if(k === "3") setMode("focus");
+    else if(k === "4") setMode("power");
+    else if(k === "5") setMode("move");
+    else if(k === "Escape"){ S.sel = null; render(); renderPanel(); }
+    else if(k === "l" || k === "L") lbBtn.click();
+    else if(k === "f" || k === "F") toggleFull();
+  });
+
+  setMode("struct");
+
+  window.__SELFTEST__ = function(){
+    var errs = [];
+    var keep = { o:S.objective, e:S.eyepiece, f:S.focus, s:S.slideX, m:S.mode };
+
+    S.objective = 10; S.eyepiece = 10;
+    if(mag() !== 100) errs.push("10×10 应为 100，实得 " + mag());
+    S.objective = 40;
+    if(mag() !== 400) errs.push("10×40 应为 400，实得 " + mag());
+    if(mag() === 50) errs.push("放大倍数被错误相加");
+
+    S.objective = 10; var r1 = cellR(), n1 = visibleCells(), d1 = darken();
+    S.objective = 40; var r2 = cellR(), n2 = visibleCells(), d2 = darken();
+    if(!(r2 > r1)) errs.push("倍数变大，细胞应变大");
+    if(!(n2 < n1)) errs.push("倍数变大，可见细胞数应变少（" + n1 + "→" + n2 + "）");
+    if(!(d2 > d1)) errs.push("倍数变大，视野应变暗");
+
+    S.slideX = 30; var sh = imageShift();
+    if(!(sh < 0)) errs.push("玻片右移时物像位移应为负（反向），实得 " + sh);
+    S.slideX = -30;
+    if(!(imageShift() > 0)) errs.push("玻片左移时物像位移应为正，实得 " + imageShift());
+
+    S.focus = 0; var b0 = blurAmt();
+    S.focus = 60; var b1 = blurAmt();
+    if(b0 !== 0) errs.push("准焦居中时模糊度应为 0");
+    if(!(b1 > b0)) errs.push("偏离焦点时模糊度应增大");
+
+    var cx = O.eye[0];
+    [O.source, O.aperture, O.specimen, O.objective, O.eyepiece, O.eye].forEach(function(p, i){
+      if(Math.abs(p[0] - cx) > 0.5) errs.push("光路第 " + i + " 点不在同一竖直轴上");
+    });
+
+    if(!D.parts || !D.parts.length) errs.push("parts 为空");
+    var ids = {};
+    D.parts.forEach(function(p){ ids[p.id] = 1; if(!p.name || !p.desc) errs.push("部件字段缺失: " + p.id); });
+    (D.instrument.shapes||[]).forEach(function(s){
+      if(s.part && !ids[s.part]) errs.push("图形引用了未知部件: " + s.part);
+    });
+    (D.labels||[]).forEach(function(L){
+      if(!ids[L.p]) errs.push("标注引用了未知部件: " + L.p);
+    });
+
+    S.objective = keep.o; S.eyepiece = keep.e; S.focus = keep.f;
+    S.slideX = keep.s; S.mode = keep.m;
+    return errs;
+  };
+
+  if(!window.__QUIET__){
+    var err = window.__SELFTEST__();
+    if(err.length) console.log("SELFTEST FAIL: " + err.join(" | "));
+    else console.log("SELFTEST PASS");
+  }
+})();
+</script>
+</body>
+</html>

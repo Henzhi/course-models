@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>动物体 与 植物体 的结构层次 · 七上 · 生物</title>
+<style>
+  :root{
+    --bg:#f4f6fb; --panel:#fff; --ink:#1d2333; --ink2:#4b5468; --muted:#8b93a7;
+    --line:#e3e6f0; --brand:#5b5bd6; --soft:#eeedfd;
+    --warn:#a8461f; --warnbg:#fff5f0; --warnline:#f6d3c2;
+    --ok:#2f6b45; --okbg:#eef7f1; --okline:#cbe5d5;
+    --shadow:0 1px 2px rgba(29,35,51,.05),0 10px 30px -20px rgba(29,35,51,.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC","Segoe UI",system-ui,sans-serif;
+    background:var(--bg); color:var(--ink); font-size:16px; line-height:1.65;
+    min-height:100vh; display:flex; flex-direction:column; -webkit-font-smoothing:antialiased;
+  }
+  header{padding:14px 24px 12px; background:#fff; border-bottom:1px solid var(--line)}
+  .topbar{display:flex; align-items:center; gap:14px; font-size:13px}
+  .back{
+    color:var(--brand); text-decoration:none; font-weight:600;
+    border:1px solid #dedcfb; background:var(--soft); border-radius:7px;
+    padding:2px 10px; white-space:nowrap;
+  }
+  .back:hover{background:#e4e3fc}
+  .crumb{font-size:13px; color:var(--muted); letter-spacing:.2px}
+  h1{font-size:25px; font-weight:700; letter-spacing:-.3px; margin-top:1px}
+  .sub{font-size:14px; color:var(--ink2); margin-top:3px}
+  .tools{display:flex; gap:10px; align-items:center; margin-top:12px; flex-wrap:wrap}
+  .seg{display:inline-flex; background:#eef0f7; border-radius:10px; padding:3px}
+  .seg button{
+    border:0; background:transparent; font:inherit; font-size:14px; font-weight:500;
+    color:var(--ink2); padding:6px 15px; border-radius:8px; cursor:pointer;
+  }
+  .seg button.on{background:#fff; color:var(--brand); box-shadow:0 1px 3px rgba(29,35,51,.13)}
+  .ghost{
+    border:1px solid var(--line); background:#fff; border-radius:9px;
+    padding:6px 13px; font:inherit; font-size:13.5px; color:var(--ink2); cursor:pointer;
+  }
+  .ghost:hover{border-color:#c4c9dd; color:var(--ink)}
+  main{
+    flex:1; display:grid; grid-template-columns:minmax(0,1fr) 400px;
+    gap:16px; padding:16px 20px 8px; min-height:0;
+  }
+  .canvas-wrap{
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:6px; display:flex; min-height:0;
+  }
+  svg{width:100%; height:100%; display:block; min-height:0}
+  .panel{
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:18px 20px 24px; overflow:auto;
+  }
+  .panel h3{font-size:20px; font-weight:700; letter-spacing:-.2px}
+  .panel .step-no{
+    display:inline-block; font-size:12px; font-weight:700; color:#fff;
+    background:var(--brand); border-radius:6px; padding:1px 8px; margin-right:7px;
+    vertical-align:2px;
+  }
+  .goal{
+    font-size:16px; color:var(--ink2); margin-top:11px;
+    background:#f7f7fe; border-left:3px solid var(--brand);
+    border-radius:0 8px 8px 0; padding:10px 13px;
+  }
+  .p-sec{margin-top:14px}
+  .p-sec h4{font-size:12.5px; font-weight:700; color:var(--muted); letter-spacing:1.2px; margin-bottom:4px}
+  .p-sec p{font-size:16px; color:var(--ink2)}
+  .p-sec.warn{background:var(--warnbg); border:1px solid var(--warnline); border-radius:10px; padding:11px 14px}
+  .p-sec.warn h4{color:var(--warn)}
+  .p-sec.warn p{color:#7d3617}
+  .p-sec.ok{background:var(--okbg); border:1px solid var(--okline); border-radius:10px; padding:11px 14px}
+  .p-sec.ok h4{color:var(--ok)}
+  .p-sec.ok p{color:#2a5c40}
+  .ctrl{border-top:1px dashed var(--line); padding-top:13px; margin-top:14px}
+  .ctrl:first-of-type{border-top:0; padding-top:0; margin-top:10px}
+  .ctrl .lab{font-size:12.5px; font-weight:700; color:var(--muted); letter-spacing:1px; margin-bottom:7px}
+  .btns{display:flex; gap:7px; flex-wrap:wrap}
+  .btns button{
+    border:1px solid var(--line); background:#fff; border-radius:8px;
+    padding:5px 10px; font:inherit; font-size:13px; color:var(--ink2); cursor:pointer;
+    white-space:nowrap;
+  }
+  .btns button:hover{border-color:#c4c9dd}
+  .btns button.on{background:var(--soft); border-color:#c9c3f5; color:var(--brand); font-weight:700}
+  .empty-note{
+    margin-top:14px; background:#fff8f3; border:1px dashed #e6c3a8;
+    border-radius:10px; padding:12px 14px;
+  }
+  .empty-note h4{font-size:12.5px; font-weight:700; color:var(--warn); letter-spacing:1.2px; margin-bottom:4px}
+  .empty-note p{font-size:15.5px; color:#7d3617}
+  .keys{
+    margin-top:16px; padding-top:13px; border-top:1px dashed var(--line);
+    font-size:12.5px; color:var(--muted); line-height:1.9;
+  }
+  .keys span{display:inline-block; margin-right:12px; white-space:nowrap}
+  .keys kbd{
+    font-family:Consolas,monospace; font-size:11.5px; background:#f1f2f8;
+    border:1px solid #dde0ec; border-bottom-width:2px; border-radius:4px;
+    padding:0 5px; color:var(--ink2);
+  }
+  footer{
+    padding:6px 24px 14px; font-size:12.5px; color:var(--muted);
+    display:flex; gap:18px; flex-wrap:wrap;
+  }
+  footer b{color:var(--ink2); font-weight:600}
+  @media (max-width:1180px){
+    main{grid-template-columns:1fr; grid-template-rows:minmax(300px,1fr) auto}
+    .panel{max-height:350px}
+    h1{font-size:21px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <a class="back" href="../../index.html">← 全部模型</a>
+    <span class="crumb">生物 · 七上 · 第一单元 生物和细胞 · 1.3.2 / 1.3.3</span>
+  </div>
+  <h1>动物体 与 植物体 的结构层次</h1>
+  <p class="sub">把五级结构排成一条链，逐级点开看。植物那条链中间空了一格——空的正是「系统」。</p>
+  <div class="tools">
+    <div class="seg" id="kind">
+      <button type="button" data-kind="animal" class="on">动物体</button>
+      <button type="button" data-kind="plant">植物体</button>
+    </div>
+    <button type="button" class="ghost" id="btnFull">全屏　F</button>
+  </div>
+</header>
+
+<main>
+  <div class="canvas-wrap">
+    <svg id="cv" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+  <aside class="panel" id="panel"></aside>
+</main>
+
+<footer>
+  <span><b>教材位置</b>　七上 · 第一单元 生物和细胞 · 1.3.2 / 1.3.3</span>
+  <span><b>课标要求</b>　理解</span>
+  <span><b>建议用时</b>　15–20 分钟</span>
+</footer>
+
+<script>
+window.__APP__ = {"canvas":{"w":900,"h":560},"chains":{"animal":{"name":"动物体","levels":[{"name":"细胞","ex":"胃壁细胞","caption":"细胞 · 生物体结构和功能的基本单位","lead":"细胞是构成生物体的<b>基本单位</b>。胃壁上的细胞有上皮细胞、腺细胞、肌细胞……形态不同，但都是细胞。","note":"细胞很小，必须用显微镜才能看到——上一页学的显微镜就是干这个的。","shapes":[{"t":"rect","x":390,"y":175,"w":120,"h":170,"rx":30,"fill":"#fdf1f1","stroke":"#d97a8a","sw":3},{"t":"circle","cx":425,"cy":235,"r":32,"fill":"#ece4fa","stroke":"#9b7ee0","sw":2},{"t":"circle","cx":425,"cy":235,"r":11,"fill":"#9b7ee0"},{"t":"ellipse","cx":480,"cy":300,"rx":18,"ry":11,"rot":-20,"fill":"#fbdccb","stroke":"#e08a6a","sw":1.5},{"t":"ellipse","cx":440,"cy":320,"rx":16,"ry":9,"rot":15,"fill":"#fbdccb","stroke":"#e08a6a","sw":1.5},{"t":"circle","cx":462,"cy":205,"r":5,"fill":"#e8b7c2"},{"t":"circle","cx":448,"cy":270,"r":4,"fill":"#e8b7c2"}],"scale":1.7},{"name":"组织","ex":"上皮组织","caption":"组织 · 形态相似、结构和功能相同的细胞联合在一起","lead":"形态相似、结构和功能相同的细胞联合在一起，形成<b>组织</b>。","note":"血液是<b>组织</b>，不是器官。这是最常见的一个错。","shapes":[{"t":"rect","x":300,"y":180,"w":100,"h":115,"rx":22,"fill":"#fdf1f1","stroke":"#d97a8a","sw":2},{"t":"circle","cx":340,"cy":225,"r":20,"fill":"#ece4fa","stroke":"#9b7ee0","sw":1.6},{"t":"rect","x":400,"y":180,"w":100,"h":115,"rx":22,"fill":"#fdf1f1","stroke":"#d97a8a","sw":2},{"t":"circle","cx":440,"cy":225,"r":20,"fill":"#ece4fa","stroke":"#9b7ee0","sw":1.6},{"t":"rect","x":500,"y":180,"w":100,"h":115,"rx":22,"fill":"#fdf1f1","stroke":"#d97a8a","sw":2},{"t":"circle","cx":540,"cy":225,"r":20,"fill":"#ece4fa","stroke":"#9b7ee0","sw":1.6},{"t":"rect","x":300,"y":295,"w":100,"h":115,"rx":22,"fill":"#fdf1f1","stroke":"#d97a8a","sw":2},{"t":"circle","cx":340,"cy":340,"r":20,"fill":"#ece4fa","stroke":"#9b7ee0","sw":1.6},{"t":"rect","x":400,"y":295,"w":100,"h":115,"rx":22,"fill":"#fdf1f1","stroke":"#d97a8a","sw":2},{"t":"circle","cx":440,"cy":340,"r":20,"fill":"#ece4fa","stroke":"#9b7ee0","sw":1.6},{"t":"rect","x":500,"y":295,"w":100,"h":115,"rx":22,"fill":"#fdf1f1","stroke":"#d97a8a","sw":2},{"t":"circle","cx":540,"cy":340,"r":20,"fill":"#ece4fa","stroke":"#9b7ee0","sw":1.6}],"scale":1.3},{"name":"器官","ex":"胃","caption":"器官 · 胃壁从外到内是浆膜、肌肉层、黏膜","lead":"不同的组织按一定次序结合在一起，形成<b>器官</b>。胃就是一个器官，由四种组织构成。","note":"皮肤是<b>器官</b>（由上皮组织、结缔组织等多种组织构成），不是组织。叶也是器官。","pointer":[548,290,38],"shapes":[{"t":"ellipse","cx":450,"cy":290,"rx":130,"ry":140,"rot":-8,"fill":"#f7dcd6","stroke":"#d99a8a","sw":3},{"t":"ellipse","cx":450,"cy":290,"rx":106,"ry":116,"rot":-8,"fill":"#e8a5a5","stroke":"#d08585","sw":1.6},{"t":"ellipse","cx":450,"cy":290,"rx":82,"ry":94,"rot":-8,"fill":"#fdf0e8","stroke":"#d9a08a","sw":1.6},{"t":"path","d":"M 410 235 Q 430 265 415 295","fill":"none","stroke":"#e3b8a5","sw":3,"cap":"round"},{"t":"path","d":"M 450 222 Q 470 262 452 300","fill":"none","stroke":"#e3b8a5","sw":3,"cap":"round"},{"t":"path","d":"M 490 235 Q 508 270 492 305","fill":"none","stroke":"#e3b8a5","sw":3,"cap":"round"}],"scale":1.15},{"name":"系统","ex":"消化系统","caption":"系统 · 多个器官按顺序排列，共同完成生理功能","lead":"能够共同完成一种或几种生理功能的多个器官，按顺序排列在一起，形成<b>系统</b>。","note":"胃、小肠、大肠同属<b>消化系统</b>；它们不是各自独立工作，而是配合完成消化吸收。","pointer":[440,282,66],"shapes":[{"t":"rect","x":330,"y":150,"w":240,"h":310,"rx":70,"fill":"#faf8f6","stroke":"#ddd6cc","sw":2},{"t":"line","x1":450,"y1":178,"x2":450,"y2":238,"stroke":"#e8b0b0","sw":16,"cap":"round"},{"t":"ellipse","cx":440,"cy":282,"rx":42,"ry":50,"rot":-10,"fill":"#e08a4a","stroke":"#c9764f","sw":2},{"t":"path","d":"M 474 318 C 516 334 516 370 474 382 C 432 394 432 430 474 440","fill":"none","stroke":"#e8b0b0","sw":13,"cap":"round"},{"t":"path","d":"M 474 440 L 522 440 L 522 330","fill":"none","stroke":"#d9c4c4","sw":13,"cap":"round"},{"t":"text","x":584,"y":250,"tx":"食道","size":12.5,"fill":"#8b93a7"},{"t":"text","x":386,"y":268,"tx":"胃","size":13,"fill":"#b05a2a","weight":700,"anchor":"end"},{"t":"text","x":560,"y":410,"tx":"小肠","size":12.5,"fill":"#8b93a7"},{"t":"text","x":548,"y":350,"tx":"大肠","size":12.5,"fill":"#8b93a7"}],"scale":1.2},{"name":"个体","ex":"人体","caption":"个体 · 多个系统协调配合，构成完整的人体","lead":"多个系统协调配合，构成完整的<b>人体</b>。","takeaway":"动物体的结构层次：<b>细胞 → 组织 → 器官 → 系统 → 个体</b>。","shapes":[{"t":"line","x1":398,"y1":224,"x2":340,"y2":350,"stroke":"#f0c8c0","sw":20,"cap":"round"},{"t":"line","x1":502,"y1":224,"x2":560,"y2":350,"stroke":"#f0c8c0","sw":20,"cap":"round"},{"t":"line","x1":425,"y1":392,"x2":410,"y2":512,"stroke":"#f0c8c0","sw":22,"cap":"round"},{"t":"line","x1":475,"y1":392,"x2":490,"y2":512,"stroke":"#f0c8c0","sw":22,"cap":"round"},{"t":"rect","x":392,"y":196,"w":116,"h":200,"rx":30,"fill":"#fdf8f8","stroke":"#d99a8a","sw":2},{"t":"circle","cx":450,"cy":150,"r":38,"fill":"#fdf1f1","stroke":"#d99a8a","sw":2},{"t":"ellipse","cx":450,"cy":320,"rx":40,"ry":58,"fill":"#e08a4a","opacity":0.22}],"scale":0.82}]},"plant":{"name":"植物体","levels":[{"name":"细胞","ex":"叶肉细胞","caption":"细胞 · 植物细胞有细胞壁、液泡和叶绿体","lead":"叶肉细胞里有<b>叶绿体</b>，是进行光合作用的地方。","note":"植物细胞还有细胞壁和大液泡——这是和动物细胞最大的不同。","pointer":[450,265,112],"shapes":[{"t":"rect","x":392,"y":180,"w":116,"h":170,"rx":14,"fill":"#dff0c6","stroke":"#6f9c3f","sw":5},{"t":"rect","x":400,"y":188,"w":100,"h":154,"rx":10,"fill":"#f6fce9","stroke":"#d98a3a","sw":2},{"t":"ellipse","cx":466,"cy":292,"rx":33,"ry":40,"fill":"#e2f1fd","stroke":"#7fb3dd","sw":1.6},{"t":"circle","cx":424,"cy":226,"r":23,"fill":"#ece4fa","stroke":"#9b7ee0","sw":2},{"t":"circle","cx":424,"cy":226,"r":8,"fill":"#9b7ee0"},{"t":"ellipse","cx":422,"cy":285,"rx":15,"ry":8,"rot":-25,"fill":"#c9e6a8","stroke":"#6fae4a","sw":1.4},{"t":"ellipse","cx":418,"cy":318,"rx":14,"ry":7,"rot":20,"fill":"#c9e6a8","stroke":"#6fae4a","sw":1.4},{"t":"ellipse","cx":462,"cy":212,"rx":14,"ry":7,"rot":12,"fill":"#c9e6a8","stroke":"#6fae4a","sw":1.4}],"scale":1.7},{"name":"组织","ex":"营养组织","caption":"组织 · 栅栏组织（上）和海绵组织（下）","lead":"叶肉里的细胞排列成<b>栅栏组织</b>和<b>海绵组织</b>，它们都属于营养组织。","note":"组织不只一种：叶里还有保护组织（表皮）和输导组织（叶脉）。","shapes":[{"t":"rect","x":330,"y":175,"w":52,"h":110,"rx":6,"fill":"#c9e6a8","stroke":"#6f9c3f","sw":2},{"t":"rect","x":386,"y":175,"w":52,"h":110,"rx":6,"fill":"#c9e6a8","stroke":"#6f9c3f","sw":2},{"t":"rect","x":442,"y":175,"w":52,"h":110,"rx":6,"fill":"#c9e6a8","stroke":"#6f9c3f","sw":2},{"t":"rect","x":498,"y":175,"w":52,"h":110,"rx":6,"fill":"#c9e6a8","stroke":"#6f9c3f","sw":2},{"t":"circle","cx":355,"cy":340,"r":32,"fill":"#dff0c6","stroke":"#6f9c3f","sw":2},{"t":"circle","cx":425,"cy":352,"r":29,"fill":"#dff0c6","stroke":"#6f9c3f","sw":2},{"t":"circle","cx":495,"cy":336,"r":33,"fill":"#dff0c6","stroke":"#6f9c3f","sw":2},{"t":"circle","cx":562,"cy":352,"r":28,"fill":"#dff0c6","stroke":"#6f9c3f","sw":2},{"t":"text","x":300,"y":232,"tx":"栅栏组织","size":13,"fill":"#4d7528","anchor":"end","weight":600},{"t":"text","x":320,"y":345,"tx":"海绵组织","size":13,"fill":"#4d7528","anchor":"end","weight":600}],"scale":1.25},{"name":"器官","ex":"叶","caption":"器官 · 叶由多种组织构成","lead":"叶是一个<b>器官</b>，由保护组织（表皮）、营养组织（叶肉）、输导组织（叶脉）共同构成。","note":"叶是器官，不是组织——因为它由多种组织构成。这一条和「血液是组织」是同一组考点。","pointer":[450,330,34],"shapes":[{"t":"rect","x":180,"y":220,"w":540,"h":140,"rx":70,"fill":"#f4fbe9","stroke":"#6f9c3f","sw":3},{"t":"rect","x":205,"y":232,"w":490,"h":16,"rx":8,"fill":"#e6f2d4","stroke":"#a9c98a","sw":1.2},{"t":"rect","x":215,"y":252,"w":30,"h":46,"rx":5,"fill":"#c9e6a8","stroke":"#6fae4a","sw":1.4},{"t":"rect","x":255,"y":252,"w":30,"h":46,"rx":5,"fill":"#c9e6a8","stroke":"#6fae4a","sw":1.4},{"t":"rect","x":295,"y":252,"w":30,"h":46,"rx":5,"fill":"#c9e6a8","stroke":"#6fae4a","sw":1.4},{"t":"rect","x":335,"y":252,"w":30,"h":46,"rx":5,"fill":"#c9e6a8","stroke":"#6fae4a","sw":1.4},{"t":"rect","x":375,"y":252,"w":30,"h":46,"rx":5,"fill":"#c9e6a8","stroke":"#6fae4a","sw":1.4},{"t":"rect","x":415,"y":252,"w":30,"h":46,"rx":5,"fill":"#c9e6a8","stroke":"#6fae4a","sw":1.4},{"t":"rect","x":495,"y":252,"w":30,"h":46,"rx":5,"fill":"#c9e6a8","stroke":"#6fae4a","sw":1.4},{"t":"rect","x":535,"y":252,"w":30,"h":46,"rx":5,"fill":"#c9e6a8","stroke":"#6fae4a","sw":1.4},{"t":"rect","x":575,"y":252,"w":30,"h":46,"rx":5,"fill":"#c9e6a8","stroke":"#6fae4a","sw":1.4},{"t":"rect","x":615,"y":252,"w":30,"h":46,"rx":5,"fill":"#c9e6a8","stroke":"#6fae4a","sw":1.4},{"t":"rect","x":655,"y":252,"w":30,"h":46,"rx":5,"fill":"#c9e6a8","stroke":"#6fae4a","sw":1.4},{"t":"circle","cx":240,"cy":325,"r":17,"fill":"#dff0c6","stroke":"#6f9c3f","sw":1.4},{"t":"circle","cx":290,"cy":334,"r":15,"fill":"#dff0c6","stroke":"#6f9c3f","sw":1.4},{"t":"circle","cx":340,"cy":323,"r":18,"fill":"#dff0c6","stroke":"#6f9c3f","sw":1.4},{"t":"circle","cx":390,"cy":336,"r":16,"fill":"#dff0c6","stroke":"#6f9c3f","sw":1.4},{"t":"circle","cx":512,"cy":322,"r":17,"fill":"#dff0c6","stroke":"#6f9c3f","sw":1.4},{"t":"circle","cx":562,"cy":336,"r":15,"fill":"#dff0c6","stroke":"#6f9c3f","sw":1.4},{"t":"circle","cx":612,"cy":324,"r":18,"fill":"#dff0c6","stroke":"#6f9c3f","sw":1.4},{"t":"circle","cx":660,"cy":334,"r":15,"fill":"#dff0c6","stroke":"#6f9c3f","sw":1.4},{"t":"circle","cx":450,"cy":330,"r":30,"fill":"#cfe0f5","stroke":"#7fa8d0","sw":2},{"t":"rect","x":205,"y":352,"w":490,"h":14,"rx":7,"fill":"#e6f2d4","stroke":"#a9c98a","sw":1.2},{"t":"text","x":205,"y":208,"tx":"上表皮（保护组织）","size":12,"fill":"#6b8a4a","anchor":"start"},{"t":"text","x":205,"y":390,"tx":"下表皮（保护组织）","size":12,"fill":"#6b8a4a","anchor":"start"},{"t":"text","x":450,"y":392,"tx":"叶脉（输导组织）","size":12,"fill":"#4a6f9a"}],"scale":1.0},{"name":"系统","ex":"","empty":true,"caption":"系统 · 植物没有这一层","lead":"植物<b>没有</b>「系统」这一层。它的器官直接构成植物体。","note":"动物：器官 → 系统 → 个体。植物：器官 → 植物体。少的就是「系统」。","scale":1.0},{"name":"植物体","ex":"一株植物","caption":"植物体 · 六大器官直接构成","lead":"根、茎、叶、花、果实、种子，六大器官直接构成<b>植物体</b>。","takeaway":"植物体的结构层次：<b>细胞 → 组织 → 器官 → 植物体</b>（没有系统）。","shapes":[{"t":"line","x1":450,"y1":395,"x2":418,"y2":476,"stroke":"#c9a887","sw":6,"cap":"round"},{"t":"line","x1":450,"y1":395,"x2":450,"y2":492,"stroke":"#c9a887","sw":6,"cap":"round"},{"t":"line","x1":450,"y1":395,"x2":484,"y2":476,"stroke":"#c9a887","sw":6,"cap":"round"},{"t":"line","x1":450,"y1":395,"x2":450,"y2":175,"stroke":"#8aa84f","sw":11,"cap":"round"},{"t":"ellipse","cx":394,"cy":226,"rx":58,"ry":26,"rot":-28,"fill":"#c9e6a8","stroke":"#6f9c3f","sw":2},{"t":"ellipse","cx":508,"cy":270,"rx":58,"ry":26,"rot":26,"fill":"#c9e6a8","stroke":"#6f9c3f","sw":2},{"t":"ellipse","cx":400,"cy":322,"rx":52,"ry":24,"rot":-22,"fill":"#c9e6a8","stroke":"#6f9c3f","sw":2},{"t":"circle","cx":450,"cy":168,"r":12,"fill":"#f4c6d8","stroke":"#d98aa8","sw":1.6}],"scale":1.12}]}}};
+(function(){
+  "use strict";
+  var D = window.__APP__;
+  var NS = "http://www.w3.org/2000/svg";
+  var svg = document.getElementById("cv");
+  var panel = document.getElementById("panel");
+  var S = { kind: "animal", level: 0 };
+
+  svg.setAttribute("viewBox", "0 0 " + D.canvas.w + " " + D.canvas.h);
+
+  function mk(tag, a){
+    var e = document.createElementNS(NS, tag);
+    if(a){ for(var k in a){ if(a[k] !== null && a[k] !== undefined) e.setAttribute(k, a[k]); } }
+    return e;
+  }
+
+  function shape(s){
+    var node = null;
+    if(s.g){
+      node = mk("g", s.tr ? {transform:"translate(" + s.tr[0] + "," + s.tr[1] + ")"} : null);
+      s.g.forEach(function(c){ var n = shape(c); if(n) node.appendChild(n); });
+      return node;
+    }
+    if(s.t === "rect"){
+      node = mk("rect", {x:s.x, y:s.y, width:s.w, height:s.h, rx:s.rx||0,
+        fill:s.fill||"none", stroke:s.stroke||"none", "stroke-width":s.sw||0});
+    } else if(s.t === "ellipse"){
+      node = mk("ellipse", {cx:s.cx, cy:s.cy, rx:s.rx, ry:s.ry,
+        fill:s.fill||"none", stroke:s.stroke||"none", "stroke-width":s.sw||0});
+      if(s.rot) node.setAttribute("transform","rotate(" + s.rot + " " + s.cx + " " + s.cy + ")");
+    } else if(s.t === "circle"){
+      node = mk("circle", {cx:s.cx, cy:s.cy, r:s.r,
+        fill:s.fill||"none", stroke:s.stroke||"none", "stroke-width":s.sw||0});
+    } else if(s.t === "path"){
+      node = mk("path", {d:s.d, fill:s.fill||"none", stroke:s.stroke||"none", "stroke-width":s.sw||0,
+        "stroke-linecap":s.cap||"butt", "stroke-linejoin":"round"});
+      if(s.dash) node.setAttribute("stroke-dasharray", s.dash);
+    } else if(s.t === "line"){
+      node = mk("line", {x1:s.x1, y1:s.y1, x2:s.x2, y2:s.y2,
+        stroke:s.stroke||"none", "stroke-width":s.sw||1, "stroke-linecap":s.cap||"butt"});
+      node.setAttribute("fill","none");
+      if(s.dash) node.setAttribute("stroke-dasharray", s.dash);
+    } else if(s.t === "text"){
+      node = mk("text", {x:s.x, y:s.y, "font-size":s.size||15, fill:s.fill||"#1d2333",
+        "text-anchor":s.anchor||"middle", "dominant-baseline":"middle", "font-weight":s.weight||400});
+      node.textContent = s.tx;
+    }
+    return node;
+  }
+
+  function buildChain(ch){
+    var g = mk("g", {"class":"chain"});
+    var x0 = 30, w = 150, gap = 25, y = 44, h = 54;
+    ch.levels.forEach(function(lv, i){
+      var x = x0 + i * (w + gap);
+      var on = i === S.level;
+      var isGap = !!lv.empty;
+      var rect = mk("rect", {
+        x:x, y:y, width:w, height:h, rx:11,
+        fill: isGap ? "#fdfaf7" : (on ? "#eeedfd" : "#f7f8fc"),
+        stroke: isGap ? "#e2c9b5" : (on ? "#c9c3f5" : "#e3e6f0"),
+        "stroke-width": on ? 2 : 1.2
+      });
+      if(isGap) rect.setAttribute("stroke-dasharray", "5 4");
+      var grp = mk("g", {"class":"lv", "data-lv": i, style:"cursor:pointer"});
+      grp.appendChild(rect);
+      var t1 = mk("text", {x:x + w/2, y:y + 20, "font-size":15, "font-weight":700,
+        "text-anchor":"middle", "dominant-baseline":"middle",
+        fill: isGap ? "#b08968" : (on ? "#4a3fb0" : "#4b5468")});
+      t1.textContent = lv.name;
+      grp.appendChild(t1);
+      var t2 = mk("text", {x:x + w/2, y:y + 39, "font-size":11.5,
+        "text-anchor":"middle", "dominant-baseline":"middle",
+        fill: isGap ? "#c0a48c" : "#78829a"});
+      t2.textContent = isGap ? "植物没有" : lv.ex;
+      grp.appendChild(t2);
+      g.appendChild(grp);
+
+      if(i < ch.levels.length - 1){
+        var ax = x + w + 4, ax2 = x + w + gap - 4;
+        var ln = mk("line", {x1:ax, y1:y + h/2, x2:ax2, y2:y + h/2,
+          stroke:"#c3cadb", "stroke-width":2});
+        ln.setAttribute("fill","none");
+        g.appendChild(ln);
+        var tri = mk("path", {d:"M " + (ax2-5) + " " + (y+h/2-4) + " L " + (ax2+1) + " " + (y+h/2)
+          + " L " + (ax2-5) + " " + (y+h/2+4) + " Z", fill:"#c3cadb"});
+        g.appendChild(tri);
+      }
+    });
+    return g;
+  }
+
+  function txt(x, y, s, size, fill, weight){
+    var t = mk("text", {x:x, y:y, "font-size":size, fill:fill,
+      "text-anchor":"middle", "dominant-baseline":"middle", "font-weight":weight||400});
+    t.textContent = s;
+    return t;
+  }
+
+  function buildScene(){
+    var ch = D.chains[S.kind];
+    var lv = ch.levels[S.level];
+    var g = mk("g", {"class":"scene"});
+
+    if(lv.empty){
+      g.appendChild(mk("rect", {x:250, y:170, width:400, height:250, rx:18,
+        fill:"#fdfaf7", stroke:"#e2c9b5", "stroke-width":2, "stroke-dasharray":"9 7"}));
+      g.appendChild(txt(450, 258, "×", 76, "#dcc3ae", 700));
+      g.appendChild(txt(450, 330, "植物没有「系统」这一层", 22, "#b08968", 700));
+      g.appendChild(txt(450, 368, "器官直接构成植物体", 14, "#c0a48c", 400));
+    } else {
+      var s = lv.scale || 1;
+      var art = mk("g", {});
+      if(s !== 1){
+        art.setAttribute("transform", "translate(" + (450 * (1 - s)) + "," + (300 * (1 - s))
+          + ") scale(" + s + ")");
+      }
+      (lv.shapes || []).forEach(function(sh){ var n = shape(sh); if(n) art.appendChild(n); });
+      if(lv.pointer){
+        var p = lv.pointer;
+        art.appendChild(mk("circle", {cx:p[0], cy:p[1], r:p[2], fill:"none",
+          stroke:"#e08a4a", "stroke-width":2.4, "stroke-dasharray":"7 6"}));
+      }
+      g.appendChild(art);
+    }
+
+    var cap = mk("text", {x:450, y:520, "font-size":14.5, fill:"#6b7488",
+      "text-anchor":"middle", "dominant-baseline":"middle"});
+    cap.textContent = lv.caption || "";
+    g.appendChild(cap);
+
+    return g;
+  }
+
+  function render(){
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    svg.appendChild(buildChain(D.chains[S.kind]));
+    svg.appendChild(buildScene());
+  }
+
+  function renderPanel(){
+    var ch = D.chains[S.kind];
+    var lv = ch.levels[S.level];
+    var h = '<h3><span class="step-no">' + (S.level + 1) + '</span>' + lv.name + '</h3>';
+    if(lv.empty){
+      h += '<div class="empty-note"><h4>这一层是空的</h4><p>' + lv.lead + '</p></div>';
+      if(lv.note) h += '<div class="p-sec warn"><h4>关键区别</h4><p>' + lv.note + '</p></div>';
+    } else {
+      h += '<p class="goal">' + lv.lead + '</p>';
+      if(lv.note) h += '<div class="p-sec warn"><h4>易错点</h4><p>' + lv.note + '</p></div>';
+      if(lv.takeaway) h += '<div class="p-sec ok"><h4>记住这一句</h4><p>' + lv.takeaway + '</p></div>';
+    }
+
+    h += '<div class="ctrl"><div class="lab">跳到层级</div><div class="btns">'
+      + ch.levels.map(function(x, i){
+          return '<button type="button" data-lv="' + i + '" class="' + (S.level === i ? "on" : "") + '">'
+            + (i+1) + ". " + x.name + '</button>';
+        }).join("")
+      + '</div></div>';
+
+    h += '<div class="keys"><span><kbd>1</kbd>~<kbd>5</kbd> 切层级</span>'
+      + '<span><kbd>A</kbd> 动物</span><span><kbd>P</kbd> 植物</span>'
+      + '<span><kbd>←</kbd><kbd>→</kbd> 上一级 / 下一级</span><span><kbd>F</kbd> 全屏</span></div>';
+    panel.innerHTML = h;
+  }
+
+  function fullRender(){ render(); renderPanel(); }
+
+  function go(i){
+    var n = D.chains[S.kind].levels.length;
+    S.level = Math.max(0, Math.min(n - 1, i));
+    fullRender();
+  }
+
+  function setKind(k){
+    S.kind = k;
+    S.level = 0;
+    var bs = document.querySelectorAll("#kind button");
+    for(var i=0;i<bs.length;i++) bs[i].classList.toggle("on", bs[i].getAttribute("data-kind") === k);
+    fullRender();
+  }
+
+  svg.addEventListener("click", function(e){
+    var n = e.target.closest("[data-lv]");
+    if(n) go(+n.getAttribute("data-lv"));
+  });
+
+  document.getElementById("kind").addEventListener("click", function(e){
+    var b = e.target.closest("button[data-kind]");
+    if(b) setKind(b.getAttribute("data-kind"));
+  });
+
+  panel.addEventListener("click", function(e){
+    var b = e.target.closest("button[data-lv]");
+    if(b) go(+b.getAttribute("data-lv"));
+  });
+
+  var fullBtn = document.getElementById("btnFull");
+  function toggleFull(){
+    if(!document.fullscreenElement){
+      if(document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+    } else if(document.exitFullscreen){
+      document.exitFullscreen();
+    }
+  }
+  fullBtn.addEventListener("click", toggleFull);
+
+  document.addEventListener("keydown", function(e){
+    var k = e.key;
+    if(k >= "1" && k <= "5") go(+k - 1);
+    else if(k === "ArrowRight") go(S.level + 1);
+    else if(k === "ArrowLeft") go(S.level - 1);
+    else if(k === "a" || k === "A") setKind("animal");
+    else if(k === "p" || k === "P") setKind("plant");
+    else if(k === "f" || k === "F") toggleFull();
+  });
+
+  fullRender();
+
+  window.__SELFTEST__ = function(){
+    var errs = [];
+    ["animal","plant"].forEach(function(k){
+      var ch = D.chains[k];
+      if(!ch) { errs.push("缺少链条: " + k); return; }
+      if(!ch.levels || ch.levels.length !== 5) errs.push(k + " 层级应为 5 个槽位");
+      ch.levels.forEach(function(lv, i){
+        if(!lv.name) errs.push(k + " 第 " + (i+1) + " 层缺少名称");
+        if(lv.empty) return;
+        if(!lv.shapes || !lv.shapes.length) errs.push(k + " 第 " + (i+1) + " 层没有图形");
+        if(!lv.lead) errs.push(k + " 第 " + (i+1) + " 层缺少说明");
+      });
+    });
+    var pa = D.chains.animal.levels.map(function(x){ return x.name; }).join(">");
+    var pp = D.chains.plant.levels.map(function(x){ return x.name; }).join(">");
+    if(pa.indexOf("系统") < 0) errs.push("动物链条缺少系统层");
+    if(pp.indexOf("系统") >= 0 && !D.chains.plant.levels[3].empty)
+      errs.push("植物第 4 层应标为空的系统层");
+    if(!D.chains.animal.levels[4].shapes || !D.chains.animal.levels[4].shapes.length)
+      errs.push("动物个体层没有图形");
+    if(!D.chains.plant.levels[4].shapes || !D.chains.plant.levels[4].shapes.length)
+      errs.push("植物体层没有图形");
+    return errs;
+  };
+
+  if(!window.__QUIET__){
+    var e = window.__SELFTEST__();
+    if(e.length) console.log("SELFTEST FAIL: " + e.join(" | "));
+    else console.log("SELFTEST PASS");
+  }
+})();
+</script>
+</body>
+</html>

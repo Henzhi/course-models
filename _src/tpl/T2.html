@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{PAGE_TITLE}}</title>
+<style>
+  :root{
+    --bg:#f4f6fb; --panel:#fff; --ink:#1d2333; --ink2:#4b5468; --muted:#8b93a7;
+    --line:#e3e6f0; --brand:#5b5bd6; --soft:#eeedfd;
+    --warn:#a8461f; --warnbg:#fff5f0; --warnline:#f6d3c2;
+    --ok:#2f6b45; --okbg:#eef7f1; --okline:#cbe5d5;
+    --shadow:0 1px 2px rgba(29,35,51,.05),0 10px 30px -20px rgba(29,35,51,.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC","Segoe UI",system-ui,sans-serif;
+    background:var(--bg); color:var(--ink); font-size:16px; line-height:1.65;
+    min-height:100vh; display:flex; flex-direction:column; -webkit-font-smoothing:antialiased;
+  }
+  header{padding:14px 24px 12px; background:#fff; border-bottom:1px solid var(--line)}
+  .topbar{display:flex; align-items:center; gap:14px; font-size:13px}
+  .back{
+    color:var(--brand); text-decoration:none; font-weight:600;
+    border:1px solid #dedcfb; background:var(--soft); border-radius:7px;
+    padding:2px 10px; white-space:nowrap;
+  }
+  .back:hover{background:#e4e3fc}
+  .crumb{font-size:13px; color:var(--muted); letter-spacing:.2px}
+  h1{font-size:25px; font-weight:700; letter-spacing:-.3px; margin-top:1px}
+  .sub{font-size:14px; color:var(--ink2); margin-top:3px}
+  .tools{display:flex; gap:10px; align-items:center; margin-top:12px; flex-wrap:wrap}
+  .ghost{
+    border:1px solid var(--line); background:#fff; border-radius:9px;
+    padding:6px 13px; font:inherit; font-size:13.5px; color:var(--ink2); cursor:pointer;
+  }
+  .ghost:hover{border-color:#c4c9dd; color:var(--ink)}
+  .ghost.off{background:#f1f2f8; color:var(--muted)}
+  main{
+    flex:1; display:grid; grid-template-columns:minmax(0,1fr) 400px;
+    gap:16px; padding:16px 20px 8px; min-height:0;
+  }
+  .canvas-wrap{
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:6px; display:flex; min-height:0;
+  }
+  svg{width:100%; height:100%; display:block; min-height:0}
+  .panel{
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:18px 20px 24px; overflow:auto;
+  }
+  .panel h3{font-size:20px; font-weight:700; letter-spacing:-.2px}
+  .panel .step-no{
+    display:inline-block; font-size:12px; font-weight:700; color:#fff;
+    background:var(--brand); border-radius:6px; padding:1px 8px; margin-right:7px;
+    vertical-align:2px;
+  }
+  .goal{
+    font-size:16px; color:var(--ink2); margin-top:11px;
+    background:#f7f7fe; border-left:3px solid var(--brand);
+    border-radius:0 8px 8px 0; padding:10px 13px;
+  }
+  .p-sec{margin-top:14px}
+  .p-sec h4{font-size:12.5px; font-weight:700; color:var(--muted); letter-spacing:1.2px; margin-bottom:4px}
+  .p-sec p{font-size:16px; color:var(--ink2)}
+  .p-sec.warn{background:var(--warnbg); border:1px solid var(--warnline); border-radius:10px; padding:11px 14px}
+  .p-sec.warn h4{color:var(--warn)}
+  .p-sec.warn p{color:#7d3617}
+  .p-sec.ok{background:var(--okbg); border:1px solid var(--okline); border-radius:10px; padding:11px 14px}
+  .p-sec.ok h4{color:var(--ok)}
+  .p-sec.ok p{color:#2a5c40}
+  .ctrl{border-top:1px dashed var(--line); padding-top:13px; margin-top:14px}
+  .ctrl:first-of-type{border-top:0; padding-top:0; margin-top:10px}
+  .ctrl .lab{font-size:12.5px; font-weight:700; color:var(--muted); letter-spacing:1px; margin-bottom:7px}
+  .steps{display:flex; gap:6px; flex-wrap:wrap}
+  .steps button{
+    border:1px solid var(--line); background:#fff; border-radius:8px;
+    padding:5px 10px; font:inherit; font-size:13px; color:var(--ink2); cursor:pointer;
+    white-space:nowrap;
+  }
+  .steps button:hover{border-color:#c4c9dd}
+  .steps button.on{background:var(--soft); border-color:#c9c3f5; color:var(--brand); font-weight:700}
+  .btns{display:flex; gap:7px; flex-wrap:wrap}
+  .btns button{
+    border:1px solid var(--line); background:#fff; border-radius:8px;
+    padding:6px 13px; font:inherit; font-size:14px; color:var(--ink2); cursor:pointer;
+  }
+  .btns button:hover{border-color:#c4c9dd}
+  .btns button.on{background:var(--soft); border-color:#c9c3f5; color:var(--brand); font-weight:600}
+  .stats{display:flex; gap:8px; margin-top:12px}
+  .stat{
+    flex:1; background:#f7f8fc; border:1px solid var(--line); border-radius:10px;
+    padding:8px 10px; text-align:center;
+  }
+  .stat b{display:block; font-size:21px; line-height:1.25; font-variant-numeric:tabular-nums}
+  .stat span{font-size:11.5px; color:var(--muted)}
+  .stat.hi{background:#f2effe; border-color:#d9d3fa}
+  .stat.hi b{color:var(--brand)}
+  .keys{
+    margin-top:16px; padding-top:13px; border-top:1px dashed var(--line);
+    font-size:12.5px; color:var(--muted); line-height:1.9;
+  }
+  .keys span{display:inline-block; margin-right:12px; white-space:nowrap}
+  .keys kbd{
+    font-family:Consolas,monospace; font-size:11.5px; background:#f1f2f8;
+    border:1px solid #dde0ec; border-bottom-width:2px; border-radius:4px;
+    padding:0 5px; color:var(--ink2);
+  }
+  footer{
+    padding:6px 24px 14px; font-size:12.5px; color:var(--muted);
+    display:flex; gap:18px; flex-wrap:wrap;
+  }
+  footer b{color:var(--ink2); font-weight:600}
+  @media (max-width:1180px){
+    main{grid-template-columns:1fr; grid-template-rows:minmax(300px,1fr) auto}
+    .panel{max-height:350px}
+    h1{font-size:21px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <a class="back" href="../../index.html">← 全部模型</a>
+    <span class="crumb">生物 · {{GRADE}} · {{SECTION}}</span>
+  </div>
+  <h1>{{TITLE}}</h1>
+  <p class="sub">{{SUBTITLE}}</p>
+  <div class="tools">
+    <button type="button" class="ghost" id="btnLabel">显示着丝粒编号　N</button>
+    <button type="button" class="ghost" id="btnFull">全屏　F</button>
+  </div>
+</header>
+
+<main>
+  <div class="canvas-wrap">
+    <svg id="cv" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+  <aside class="panel" id="panel"></aside>
+</main>
+
+<footer>
+  <span><b>教材位置</b>　{{GRADE}} · {{SECTION}}</span>
+  <span><b>课标要求</b>　{{LEVEL}}</span>
+  <span><b>建议用时</b>　{{DURATION}}</span>
+</footer>
+
+<script>
+window.__APP__ = {{DATA}};
+(function(){
+  "use strict";
+  var D = window.__APP__;
+  var NS = "http://www.w3.org/2000/svg";
+  var svg = document.getElementById("cv");
+  var panel = document.getElementById("panel");
+
+  var S = { stage: 0, t: 1, playing: false, n: 2, numbered: false };
+
+  svg.setAttribute("viewBox", "0 0 " + D.canvas.w + " " + D.canvas.h);
+
+  function mk(tag, a){
+    var e = document.createElementNS(NS, tag);
+    if(a){ for(var k in a){ if(a[k] !== null && a[k] !== undefined) e.setAttribute(k, a[k]); } }
+    return e;
+  }
+  function lerp(a, b, t){ return a + (b - a) * t; }
+  function fill(tpl){
+    return tpl.replace(/\{N\}/g, S.n).replace(/\{N2\}/g, S.n * 2);
+  }
+
+  function targetOf(stage){
+    return {
+      dup: stage >= 1 ? 1 : 0,
+      equator: stage >= 2 ? 1 : 0,
+      sep: stage >= 3 ? 1 : 0,
+      divide: stage >= 4 ? 1 : 0
+    };
+  }
+
+  function stateNow(){
+    var p = targetOf(Math.max(0, S.stage - 1));
+    var c = targetOf(S.stage);
+    var t = S.stage === 0 ? 1 : S.t;
+    return {
+      dup: lerp(p.dup, c.dup, t),
+      equator: lerp(p.equator, c.equator, t),
+      sep: lerp(p.sep, c.sep, t),
+      divide: lerp(p.divide, c.divide, t)
+    };
+  }
+
+  function scatter(N, i){
+    var a = D.layout.scatter[N][i];
+    return a;
+  }
+  function equatorY(N, i){
+    var ys = D.layout.equator[N];
+    return ys[i];
+  }
+
+  function chromatid(cx, cy, L, w, color, rot){
+    var d = "M " + cx + " " + (cy - L)
+      + " Q " + (cx - w) + " " + cy + " " + cx + " " + (cy + L)
+      + " Q " + (cx + w) + " " + cy + " " + cx + " " + (cy - L) + " Z";
+    var p = mk("path", {d:d, fill:color, stroke:"rgba(0,0,0,.18)", "stroke-width":1.1});
+    if(rot) p.setAttribute("transform", "rotate(" + rot + " " + cx + " " + cy + ")");
+    return p;
+  }
+
+  function drawCell(g, cx, cy, rx, ry){
+    g.appendChild(mk("ellipse", {cx:cx, cy:cy, rx:rx, ry:ry, fill:"#f6faf0", stroke:"#7ea86a", "stroke-width":3}));
+  }
+
+  function render(){
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    var st = stateNow();
+    var N = S.n;
+    var g = mk("g", {});
+
+    var c1x = lerp(450, 300, st.divide);
+    var c2x = lerp(450, 600, st.divide);
+    var rx = lerp(252, 132, st.divide);
+    var ry = lerp(186, 164, st.divide);
+
+    if(st.divide < 0.02){
+      drawCell(g, 450, 280, rx, ry);
+    } else {
+      drawCell(g, c1x, 280, rx, ry);
+      drawCell(g, c2x, 280, rx, ry);
+    }
+
+    if(st.divide < 0.55){
+      var eq = mk("line", {x1:450, y1:118, x2:450, y2:442, stroke:"#b9c4d6",
+        "stroke-width":2, "stroke-dasharray":"8 8", opacity:(1 - st.divide / 0.55)});
+      eq.setAttribute("fill","none");
+      g.appendChild(eq);
+      var et = mk("text", {x:450, y:72, "font-size":12.5, fill:"#8b93a7",
+        "text-anchor":"middle", opacity:(1 - st.divide / 0.55)});
+      et.textContent = "细胞中央";
+      g.appendChild(et);
+    }
+
+    var L = N === 2 ? 54 : 34;
+    var w = N === 2 ? 11 : 8;
+    var colors = D.colors[N];
+
+    for(var i=0;i<N;i++){
+      var sc = scatter(N, i);
+      var ex = 450, ey = equatorY(N, i);
+      var x = lerp(sc[0], ex, st.equator);
+      var y = lerp(sc[1], ey, st.equator);
+
+      var off = 4.5 * st.dup + 152 * st.sep;
+      var rot = 11 * st.dup * (1 - st.sep);
+
+      var cg = mk("g", {"class":"chromo"});
+      cg.appendChild(chromatid(x - off, y, L, w, colors[i], -rot));
+      cg.appendChild(chromatid(x + off, y, L, w, colors[i], rot));
+
+      var cenR = 5.4;
+      var cenAx = lerp(x, x - off, st.sep);
+      var cenBx = lerp(x, x + off, st.sep);
+      cg.appendChild(mk("circle", {cx:cenAx, cy:y, r:cenR,
+        fill:"#3c465c", stroke:"#ffffff", "stroke-width":1.4}));
+      cg.appendChild(mk("circle", {cx:cenBx, cy:y, r:cenR,
+        fill:"#3c465c", stroke:"#ffffff", "stroke-width":1.4}));
+      g.appendChild(cg);
+
+      if(S.numbered && st.dup > 0.5){
+        var nx = x - off - 13, ny = y - L - 12;
+        var nt = mk("text", {x:nx, y:ny, "font-size":12, fill:"#3c465c",
+          "text-anchor":"middle", "font-weight":700});
+        nt.textContent = (i + 1);
+        g.appendChild(nt);
+      }
+    }
+
+    var cap = mk("text", {x:450, y:524, "font-size":14, fill:"#6b7488", "text-anchor":"middle"});
+    cap.textContent = fill(D.layout.captions[S.stage]);
+    g.appendChild(cap);
+
+    svg.appendChild(g);
+  }
+
+  function stats(){
+    var st = stateNow();
+    var n = S.n;
+    var chromo = n, centros = n, chromatids = n;
+    if(st.dup > 0.5) chromatids = n * 2;
+    if(st.sep > 0.5){ chromo = n * 2; centros = n * 2; chromatids = n * 2; }
+    if(st.divide > 0.5){ chromo = n; centros = n; chromatids = n; }
+    return { chromo: chromo, chromatids: chromatids, centros: centros };
+  }
+
+  function controls(){
+    var names = D.stages.map(function(s, i){ return s.name; });
+    return '<div class="ctrl"><div class="lab">阶段</div><div class="steps">'
+      + names.map(function(nm, i){
+          return '<button type="button" data-go="' + i + '" class="' + (S.stage === i ? "on" : "") + '">'
+            + (i+1) + ". " + nm + '</button>';
+        }).join("")
+      + '</div></div>'
+      + '<div class="ctrl"><div class="lab">播放</div><div class="btns">'
+      + '<button type="button" id="btnPlay" class="' + (S.playing ? "on" : "") + '">'
+      + (S.playing ? "⏸ 暂停" : "▶ 播放") + '</button>'
+      + '<button type="button" id="btnPrev">上一步</button>'
+      + '<button type="button" id="btnNext">下一步</button>'
+      + '<button type="button" id="btnReset">重置</button>'
+      + '</div></div>'
+      + '<div class="ctrl"><div class="lab">染色体条数</div><div class="btns">'
+      + [2, 4].map(function(n){
+          return '<button type="button" data-n="' + n + '" class="' + (S.n === n ? "on" : "") + '">' + n + ' 条</button>';
+        }).join("")
+      + '</div></div>';
+  }
+
+  function renderPanel(){
+    var sg = D.stages[S.stage];
+    var s = stats();
+    panel.innerHTML =
+      '<h3><span class="step-no">' + (S.stage + 1) + '</span>' + sg.name + '</h3>'
+      + '<p class="goal">' + fill(sg.say) + '</p>'
+      + '<div class="stats">'
+      + '<div class="stat"><b>' + s.chromo + '</b><span>染色体（条）</span></div>'
+      + '<div class="stat hi"><b>' + s.centros + '</b><span>着丝粒（个）</span></div>'
+      + '<div class="stat"><b>' + s.chromatids + '</b><span>染色单体</span></div>'
+      + '</div>'
+      + '<div class="p-sec"><h4>观察提示</h4><p>' + fill(sg.ask) + '</p></div>'
+      + (sg.note ? '<div class="p-sec warn"><h4>关键结论</h4><p>' + fill(sg.note) + '</p></div>' : '')
+      + controls()
+      + '<div class="keys"><span><kbd>空格</kbd> 播放暂停</span><span><kbd>←</kbd><kbd>→</kbd> 切换阶段</span>'
+      + '<span><kbd>N</kbd> 换条数</span><span><kbd>L</kbd> 编号</span><span><kbd>R</kbd> 重置</span></div>';
+  }
+
+  function fullRender(){ render(); renderPanel(); }
+
+  function go(stage){
+    S.stage = Math.max(0, Math.min(D.stages.length - 1, stage));
+    S.t = 1;
+    fullRender();
+  }
+
+  function setN(n){
+    S.n = n;
+    S.stage = 0; S.t = 1; S.playing = false;
+    fullRender();
+  }
+
+  function setPlaying(v){
+    S.playing = v;
+    var b = document.getElementById("btnPlay");
+    if(b){ b.classList.toggle("on", v); b.textContent = v ? "⏸ 暂停" : "▶ 播放"; }
+    if(v && S.stage === D.stages.length - 1 && S.t >= 1){ S.stage = 0; S.t = 0; }
+  }
+
+  panel.addEventListener("click", function(e){
+    var b = e.target.closest("button");
+    if(!b) return;
+    if(b.hasAttribute("data-go")){ setPlaying(false); go(+b.getAttribute("data-go")); return; }
+    if(b.hasAttribute("data-n")){ setN(+b.getAttribute("data-n")); return; }
+    if(b.id === "btnPlay"){ setPlaying(!S.playing); return; }
+    if(b.id === "btnPrev"){ setPlaying(false); go(S.stage - 1); return; }
+    if(b.id === "btnNext"){ setPlaying(false); go(S.stage + 1); return; }
+    if(b.id === "btnReset"){ setPlaying(false); S.stage = 0; S.t = 1; fullRender(); return; }
+  });
+
+  var lbBtn = document.getElementById("btnLabel");
+  lbBtn.addEventListener("click", function(){
+    S.numbered = !S.numbered;
+    lbBtn.classList.toggle("off", !S.numbered);
+    lbBtn.textContent = S.numbered ? "隐藏着丝粒编号　N" : "显示着丝粒编号　N";
+    render();
+  });
+
+  var fullBtn = document.getElementById("btnFull");
+  function toggleFull(){
+    if(!document.fullscreenElement){
+      if(document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+    } else if(document.exitFullscreen){
+      document.exitFullscreen();
+    }
+  }
+  fullBtn.addEventListener("click", toggleFull);
+
+  document.addEventListener("keydown", function(e){
+    var k = e.key;
+    if(k === " "){
+      e.preventDefault();
+      setPlaying(!S.playing);
+    }
+    else if(k === "ArrowRight"){ e.preventDefault(); setPlaying(false); go(S.stage + 1); }
+    else if(k === "ArrowLeft"){ e.preventDefault(); setPlaying(false); go(S.stage - 1); }
+    else if(k === "r" || k === "R"){ setPlaying(false); S.stage = 0; S.t = 1; fullRender(); }
+    else if(k === "n" || k === "N"){ setN(S.n === 2 ? 4 : 2); }
+    else if(k === "l" || k === "L"){ lbBtn.click(); }
+    else if(k === "f" || k === "F"){ toggleFull(); }
+    else if(k >= "1" && k <= "5"){ setPlaying(false); go(+k - 1); }
+  });
+
+  function tick(){
+    if(!S.playing) return;
+    S.t += 0.022;
+    if(S.t >= 1){
+      S.t = 1;
+      if(S.stage < D.stages.length - 1){
+        S.stage++;
+        S.t = 0;
+        renderPanel();
+      } else {
+        setPlaying(false);
+      }
+    }
+    render();
+  }
+
+  setInterval(tick, 30);
+  fullRender();
+
+  window.__SELFTEST__ = function(){
+    var errs = [];
+    if(!D.stages || D.stages.length !== 5) errs.push("阶段数应为 5");
+    if(!D.layout.scatter[2] || D.layout.scatter[2].length !== 2) errs.push("2 条染色体缺少散布局");
+    if(!D.layout.scatter[4] || D.layout.scatter[4].length !== 4) errs.push("4 条染色体缺少散布局");
+    if(!D.layout.equator[2] || D.layout.equator[2].length !== 2) errs.push("2 条染色体缺少赤道排布");
+    if(!D.layout.equator[4] || D.layout.equator[4].length !== 4) errs.push("4 条染色体缺少赤道排布");
+    if(!D.colors[2] || D.colors[2].length !== 2) errs.push("2 条染色体缺少配色");
+    if(!D.colors[4] || D.colors[4].length !== 4) errs.push("4 条染色体缺少配色");
+
+    var keep = S.n;
+    [2, 4].forEach(function(n){
+      S.n = n;
+      if(targetOf(0).dup !== 0) errs.push("阶段 1 不应复制");
+      if(targetOf(1).dup !== 1) errs.push("阶段 2 应完成复制");
+      if(targetOf(2).equator !== 1) errs.push("阶段 3 应排到中央");
+      if(targetOf(2).sep !== 0) errs.push("阶段 3 不应分离");
+      if(targetOf(3).sep !== 1) errs.push("阶段 4 应完成分离");
+      if(targetOf(4).divide !== 1) errs.push("阶段 5 应完成分裂");
+      if(targetOf(0).divide !== 0) errs.push("阶段 1 不应分裂");
+    });
+    S.n = keep;
+
+    if(S.stage < 0 || S.stage > 4) errs.push("阶段越界");
+    if(!D.layout.captions || D.layout.captions.length !== 5) errs.push("图注应为 5 条");
+    return errs;
+  };
+
+  if(!window.__QUIET__){
+    var e = window.__SELFTEST__();
+    if(e.length) console.log("SELFTEST FAIL: " + e.join(" | "));
+    else console.log("SELFTEST PASS");
+  }
+})();
+</script>
+</body>
+</html>
