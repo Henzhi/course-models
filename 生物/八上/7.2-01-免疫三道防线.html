@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>免疫：三道防线 · 八上 · 生物</title>
+<style>
+  :root{
+    --bg:#f4f6fb; --panel:#fff; --ink:#1d2333; --ink2:#4b5468; --muted:#8b93a7;
+    --line:#e3e6f0; --brand:#5b5bd6; --soft:#eeedfd;
+    --warn:#a8461f; --warnbg:#fff5f0; --warnline:#f6d3c2;
+    --ok:#2f6b45; --okbg:#eef7f1; --okline:#cbe5d5;
+    --shadow:0 1px 2px rgba(29,35,51,.05),0 10px 30px -20px rgba(29,35,51,.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC","Segoe UI",system-ui,sans-serif;
+    background:var(--bg); color:var(--ink); font-size:16px; line-height:1.65;
+    height:100vh; overflow:hidden;
+    display:flex; flex-direction:column; -webkit-font-smoothing:antialiased;
+  }
+  header{padding:14px 24px 12px; background:#fff; border-bottom:1px solid var(--line)}
+  .topbar{display:flex; align-items:center; gap:14px; font-size:13px}
+  .back{
+    color:var(--brand); text-decoration:none; font-weight:600;
+    border:1px solid #dedcfb; background:var(--soft); border-radius:7px;
+    padding:2px 10px; white-space:nowrap;
+  }
+  .back:hover{background:#e4e3fc}
+  .crumb{font-size:13px; color:var(--muted); letter-spacing:.2px}
+  h1{font-size:25px; font-weight:700; letter-spacing:-.3px; margin-top:1px}
+  .sub{font-size:14px; color:var(--ink2); margin-top:3px}
+  .tools{display:flex; gap:10px; align-items:center; margin-top:12px; flex-wrap:wrap}
+  .ghost{
+    border:1px solid var(--line); background:#fff; border-radius:9px;
+    padding:6px 13px; font:inherit; font-size:13.5px; color:var(--ink2); cursor:pointer;
+  }
+  .ghost:hover{border-color:#c4c9dd; color:var(--ink)}
+  .ghost.off{background:#f1f2f8; color:var(--muted)}
+  main{
+    flex:1; display:grid; grid-template-columns:minmax(0,1fr) 408px;
+    grid-template-rows:minmax(0,1fr);
+    gap:16px; padding:16px 20px 8px; min-height:0;
+  }
+  .canvas-wrap{
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:6px; display:flex; min-height:0;
+  }
+  svg{width:100%; height:100%; display:block; min-height:0}
+  .panel{
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:18px 20px 24px; overflow:auto; min-height:0;
+  }
+  .panel h3{font-size:20px; font-weight:700; letter-spacing:-.2px}
+  .panel .step-no{
+    display:inline-block; font-size:12px; font-weight:700; color:#fff;
+    background:var(--brand); border-radius:6px; padding:1px 8px; margin-right:7px;
+    vertical-align:2px;
+  }
+  .panel .en{display:block; font-size:12.5px; color:var(--muted); font-style:italic; margin-top:1px}
+  .panel .tag{
+    display:inline-block; font-size:12px; font-weight:600; color:var(--brand);
+    background:var(--soft); border:1px solid #dedcfb; border-radius:6px;
+    padding:1px 8px; margin-top:7px;
+  }
+  .goal{
+    font-size:16px; color:var(--ink2); margin-top:11px;
+    background:#f7f7fe; border-left:3px solid var(--brand);
+    border-radius:0 8px 8px 0; padding:10px 13px;
+  }
+  .goal b{color:var(--ink)}
+  .p-sec{margin-top:14px}
+  .p-sec h4{font-size:12.5px; font-weight:700; color:var(--muted); letter-spacing:1.2px; margin-bottom:4px}
+  .p-sec p{font-size:16px; color:var(--ink2)}
+  .p-sec.warn{background:var(--warnbg); border:1px solid var(--warnline); border-radius:10px; padding:11px 14px}
+  .p-sec.warn h4{color:var(--warn)}
+  .p-sec.warn p{color:#7d3617}
+  .p-sec.ok{background:var(--okbg); border:1px solid var(--okline); border-radius:10px; padding:11px 14px}
+  .p-sec.ok h4{color:var(--ok)}
+  .p-sec.ok p{color:#2a5c40}
+  .ctrl{border-top:1px dashed var(--line); padding-top:13px; margin-top:14px}
+  .ctrl:first-of-type{border-top:0; padding-top:0; margin-top:10px}
+  .ctrl .lab{font-size:12.5px; font-weight:700; color:var(--muted); letter-spacing:1px; margin-bottom:7px}
+  .steps{display:flex; gap:6px; flex-wrap:wrap}
+  .steps button{
+    border:1px solid var(--line); background:#fff; border-radius:8px;
+    padding:5px 10px; font:inherit; font-size:13px; color:var(--ink2); cursor:pointer;
+    white-space:nowrap;
+  }
+  .steps button:hover{border-color:#c4c9dd}
+  .steps button.on{background:var(--soft); border-color:#c9c3f5; color:var(--brand); font-weight:700}
+  .stepnav{display:flex; gap:7px; flex-wrap:wrap; margin:12px 0 2px}
+  .stepnav button{
+    width:40px; height:34px; border:1px solid var(--line); background:#fff; border-radius:8px;
+    font:inherit; font-size:14px; font-weight:600; color:var(--ink2); cursor:pointer;
+  }
+  .stepnav button:hover{border-color:#c4c9dd}
+  .stepnav button.on{background:var(--brand); border-color:var(--brand); color:#fff}
+  .btns{display:flex; gap:7px; flex-wrap:wrap}
+  .btns button{
+    border:1px solid var(--line); background:#fff; border-radius:8px;
+    padding:6px 13px; font:inherit; font-size:14px; color:var(--ink2); cursor:pointer;
+  }
+  .btns button:hover{border-color:#c4c9dd}
+  .btns button.on{background:var(--soft); border-color:#c9c3f5; color:var(--brand); font-weight:600}
+  .stats{display:flex; gap:8px; margin-top:12px}
+  .stat{
+    flex:1; background:#f7f8fc; border:1px solid var(--line); border-radius:10px;
+    padding:8px 10px; text-align:center;
+  }
+  .stat b{display:block; font-size:20px; line-height:1.3; font-variant-numeric:tabular-nums}
+  .stat span{font-size:11.5px; color:var(--muted)}
+  .stat.hi{background:#f2effe; border-color:#d9d3fa}
+  .stat.hi b{color:var(--brand)}
+  .legend{display:flex; flex-wrap:wrap; gap:7px 14px}
+  .legend .lg{display:inline-flex; align-items:center; gap:6px; font-size:13.5px; color:var(--ink2)}
+  .legend .lg i{width:12px; height:6px; border-radius:3px; display:inline-block; flex:none}
+  .cmp{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}
+  .cmp th,.cmp td{border-bottom:1px solid var(--line);padding:5px 6px;text-align:left;vertical-align:top}
+  .cmp th{font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.5px;padding-bottom:7px}
+  .cmp td:first-child{font-weight:600;color:var(--ink);white-space:nowrap}
+  .cmp td{color:var(--ink2)}
+  .keys{
+    margin-top:16px; padding-top:13px; border-top:1px dashed var(--line);
+    font-size:12.5px; color:var(--muted); line-height:1.9;
+  }
+  .keys span{display:inline-block; margin-right:12px; white-space:nowrap}
+  .keys kbd{
+    font-family:Consolas,monospace; font-size:11.5px; background:#f1f2f8;
+    border:1px solid #dde0ec; border-bottom-width:2px; border-radius:4px;
+    padding:0 5px; color:var(--ink2);
+  }
+  footer{
+    padding:6px 24px 14px; font-size:12.5px; color:var(--muted);
+    display:flex; gap:18px; flex-wrap:wrap;
+  }
+  footer b{color:var(--ink2); font-weight:600}
+
+  [data-part]{cursor:pointer; transition:opacity .18s}
+  [data-part]:hover{opacity:.86}
+  svg.hide-lb .lb{display:none}
+  .cap text{pointer-events:none}
+
+  @media (max-width:1180px){
+    body{height:auto; overflow:auto}
+    main{grid-template-columns:1fr; grid-template-rows:minmax(300px,1fr) auto}
+    .panel{max-height:350px}
+    h1{font-size:21px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <a class="back" href="../../index.html">← 全部模型</a>
+    <span class="crumb">生物 · 八上 · 第四单元 人体生理与健康（二） · 7.2</span>
+  </div>
+  <h1>免疫：三道防线</h1>
+  <p class="sub">病原体从体外闯到体内，一路撞上三道防线。看清每一道的拦截方式，以及为什么前两道「不挑对象」、第三道「只认一种」。</p>
+  <div class="tools">
+    <button type="button" class="ghost" id="btnLabel">隐藏标注　L</button>
+    <button type="button" class="ghost" id="btnFull">全屏　F</button>
+  </div>
+</header>
+
+<main>
+  <div class="canvas-wrap">
+    <svg id="cv" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+  <aside class="panel" id="panel"></aside>
+</main>
+
+<footer>
+  <span><b>教材位置</b>　八上 · 第四单元 人体生理与健康（二） · 7.2</span>
+  <span><b>课标要求</b>　理解</span>
+  <span><b>建议用时</b>　20–25 分钟</span>
+</footer>
+
+<script>
+window.__APP__ = {"canvas":{"w":1000,"h":660},"legend":[{"color":"#c0392b","text":"病原体"},{"color":"#4a7fc1","text":"抗体"},{"color":"#7a5cc4","text":"吞噬细胞"}],"parts":[{"id":"skin","name":"第一道防线：皮肤和黏膜","en":"skin & mucous membrane","only":"挡住 + 杀菌 + 清扫","desc":"皮肤覆盖全身表面，呼吸道、消化道等腔道内表面是黏膜。","role":"皮肤阻挡病原体侵入；黏膜分泌黏液粘住病原体，呼吸道黏膜上的纤毛还会把它扫出去。","warn":"皮肤<b>破损</b>时这道防线被突破，病原体就从缺口进去了——所以伤口要处理。"},{"id":"lysozyme","name":"杀菌物质（溶菌酶）","en":"lysozyme","only":"溶解细菌的细胞壁","desc":"体液（如泪液、唾液、血浆）中的一类物质。","role":"能破坏许多种细菌的细胞壁，使细菌溶解死亡。","warn":"溶菌酶属于<b>第二道</b>防线，不是第一道。它存在于体液里，不在皮肤表面。"},{"id":"phagocyte","name":"吞噬细胞","en":"phagocyte","only":"吞掉病原体","desc":"体液和组织中的一类白细胞，能伸出伪足包住病原体。","role":"把病原体吞入细胞内消化掉，是第二道防线的主力。","warn":"吞噬细胞属于<b>第二道</b>防线（非特异性），不是第三道。第三道才靠淋巴细胞和抗体。"},{"id":"lymph","name":"淋巴细胞","en":"lymphocyte","only":"产生抗体","desc":"免疫器官（如淋巴结、脾）里的一种白细胞。","role":"受到抗原刺激后产生<b>抗体</b>，抗体与抗原特异性结合，把病原体清除掉。","warn":"第三道防线是<b>后天获得</b>的，只对<b>特定</b>的病原体起作用——这叫特异性免疫。"},{"id":"antibody","name":"抗体","en":"antibody","only":"专抓一种抗原","desc":"淋巴细胞产生的蛋白质，形状像「Y」，能与对应的抗原结合。","role":"与抗原<b>特异性结合</b>，使病原体失去活性或被吞噬细胞清除。","warn":"抗体有<b>专一性</b>：一种抗体只对一种抗原有效。所以得过麻疹不会再得，但仍会得流感。"},{"id":"pathogen","name":"病原体","en":"pathogen","only":"入侵者","desc":"能引起疾病的细菌、病毒、真菌、寄生虫等。","role":"突破防线、在体内繁殖，就可能导致疾病。","warn":"疫苗是<b>抗原</b>（灭活或减毒的病原体），不是抗体。接种疫苗是让身体自己产生抗体。"}],"routes":[{"id":"p1","color":"#c0392b","w":11,"speed":0.8,"part":"pathogen","pts":[[72,344],[140,340],[204,336]]},{"id":"p2","color":"#c0392b","w":11,"speed":0.75,"part":"skin","pts":[[212,334],[246,334],[280,338]]},{"id":"p3","color":"#c0392b","w":11,"speed":0.8,"part":"phagocyte","pts":[[288,340],[360,344],[440,348]]},{"id":"p4","color":"#c0392b","w":11,"speed":0.8,"part":"lymph","pts":[[446,350],[530,352],[614,354]]},{"id":"p5","color":"#c0392b","w":11,"speed":0.7,"part":"lymph","pts":[[620,354],[662,354],[700,354]]},{"id":"antibody","color":"#4a7fc1","w":9,"speed":0.9,"part":"antibody","pts":[[704,282],[704,318],[700,352]]}],"shapes":[{"t":"rect","x":36,"y":120,"w":152,"h":424,"rx":18,"fill":"#eef1f6","stroke":"#c3cad9","sw":2},{"t":"text","x":112,"y":96,"tx":"体外","size":15,"fill":"#8b93a7","anchor":"middle","weight":700,"lbl":true},{"t":"rect","x":208,"y":120,"w":42,"h":200,"rx":6,"fill":"#f0ddc4","stroke":"#c0a074","sw":2.2,"part":"skin"},{"t":"rect","x":208,"y":344,"w":42,"h":200,"rx":6,"fill":"#f0ddc4","stroke":"#c0a074","sw":2.2,"part":"skin"},{"t":"path","d":"M 208 156 L 250 156 M 208 196 L 250 196 M 208 236 L 250 236 M 208 276 L 250 276 M 208 384 L 250 384 M 208 424 L 250 424 M 208 464 L 250 464 M 208 504 L 250 504","fill":"none","stroke":"#d9c6a8","sw":1.6,"part":"skin"},{"t":"path","d":"M 214 120 L 210 96 M 228 120 L 226 92 M 242 120 L 244 96 M 214 544 L 210 568 M 228 544 L 226 572 M 242 544 L 244 568","fill":"none","stroke":"#c0a074","sw":2.2,"cap":"round","part":"skin"},{"t":"rect","x":286,"y":120,"w":296,"h":424,"rx":18,"fill":"#fdf7e8","stroke":"#ddd0b0","sw":2},{"t":"path","d":"M 388 300 C 388 268 412 250 436 254 C 462 240 486 262 484 288 C 502 302 494 330 472 336 C 470 358 442 366 426 352 C 404 362 384 342 388 320 Z","fill":"#ded4f0","stroke":"#8f7bc4","sw":2.6,"part":"phagocyte"},{"t":"circle","cx":428,"cy":300,"r":13,"fill":"#c0392b","opacity":0.75,"part":"phagocyte"},{"t":"circle","cx":456,"cy":320,"r":8,"fill":"#c0392b","opacity":0.6,"part":"phagocyte"},{"t":"circle","cx":452,"cy":276,"r":15,"fill":"#b9a8dd","opacity":0.7,"part":"phagocyte"},{"t":"path","d":"M 512 420 C 512 396 532 382 552 386 C 572 376 592 394 590 414 C 604 426 596 448 578 452 C 576 468 554 474 542 462 C 524 470 508 450 512 432 Z","fill":"#ded4f0","stroke":"#8f7bc4","sw":2.4,"part":"phagocyte"},{"t":"circle","cx":340,"cy":210,"r":5,"fill":"#f0b37a","part":"lysozyme"},{"t":"circle","cx":368,"cy":460,"r":5,"fill":"#f0b37a","part":"lysozyme"},{"t":"circle","cx":320,"cy":400,"r":4,"fill":"#f0b37a","part":"lysozyme"},{"t":"circle","cx":520,"cy":200,"r":5,"fill":"#f0b37a","part":"lysozyme"},{"t":"circle","cx":480,"cy":500,"r":4,"fill":"#f0b37a","part":"lysozyme"},{"t":"circle","cx":550,"cy":300,"r":4.5,"fill":"#f0b37a","part":"lysozyme"},{"t":"ellipse","cx":700,"cy":300,"rx":92,"ry":140,"fill":"#eaf3e4","stroke":"#7aa05a","sw":2.6,"part":"lymph"},{"t":"circle","cx":700,"cy":246,"r":36,"fill":"#cfe0f4","stroke":"#4a7fc1","sw":2.6,"part":"lymph"},{"t":"circle","cx":700,"cy":246,"r":16,"fill":"#8fb4e0","part":"lymph"},{"t":"text","x":700,"y":300,"tx":"淋巴细胞","size":12.5,"fill":"#3d6a94","anchor":"middle","weight":600,"lbl":true},{"t":"path","d":"M 700 356 L 700 380 M 700 380 L 686 400 M 700 380 L 714 400","fill":"none","stroke":"#4a7fc1","sw":3.4,"cap":"round","part":"antibody"},{"t":"path","d":"M 648 320 L 648 342 M 648 342 L 636 358 M 648 342 L 660 358","fill":"none","stroke":"#4a7fc1","sw":3,"cap":"round","part":"antibody"},{"t":"path","d":"M 754 340 L 754 362 M 754 362 L 742 378 M 754 362 L 766 378","fill":"none","stroke":"#4a7fc1","sw":3,"cap":"round","part":"antibody"},{"t":"rect","x":800,"y":120,"w":156,"h":424,"rx":18,"fill":"#eef6e6","stroke":"#a8c890","sw":2},{"t":"text","x":878,"y":96,"tx":"体内","size":15,"fill":"#6f8f58","anchor":"middle","weight":700,"lbl":true},{"t":"circle","cx":92,"cy":344,"r":16,"fill":"#e88a80","stroke":"#b03a2e","sw":2.2,"part":"pathogen"},{"t":"path","d":"M 78 336 L 72 330 M 92 328 L 92 320 M 106 336 L 112 330 M 78 352 L 72 358 M 92 360 L 92 368 M 106 352 L 112 358","fill":"none","stroke":"#b03a2e","sw":2.2,"cap":"round","part":"pathogen"}],"labels":[{"p":"skin","text":"第一道：皮肤和黏膜","from":[200,56],"to":[240,108],"anchor":"end"},{"p":"lysozyme","text":"杀菌物质（溶菌酶）","from":[332,590],"to":[352,468],"anchor":"start"},{"p":"phagocyte","text":"吞噬细胞","from":[286,152],"to":[386,268],"anchor":"end"},{"p":"lymph","text":"第三道：淋巴细胞","from":[700,84],"to":[700,206],"anchor":"middle"},{"p":"antibody","text":"抗体（Y 形）","from":[792,420],"to":[712,392],"anchor":"start"},{"p":"pathogen","text":"病原体","from":[92,262],"to":[92,322],"anchor":"middle"}],"steps":[{"name":"三道防线，一道比一道专","say":"人体有三道防线：<b>皮肤和黏膜</b>、<b>体液中的杀菌物质和吞噬细胞</b>、<b>免疫器官和免疫细胞</b>。前两道生来就有，第三道后天才能获得。","stats":[{"v":"3 道","label":"防线"},{"v":"前 2 道","label":"非特异性"},{"v":"第 3 道","label":"特异性"}],"ask":"点每一道防线看它的作用。病原体从左边来，一路往右闯——看它能在哪一道被拦下。","note":"前两道防线<b>对多种病原体都有效</b>（不挑对象），第三道<b>只对特定的病原体</b>有效。这就是「非特异性」和「特异性」的区别。","parts":["skin","lysozyme","phagocyte","lymph","antibody","pathogen"],"routes":["p1"],"caption":"第一道（皮肤黏膜）→ 第二道（杀菌物质、吞噬细胞）→ 第三道（淋巴细胞、抗体）"},{"name":"第一道：皮肤和黏膜","say":"<b>皮肤</b>挡住病原体，<b>黏膜</b>分泌黏液粘住它们，呼吸道黏膜上的纤毛再把它们扫出去。","stats":[{"v":"生来就有","label":"获得方式"},{"v":"多种病原体","label":"作用范围"},{"v":"非特异性","label":"免疫类型"}],"ask":"注意墙上那个<b>缺口</b>——皮肤破损时这道防线就被突破了，病原体从这里钻进去。所以伤口要清洗、包扎。","note":"第一道防线是<b>物理屏障</b>：挡住、粘住、扫走，不针对某一种病原体。","parts":["skin","pathogen"],"routes":["p1","p2"],"caption":"第一道：皮肤阻挡、黏膜粘住并清扫（非特异性）"},{"name":"第二道：杀菌物质和吞噬细胞","say":"钻进组织的病原体会遇到<b>溶菌酶</b>（溶解细菌的细胞壁）和<b>吞噬细胞</b>（直接吞掉）。","stats":[{"v":"生来就有","label":"获得方式"},{"v":"多种病原体","label":"作用范围"},{"v":"非特异性","label":"免疫类型"}],"ask":"看吞噬细胞伸出的<b>伪足</b>：它把病原体包起来，吞进细胞里消化掉。这一道也不挑对象。","note":"溶菌酶和吞噬细胞都属于<b>第二道</b>防线。它们<b>不是</b>第三道——第三道才靠抗体。","parts":["lysozyme","phagocyte","pathogen"],"routes":["p2","p3"],"caption":"第二道：溶菌酶溶解、吞噬细胞吞噬（非特异性）"},{"name":"第三道：淋巴细胞和抗体","say":"漏网的病原体进入淋巴结，<b>淋巴细胞</b>受刺激产生<b>抗体</b>。抗体像「Y 形的夹子」，专门夹住这种病原体。","stats":[{"v":"后天获得","label":"获得方式"},{"v":"特定病原体","label":"作用范围"},{"v":"特异性","label":"免疫类型"}],"ask":"抗体的形状像 Y，两个「叉」正好卡住抗原。注意它是<b>专门</b>为这一种病原体造的——换一种就夹不住了。","note":"抗体有<b>专一性</b>：一种抗体只对一种抗原有效。所以得过麻疹不会再得，但明年照样会得流感。","parts":["lymph","antibody","pathogen"],"routes":["p4","p5","antibody"],"caption":"第三道：淋巴细胞产生抗体，抗体与抗原特异性结合"},{"name":"非特异性 vs 特异性","say":"前两道<b>生来就有、不挑对象</b>；第三道<b>后天获得、只认一种</b>。疫苗就是利用第三道的原理。","stats":[{"v":"非特异性","label":"第一、二道"},{"v":"特异性","label":"第三道"},{"v":"抗原","label":"疫苗是什么"}],"ask":"看最后一列的问题：<b>疫苗是抗原还是抗体？</b>——是抗原。接种疫苗是把灭活或减毒的病原体送进去，让身体自己产生抗体。","note":"接种疫苗后，人体产生了针对这种病原体的<b>抗体</b>，下次真的病原体入侵时就能迅速清除——这就是免疫规划的原理。","parts":["skin","lysozyme","phagocyte","lymph","antibody"],"routes":[],"table":{"head":["","第一、二道防线","第三道防线"],"rows":[["生来就有？","是","不是，后天获得"],["针对谁","多种病原体","特定的病原体"],["免疫类型","非特异性免疫","特异性免疫"]]},"caption":"非特异性免疫（第一、二道）与特异性免疫（第三道）"}]};
+(function(){
+  "use strict";
+  var D = window.__APP__;
+  var NS = "http://www.w3.org/2000/svg";
+  var svg = document.getElementById("cv");
+  var panel = document.getElementById("panel");
+  var S = { step:0, t:0, playing:true, sel:null };
+
+  svg.setAttribute("viewBox", "0 0 " + D.canvas.w + " " + D.canvas.h);
+
+  function mk(tag, a){
+    var e = document.createElementNS(NS, tag);
+    if(a){ for(var k in a){ if(a[k] !== null && a[k] !== undefined) e.setAttribute(k, a[k]); } }
+    return e;
+  }
+  function r1(v){ return Math.round(v * 10) / 10; }
+
+  // Catmull-Rom -> 三次贝塞尔，把折线点变成平滑路径（保证穿过每个控制点）
+  function smoothPath(pts, close){
+    if(!pts || pts.length < 2) return "";
+    var d = "M " + pts[0][0] + " " + pts[0][1];
+    var n = pts.length;
+    var lim = close ? n : n - 1;
+    for(var i=0;i<lim;i++){
+      var p0 = pts[(i - 1 + n) % n] || pts[i];
+      var p1 = pts[i];
+      var p2 = pts[(i + 1) % n];
+      var p3 = pts[(i + 2) % n] || p2;
+      if(!close){
+        p0 = pts[i - 1] || pts[i];
+        p3 = pts[i + 2] || p2;
+      }
+      var c1x = p1[0] + (p2[0] - p0[0]) / 6, c1y = p1[1] + (p2[1] - p0[1]) / 6;
+      var c2x = p2[0] - (p3[0] - p1[0]) / 6, c2y = p2[1] - (p3[1] - p1[1]) / 6;
+      d += " C " + r1(c1x) + " " + r1(c1y) + " " + r1(c2x) + " " + r1(c2y)
+         + " " + p2[0] + " " + p2[1];
+    }
+    if(close) d += " Z";
+    return d;
+  }
+
+  function shape(s){
+    var node = null;
+    if(s.t === "g"){
+      node = mk("g", null);
+      (s.items || []).forEach(function(c){ var n = shape(c); if(n) node.appendChild(n); });
+      return node;
+    }
+    if(s.pts){
+      var d = s.smooth === false
+        ? "M " + s.pts.map(function(p){ return p[0] + " " + p[1]; }).join(" L ")
+        : smoothPath(s.pts, !!s.close);
+      node = mk("path", {d:d, fill:s.fill || "none", stroke:s.stroke || "none",
+        "stroke-width":s.sw || 0, "stroke-linecap":"round", "stroke-linejoin":"round"});
+      if(s.close && !s.fill) node.setAttribute("fill", "none");
+      return node;
+    }
+    if(s.t === "rect"){
+      node = mk("rect", {x:s.x, y:s.y, width:s.w, height:s.h, rx:s.rx || 0,
+        fill:s.fill || "none", stroke:s.stroke || "none", "stroke-width":s.sw || 0});
+      if(s.rot) node.setAttribute("transform", "rotate(" + s.rot + " " + (s.x + s.w/2) + " " + (s.y + s.h/2) + ")");
+    } else if(s.t === "ellipse"){
+      node = mk("ellipse", {cx:s.cx, cy:s.cy, rx:s.rx, ry:s.ry,
+        fill:s.fill || "none", stroke:s.stroke || "none", "stroke-width":s.sw || 0});
+      if(s.rot) node.setAttribute("transform", "rotate(" + s.rot + " " + s.cx + " " + s.cy + ")");
+    } else if(s.t === "circle"){
+      node = mk("circle", {cx:s.cx, cy:s.cy, r:s.r,
+        fill:s.fill || "none", stroke:s.stroke || "none", "stroke-width":s.sw || 0});
+    } else if(s.t === "path"){
+      node = mk("path", {d:s.d, fill:s.fill || "none", stroke:s.stroke || "none",
+        "stroke-width":s.sw || 0, "stroke-linecap":"round", "stroke-linejoin":"round"});
+    } else if(s.t === "line"){
+      node = mk("line", {x1:s.x1, y1:s.y1, x2:s.x2, y2:s.y2,
+        stroke:s.stroke || "none", "stroke-width":s.sw || 1,
+        "stroke-dasharray":s.dash || null, "stroke-linecap":"round"});
+    } else if(s.t === "text"){
+      node = mk("text", {x:s.x, y:s.y, "font-size":s.size || 15, fill:s.fill || "#1d2333",
+        "text-anchor":s.anchor || "middle", "dominant-baseline":"middle",
+        "font-weight":s.weight || 400});
+      node.textContent = s.tx;
+    }
+    if(node && s.op !== undefined) node.setAttribute("opacity", s.op);
+    return node;
+  }
+
+  var routeEls = {};
+  var flow = [];
+  var flowLayer = null;
+  var capG = null;
+
+  function build(){
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    routeEls = {};
+    flow = [];
+
+    var base = mk("g", null);
+    (D.shapes || []).forEach(function(s){
+      var n = shape(s);
+      if(!n) return;
+      if(s.part) n.setAttribute("data-part", s.part);
+      if(s.lbl) n.setAttribute("class", "lb");
+      base.appendChild(n);
+    });
+    svg.appendChild(base);
+
+    var tube = mk("g", null);
+    (D.routes || []).forEach(function(rt){
+      var d = smoothPath(rt.pts, false);
+      var under = mk("path", {d:d, fill:"none", stroke:rt.color, "stroke-width":rt.w + 9,
+        "stroke-linecap":"round", "stroke-linejoin":"round", opacity:0.18});
+      var core = mk("path", {d:d, fill:"none", stroke:rt.color, "stroke-width":rt.w,
+        "stroke-linecap":"round", "stroke-linejoin":"round", opacity:0.42});
+      under.setAttribute("data-route", rt.id);
+      core.setAttribute("data-route", rt.id);
+      if(rt.part) core.setAttribute("data-hit", rt.part);
+      tube.appendChild(under);
+      tube.appendChild(core);
+      routeEls[rt.id] = core;
+    });
+    svg.appendChild(tube);
+
+    flowLayer = mk("g", null);
+    svg.appendChild(flowLayer);
+
+    (D.labels || []).forEach(function(L){
+      var g = mk("g", {"class":"lb"});
+      if(L.p) g.setAttribute("data-part", L.p);
+      var ln = mk("line", {x1:L.from[0], y1:L.from[1], x2:L.to[0], y2:L.to[1],
+        stroke:"#a4acc0", "stroke-width":1, "stroke-dasharray":"3 3"});
+      g.appendChild(ln);
+      g.appendChild(mk("circle", {cx:L.to[0], cy:L.to[1], r:3.2, fill:"#7b8497"}));
+      var t = mk("text", {
+        x:L.from[0] + (L.anchor === "end" ? -5 : 5), y:L.from[1],
+        "font-size":L.size || 14, fill:"#3c465c", "text-anchor":L.anchor || "end",
+        "dominant-baseline":"middle", "font-weight":500
+      });
+      t.textContent = L.text;
+      g.appendChild(t);
+      svg.appendChild(g);
+    });
+
+    // 底部图注层必须最后重建，否则会被上面的清空逻辑带走
+    capG = mk("g", {"class":"cap"});
+    svg.appendChild(capG);
+  }
+
+  function activeRoutes(){
+    var st = D.steps[S.step];
+    return (st && st.routes) ? st.routes : [];
+  }
+
+  function buildFlow(){
+    flow = [];
+    if(flowLayer){ flowLayer.innerHTML = ""; }
+    var on = activeRoutes();
+    (D.routes || []).forEach(function(rt){
+      var core = routeEls[rt.id];
+      if(!core) return;
+      var isOn = on.indexOf(rt.id) >= 0;
+      var ids = svg.querySelectorAll('[data-route="' + rt.id + '"]');
+      for(var i=0;i<ids.length;i++){
+        var offOp = (rt.off === undefined || rt.off === null) ? 0.14 : rt.off;
+        ids[i].setAttribute("opacity", isOn ? (i === 0 ? 0.26 : 0.95) : offOp);
+      }
+      if(!isOn) return;
+      var len = core.getTotalLength();
+      if(!len || len < 2) return;
+      var n = Math.max(3, Math.min(11, Math.round(len / 78)));
+      for(var j=0;j<n;j++){
+        var c = mk("circle", {r:4.4, fill:"#ffffff", stroke:rt.color, "stroke-width":2.4, opacity:0.96});
+        flowLayer.appendChild(c);
+        flow.push({el:c, path:core, len:len, phase:j / n, speed:rt.speed || 0.9});
+      }
+    });
+  }
+
+  function tick(){
+    S.t += 0.0075;
+    if(S.t > 1000) S.t = 0;
+    if(!S.playing) return;
+    for(var i=0;i<flow.length;i++){
+      var f = flow[i];
+      var p = (S.t * f.speed + f.phase) % 1;
+      var pt = f.path.getPointAtLength(p * f.len);
+      f.el.setAttribute("cx", r1(pt.x));
+      f.el.setAttribute("cy", r1(pt.y));
+    }
+  }
+
+  function partById(id){
+    for(var i=0;i<(D.parts || []).length;i++){ if(D.parts[i].id === id) return D.parts[i]; }
+    return null;
+  }
+
+  function stepsNav(){
+    return '<div class="stepnav">'
+      + D.steps.map(function(st, i){
+          return '<button type="button" data-go="' + i + '" title="' + st.name + '" class="'
+            + (S.step === i ? "on" : "") + '">' + (i + 1) + '</button>';
+        }).join("")
+      + '</div>';
+  }
+
+  function controls(){
+    return '<div class="ctrl"><div class="lab">播放</div><div class="btns">'
+      + '<button type="button" id="btnPlay" class="' + (S.playing ? "on" : "") + '">'
+      + (S.playing ? "⏸ 暂停流动" : "▶ 播放流动") + '</button>'
+      + '<button type="button" id="btnPrev">上一步</button>'
+      + '<button type="button" id="btnNext">下一步</button>'
+      + '</div></div>';
+  }
+
+  function legendHtml(){
+    if(!D.legend || !D.legend.length) return "";
+    return '<div class="ctrl"><div class="lab">图例</div><div class="legend">'
+      + D.legend.map(function(x){
+          return '<span class="lg"><i style="background:' + x.color + '"></i>' + x.text + '</span>';
+        }).join("")
+      + '</div></div>';
+  }
+
+  function renderPart(id){
+    var p = partById(id);
+    if(!p) return;
+    var h = '<h3>' + p.name + '</h3>';
+    if(p.en) h += '<span class="en">' + p.en + '</span>';
+    if(p.only) h += '<span class="tag">' + p.only + '</span>';
+    h += '<div class="p-sec"><h4>是什么</h4><p>' + p.desc + '</p></div>';
+    h += '<div class="p-sec"><h4>作用</h4><p>' + p.role + '</p></div>';
+    if(p.warn) h += '<div class="p-sec warn"><h4>易错点</h4><p>' + p.warn + '</p></div>';
+    h += '<div class="ctrl"><div class="btns"><button type="button" id="btnBack">← 回到第 '
+      + (S.step + 1) + ' 步</button></div></div>';
+    panel.innerHTML = h;
+  }
+
+  function renderStep(){
+    var st = D.steps[S.step];
+    var h = '<h3><span class="step-no">' + (S.step + 1) + '</span>' + st.name + '</h3>'
+      + stepsNav();
+    if(st.say) h += '<p class="goal">' + st.say + '</p>';
+    if(st.stats && st.stats.length){
+      h += '<div class="stats">' + st.stats.map(function(x, i){
+        return '<div class="stat' + (i === 0 ? " hi" : "") + '"><b>' + x.v + '</b><span>' + x.label + '</span></div>';
+      }).join("") + '</div>';
+    }
+    if(st.ask) h += '<div class="p-sec"><h4>观察提示</h4><p>' + st.ask + '</p></div>';
+    if(st.note) h += '<div class="p-sec warn"><h4>关键结论</h4><p>' + st.note + '</p></div>';
+    if(st.table && st.table.head && st.table.rows){
+      h += '<table class="cmp"><thead><tr>'
+        + st.table.head.map(function(x){ return '<th>' + x + '</th>'; }).join('')
+        + '</tr></thead><tbody>'
+        + st.table.rows.map(function(r){
+            return '<tr>' + r.map(function(c){ return '<td>' + c + '</td>'; }).join('') + '</tr>';
+          }).join('')
+        + '</tbody></table>';
+    }
+    h += controls() + legendHtml();
+    h += '<div class="keys"><span><kbd>空格</kbd> 暂停/播放</span>'
+      + '<span><kbd>←</kbd><kbd>→</kbd> 切换步骤</span>'
+      + '<span><kbd>1</kbd>–<kbd>' + D.steps.length + '</kbd> 跳步</span>'
+      + '<span><kbd>L</kbd> 标注</span><span><kbd>F</kbd> 全屏</span></div>';
+    panel.innerHTML = h;
+  }
+
+  function applyStep(){
+    var st = D.steps[S.step];
+    var keep = st.parts || null;
+    var hide = st.hide || [];
+    var ns = svg.querySelectorAll("[data-part]");
+    for(var i=0;i<ns.length;i++){
+      var p = ns[i].getAttribute("data-part");
+      var op = (keep && keep.indexOf(p) < 0) ? 0.32 : 1;
+      if(hide.indexOf(p) >= 0) op = 0;   // hide 里的部分本步完全不出现
+      ns[i].setAttribute("opacity", op);
+    }
+    var cap = capG;
+    if(cap){
+      while(cap.firstChild) cap.removeChild(cap.firstChild);
+      if(st.caption){
+        var t = mk("text", {x:D.canvas.w / 2, y:D.canvas.h - 22, "font-size":13.5,
+          fill:"#6b7488", "text-anchor":"middle"});
+        t.textContent = st.caption;
+        cap.appendChild(t);
+      }
+    }
+  }
+
+  function go(i){
+    S.step = Math.max(0, Math.min(D.steps.length - 1, i));
+    S.sel = null;
+    build();
+    buildFlow();
+    applyStep();
+    renderStep();
+  }
+
+  function setPlaying(v){
+    S.playing = v;
+    var b = document.getElementById("btnPlay");
+    if(b){ b.classList.toggle("on", v); b.textContent = v ? "⏸ 暂停流动" : "▶ 播放流动"; }
+  }
+
+  panel.addEventListener("click", function(e){
+    var b = e.target.closest("button");
+    if(!b) return;
+    if(b.hasAttribute("data-go")){ go(+b.getAttribute("data-go")); return; }
+    if(b.id === "btnPlay"){ setPlaying(!S.playing); return; }
+    if(b.id === "btnPrev"){ go(S.step - 1); return; }
+    if(b.id === "btnNext"){ go(S.step + 1); return; }
+    if(b.id === "btnBack"){ S.sel = null; renderStep(); return; }
+  });
+
+  svg.addEventListener("click", function(e){
+    var n = e.target.closest("[data-part],[data-hit]");
+    if(!n){ return; }
+    S.sel = n.getAttribute("data-part") || n.getAttribute("data-hit");
+    renderPart(S.sel);
+  });
+
+  var lbBtn = document.getElementById("btnLabel");
+  lbBtn.addEventListener("click", function(){
+    var off = svg.classList.toggle("hide-lb");
+    lbBtn.classList.toggle("off", off);
+    lbBtn.textContent = off ? "显示标注　L" : "隐藏标注　L";
+  });
+
+  var fullBtn = document.getElementById("btnFull");
+  function toggleFull(){
+    if(!document.fullscreenElement){
+      if(document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+    } else if(document.exitFullscreen){
+      document.exitFullscreen();
+    }
+  }
+  fullBtn.addEventListener("click", toggleFull);
+
+  document.addEventListener("keydown", function(e){
+    var k = e.key;
+    if(k === " "){ e.preventDefault(); setPlaying(!S.playing); }
+    else if(k === "ArrowRight" || k === "ArrowDown"){ e.preventDefault(); go(S.step + 1); }
+    else if(k === "ArrowLeft" || k === "ArrowUp"){ e.preventDefault(); go(S.step - 1); }
+    else if(k === "Escape" || k === "Backspace"){ S.sel = null; renderStep(); }
+    else if(k === "l" || k === "L"){ lbBtn.click(); }
+    else if(k === "f" || k === "F"){ toggleFull(); }
+    else if(k >= "1" && k <= "9"){
+      var idx = +k - 1;
+      if(idx < D.steps.length) go(idx);
+    }
+  });
+
+  go(0);
+  setInterval(tick, 30);
+
+  window.__SELFTEST__ = function(){
+    var errs = [];
+    var W = D.canvas.w, H = D.canvas.h;
+    if(!D.steps || D.steps.length < 3) errs.push("步骤应不少于 3 步");
+    if(!D.routes || !D.routes.length) errs.push("routes 为空");
+    if(!D.parts || !D.parts.length) errs.push("parts 为空");
+
+    var ids = {}, rids = {};
+    (D.parts || []).forEach(function(p){
+      ids[p.id] = 1;
+      if(!p.name || !p.desc || !p.role) errs.push("部位字段缺失: " + p.id);
+    });
+    (D.routes || []).forEach(function(rt){
+      if(rids[rt.id]) errs.push("route id 重复: " + rt.id);
+      rids[rt.id] = 1;
+      if(!rt.color) errs.push("route 缺少颜色: " + rt.id);
+      if(!rt.pts || rt.pts.length < 2) errs.push("route 控制点不足: " + rt.id);
+      (rt.pts || []).forEach(function(pt){
+        if(pt[0] < 0 || pt[0] > W || pt[1] < 0 || pt[1] > H){
+          errs.push("route「" + rt.id + "」有点跑出画布: " + pt[0] + "," + pt[1]);
+        }
+      });
+    });
+    (D.shapes || []).forEach(function(s){
+      if(s.part && !ids[s.part]) errs.push("shape 引用了未知部位: " + s.part);
+    });
+    (D.labels || []).forEach(function(l){
+      if(l.p && !ids[l.p]) errs.push("label 引用了未知部位: " + l.p);
+    });
+    D.steps.forEach(function(st, i){
+      if(!st.name) errs.push("步骤缺少名称: " + (i + 1));
+      (st.routes || []).forEach(function(rid){
+        if(!rids[rid]) errs.push("步骤「" + st.name + "」引用了未知路径: " + rid);
+      });
+      (st.parts || []).forEach(function(pid){
+        if(!ids[pid]) errs.push("步骤「" + st.name + "」引用了未知部位: " + pid);
+      });
+    });
+    // 路径必须真的渲染出长度（防退化成一个点）
+    Object.keys(routeEls).forEach(function(k){
+      var el = routeEls[k];
+      if(!el) return;
+      var L = el.getTotalLength();
+      if(!L || L < 60) errs.push("路径「" + k + "」长度异常: " + Math.round(L || 0));
+    });
+    if(flow.length === 0 && S.step > 0 && D.steps[S.step].routes && D.steps[S.step].routes.length){
+      errs.push("当前步骤配置了路径却没有流动粒子");
+    }
+    var anyFlow = false;
+    D.steps.forEach(function(st){ if(st.routes && st.routes.length) anyFlow = true; });
+    if(!anyFlow) errs.push("没有任何步骤配置流动路径");
+    if(svg.querySelectorAll("[data-part]").length === 0) errs.push("没有渲染出任何部位");
+    return errs;
+  };
+
+  if(!window.__QUIET__){
+    var e = window.__SELFTEST__();
+    if(e.length) console.log("SELFTEST FAIL: " + e.join(" | "));
+    else console.log("SELFTEST PASS");
+  }
+})();
+</script>
+</body>
+</html>
