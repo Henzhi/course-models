@@ -15,3 +15,6 @@ desktop.ini
 .vscode/
 .idea/
 *.swp
+
+# 本地工作目录（项目记忆/配置），不纳入版本控制
+.workbuddy/
