@@ -16,7 +16,7 @@
   body{
     font-family:"Microsoft YaHei","PingFang SC","Segoe UI",system-ui,sans-serif;
     background:var(--bg); color:var(--ink); font-size:16px; line-height:1.65;
-    min-height:100vh; display:flex; flex-direction:column; -webkit-font-smoothing:antialiased;
+    height:100vh; overflow:hidden; display:flex; flex-direction:column; -webkit-font-smoothing:antialiased;
   }
   header{padding:14px 24px 12px; background:#fff; border-bottom:1px solid var(--line)}
   .topbar{display:flex; align-items:center; gap:14px; font-size:13px}
@@ -43,6 +43,7 @@
   .ghost:hover{border-color:#c4c9dd; color:var(--ink)}
   main{
     flex:1; display:grid; grid-template-columns:minmax(0,1fr) 400px;
+    grid-template-rows:minmax(0,1fr);
     gap:16px; padding:16px 20px 8px; min-height:0;
   }
   .canvas-wrap{
@@ -52,7 +53,7 @@
   svg{width:100%; height:100%; display:block; min-height:0}
   .panel{
     background:#fff; border:1px solid var(--line); border-radius:16px;
-    box-shadow:var(--shadow); padding:18px 20px 24px; overflow:auto;
+    box-shadow:var(--shadow); padding:18px 20px 24px; overflow:auto; min-height:0;
   }
   .panel h3{font-size:20px; font-weight:700; letter-spacing:-.2px}
   .panel .step-no{
@@ -107,6 +108,7 @@
   }
   footer b{color:var(--ink2); font-weight:600}
   @media (max-width:1180px){
+    body{height:auto; overflow:auto}
     main{grid-template-columns:1fr; grid-template-rows:minmax(300px,1fr) auto}
     .panel{max-height:350px}
     h1{font-size:21px}
@@ -153,8 +155,9 @@ window.__APP__ = {{DATA}};
   var svg = document.getElementById("cv");
   var panel = document.getElementById("panel");
   var S = { kind: "animal", level: 0 };
+  var SVGPAD = 34;   // 场景整体下移，避开顶部层级链
 
-  svg.setAttribute("viewBox", "0 0 " + D.canvas.w + " " + D.canvas.h);
+  svg.setAttribute("viewBox", "0 0 " + D.canvas.w + " " + (D.canvas.h + SVGPAD));
 
   function mk(tag, a){
     var e = document.createElementNS(NS, tag);
@@ -248,7 +251,7 @@ window.__APP__ = {{DATA}};
   function buildScene(){
     var ch = D.chains[S.kind];
     var lv = ch.levels[S.level];
-    var g = mk("g", {"class":"scene"});
+    var g = mk("g", {"class":"scene", "transform":"translate(0," + SVGPAD + ")"});
 
     if(lv.empty){
       g.appendChild(mk("rect", {x:250, y:170, width:400, height:250, rx:18,
