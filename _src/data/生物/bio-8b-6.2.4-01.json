@@ -1,0 +1,765 @@
+{
+  "canvas": {
+    "w": 1000,
+    "h": 660
+  },
+  "legend": [
+    {
+      "color": "#3f66c8",
+      "text": "来自父亲"
+    },
+    {
+      "color": "#c0504d",
+      "text": "来自母亲"
+    }
+  ],
+  "shapes": [
+    {
+      "t": "ellipse",
+      "cx": 130,
+      "cy": 130,
+      "rx": 84,
+      "ry": 62,
+      "fill": "#fdf5f4",
+      "stroke": "#e2bcb9",
+      "sw": 2.6,
+      "part": "momcell"
+    },
+    {
+      "t": "line",
+      "x1": 102,
+      "y1": 104,
+      "x2": 102,
+      "y2": 156,
+      "stroke": "#c0504d",
+      "sw": 10,
+      "cap": "round",
+      "part": "sexchrom"
+    },
+    {
+      "t": "line",
+      "x1": 130,
+      "y1": 104,
+      "x2": 130,
+      "y2": 156,
+      "stroke": "#c0504d",
+      "sw": 10,
+      "cap": "round",
+      "part": "sexchrom"
+    },
+    {
+      "t": "text",
+      "x": 116,
+      "y": 90,
+      "tx": "XX",
+      "size": 13,
+      "fill": "#c0504d",
+      "anchor": "middle",
+      "weight": 700,
+      "part": "sexchrom",
+      "lbl": true
+    },
+    {
+      "t": "ellipse",
+      "cx": 130,
+      "cy": 460,
+      "rx": 84,
+      "ry": 62,
+      "fill": "#f4f7fd",
+      "stroke": "#b9c6e0",
+      "sw": 2.6,
+      "part": "dadcell"
+    },
+    {
+      "t": "line",
+      "x1": 100,
+      "y1": 436,
+      "x2": 100,
+      "y2": 484,
+      "stroke": "#3f66c8",
+      "sw": 10,
+      "cap": "round",
+      "part": "sexchrom"
+    },
+    {
+      "t": "line",
+      "x1": 142,
+      "y1": 448,
+      "x2": 142,
+      "y2": 472,
+      "stroke": "#3f66c8",
+      "sw": 10,
+      "cap": "round",
+      "part": "sexchrom"
+    },
+    {
+      "t": "text",
+      "x": 121,
+      "y": 420,
+      "tx": "XY",
+      "size": 13,
+      "fill": "#3f66c8",
+      "anchor": "middle",
+      "weight": 700,
+      "part": "sexchrom",
+      "lbl": true
+    },
+    {
+      "t": "circle",
+      "cx": 380,
+      "cy": 130,
+      "r": 52,
+      "fill": "#fdf5f4",
+      "stroke": "#e2bcb9",
+      "sw": 2.6,
+      "part": "egg"
+    },
+    {
+      "t": "line",
+      "x1": 378,
+      "y1": 106,
+      "x2": 378,
+      "y2": 154,
+      "stroke": "#c0504d",
+      "sw": 9,
+      "cap": "round",
+      "part": "sexchrom"
+    },
+    {
+      "t": "ellipse",
+      "cx": 380,
+      "cy": 330,
+      "rx": 38,
+      "ry": 30,
+      "fill": "#f4f7fd",
+      "stroke": "#b9c6e0",
+      "sw": 2.2,
+      "part": "spermX"
+    },
+    {
+      "t": "path",
+      "d": "M 414 336 q 24 10 44 -12",
+      "fill": "none",
+      "stroke": "#b9c6e0",
+      "sw": 2.2,
+      "cap": "round",
+      "part": "spermX"
+    },
+    {
+      "t": "line",
+      "x1": 378,
+      "y1": 310,
+      "x2": 378,
+      "y2": 350,
+      "stroke": "#3f66c8",
+      "sw": 9,
+      "cap": "round",
+      "part": "sexchrom"
+    },
+    {
+      "t": "ellipse",
+      "cx": 380,
+      "cy": 520,
+      "rx": 38,
+      "ry": 30,
+      "fill": "#f4f7fd",
+      "stroke": "#b9c6e0",
+      "sw": 2.2,
+      "part": "spermY"
+    },
+    {
+      "t": "path",
+      "d": "M 414 526 q 24 10 44 -12",
+      "fill": "none",
+      "stroke": "#b9c6e0",
+      "sw": 2.2,
+      "cap": "round",
+      "part": "spermY"
+    },
+    {
+      "t": "line",
+      "x1": 380,
+      "y1": 508,
+      "x2": 380,
+      "y2": 532,
+      "stroke": "#3f66c8",
+      "sw": 9,
+      "cap": "round",
+      "part": "sexchrom"
+    },
+    {
+      "t": "circle",
+      "cx": 740,
+      "cy": 230,
+      "r": 68,
+      "fill": "#fdf5f8",
+      "stroke": "#d9a3b4",
+      "sw": 3,
+      "part": "zygoteXX"
+    },
+    {
+      "t": "line",
+      "x1": 718,
+      "y1": 204,
+      "x2": 718,
+      "y2": 256,
+      "stroke": "#c0504d",
+      "sw": 10,
+      "cap": "round",
+      "part": "sexchrom"
+    },
+    {
+      "t": "line",
+      "x1": 748,
+      "y1": 204,
+      "x2": 748,
+      "y2": 256,
+      "stroke": "#3f66c8",
+      "sw": 10,
+      "cap": "round",
+      "part": "sexchrom"
+    },
+    {
+      "t": "text",
+      "x": 740,
+      "y": 330,
+      "tx": "女孩 · XX",
+      "size": 16,
+      "fill": "#a8425f",
+      "anchor": "middle",
+      "weight": 700,
+      "part": "zygoteXX",
+      "lbl": true
+    },
+    {
+      "t": "circle",
+      "cx": 740,
+      "cy": 470,
+      "r": 68,
+      "fill": "#f4f8fc",
+      "stroke": "#93aecd",
+      "sw": 3,
+      "part": "zygoteXY"
+    },
+    {
+      "t": "line",
+      "x1": 718,
+      "y1": 444,
+      "x2": 718,
+      "y2": 496,
+      "stroke": "#c0504d",
+      "sw": 10,
+      "cap": "round",
+      "part": "sexchrom"
+    },
+    {
+      "t": "line",
+      "x1": 748,
+      "y1": 458,
+      "x2": 748,
+      "y2": 482,
+      "stroke": "#3f66c8",
+      "sw": 10,
+      "cap": "round",
+      "part": "sexchrom"
+    },
+    {
+      "t": "text",
+      "x": 740,
+      "y": 568,
+      "tx": "男孩 · XY",
+      "size": 16,
+      "fill": "#3a5f8c",
+      "anchor": "middle",
+      "weight": 700,
+      "part": "zygoteXY",
+      "lbl": true
+    }
+  ],
+  "routes": [
+    {
+      "id": "r_mom",
+      "color": "#c0504d",
+      "w": 10,
+      "speed": 0.85,
+      "pts": [
+        [
+          214,
+          130
+        ],
+        [
+          258,
+          128
+        ],
+        [
+          310,
+          130
+        ],
+        [
+          326,
+          130
+        ]
+      ]
+    },
+    {
+      "id": "r_dadX",
+      "color": "#3f66c8",
+      "w": 9,
+      "speed": 0.8,
+      "pts": [
+        [
+          214,
+          442
+        ],
+        [
+          258,
+          404
+        ],
+        [
+          306,
+          372
+        ],
+        [
+          346,
+          352
+        ]
+      ]
+    },
+    {
+      "id": "r_dadY",
+      "color": "#3f66c8",
+      "w": 9,
+      "speed": 0.8,
+      "pts": [
+        [
+          214,
+          478
+        ],
+        [
+          258,
+          504
+        ],
+        [
+          306,
+          528
+        ],
+        [
+          346,
+          540
+        ]
+      ]
+    },
+    {
+      "id": "r_egg1",
+      "color": "#c0504d",
+      "w": 9,
+      "speed": 0.8,
+      "pts": [
+        [
+          420,
+          162
+        ],
+        [
+          500,
+          182
+        ],
+        [
+          590,
+          202
+        ],
+        [
+          676,
+          218
+        ]
+      ],
+      "off": 0.06
+    },
+    {
+      "id": "r_egg2",
+      "color": "#c0504d",
+      "w": 9,
+      "speed": 0.75,
+      "pts": [
+        [
+          424,
+          166
+        ],
+        [
+          470,
+          250
+        ],
+        [
+          520,
+          340
+        ],
+        [
+          580,
+          410
+        ],
+        [
+          676,
+          458
+        ]
+      ],
+      "off": 0.06
+    },
+    {
+      "id": "r_spermX",
+      "color": "#3f66c8",
+      "w": 9,
+      "speed": 0.8,
+      "pts": [
+        [
+          410,
+          312
+        ],
+        [
+          470,
+          292
+        ],
+        [
+          560,
+          268
+        ],
+        [
+          676,
+          244
+        ]
+      ],
+      "off": 0.06
+    },
+    {
+      "id": "r_spermY",
+      "color": "#3f66c8",
+      "w": 9,
+      "speed": 0.8,
+      "pts": [
+        [
+          412,
+          502
+        ],
+        [
+          470,
+          494
+        ],
+        [
+          560,
+          486
+        ],
+        [
+          676,
+          478
+        ]
+      ],
+      "off": 0.06
+    }
+  ],
+  "steps": [
+    {
+      "name": "第 23 对染色体不一样",
+      "say": "人的体细胞里有 23 对染色体，前 22 对男女都一样，只有第 23 对不一样。",
+      "stats": [
+        {
+          "v": "22 对",
+          "label": "常染色体（男女相同）"
+        },
+        {
+          "v": "1 对",
+          "label": "性染色体（XX 或 XY）"
+        }
+      ],
+      "ask": "看左上的母亲和左下的父亲，第 23 对染色体差在哪？",
+      "note": "女性的性染色体是 <b>XX</b>（两条一样长），男性是 <b>XY</b>（一条长、一条短）。<b>长短不同，就是 X 和 Y 的区别</b>。",
+      "parts": [
+        "sexchrom",
+        "momcell",
+        "dadcell"
+      ],
+      "routes": [],
+      "caption": "长棒 = X 染色体，短棒 = Y 染色体"
+    },
+    {
+      "name": "母亲只给 X",
+      "say": "母亲是 XX，形成卵细胞时两条 X 分开，所以每个卵细胞都含一条 X。",
+      "stats": [
+        {
+          "v": "1 种",
+          "label": "卵细胞（只含 X）"
+        }
+      ],
+      "ask": "卵细胞里有可能出现 Y 吗？为什么？",
+      "note": "母亲身上没有 Y，所以<b>卵细胞只有一种：必含 X</b>。这一点已经决定了——<b>生男生女不可能由母亲决定</b>。",
+      "parts": [
+        "momcell",
+        "egg",
+        "sexchrom"
+      ],
+      "routes": [
+        "r_mom"
+      ],
+      "caption": "卵细胞：只含 X，只有一种"
+    },
+    {
+      "name": "父亲给 X 或 Y",
+      "say": "父亲是 XY，两条性染色体分开时，含 X 的精子和含 Y 的精子各占一半。",
+      "stats": [
+        {
+          "v": "2 种",
+          "label": "精子（含 X / 含 Y，各半）"
+        }
+      ],
+      "ask": "为什么父亲的精子有两种，而母亲的卵细胞只有一种？",
+      "note": "<b>精子有两种：含 X 的和含 Y 的</b>，数量大致各占一半。这是子代性别不同的<b>唯一来源</b>。",
+      "parts": [
+        "dadcell",
+        "spermX",
+        "spermY",
+        "sexchrom"
+      ],
+      "routes": [
+        "r_dadX",
+        "r_dadY"
+      ],
+      "caption": "精子：含 X 或含 Y，各占一半"
+    },
+    {
+      "name": "给 X 就是女孩",
+      "say": "含 X 的精子与卵细胞结合，受精卵里是两条 X——一样长。",
+      "stats": [
+        {
+          "v": "XX",
+          "label": "女孩"
+        }
+      ],
+      "ask": "这个受精卵里的两条 X，分别来自谁？",
+      "note": "卵细胞给的是 X，含 X 的精子给的也是 X，所以是 <b>XX</b>。<b>两条一样长</b>，发育成女孩。",
+      "parts": [
+        "egg",
+        "spermX",
+        "zygoteXX",
+        "sexchrom"
+      ],
+      "routes": [
+        "r_egg1",
+        "r_spermX"
+      ],
+      "caption": "X 精子 + X 卵细胞 → XX（女孩）"
+    },
+    {
+      "name": "给 Y 就是男孩",
+      "say": "含 Y 的精子与卵细胞结合，受精卵里是一长一短——XY。",
+      "stats": [
+        {
+          "v": "XY",
+          "label": "男孩"
+        }
+      ],
+      "ask": "这条 Y 一定来自谁？有没有可能来自母亲？",
+      "note": "卵细胞只含 X，所以 <b>Y 一定来自父亲</b>。这就是「生男生女由父亲决定」最直接的证据——<b>母亲这一侧根本没有变量</b>。",
+      "parts": [
+        "egg",
+        "spermY",
+        "zygoteXY",
+        "sexchrom"
+      ],
+      "routes": [
+        "r_egg2",
+        "r_spermY"
+      ],
+      "caption": "Y 精子 + X 卵细胞 → XY（男孩）"
+    },
+    {
+      "name": "所以，各占一半",
+      "say": "含 X 的精子与卵细胞结合，受精卵是 XX；含 Y 的结合，就是 XY。",
+      "stats": [
+        {
+          "v": "XX",
+          "label": "女孩"
+        },
+        {
+          "v": "XY",
+          "label": "男孩"
+        }
+      ],
+      "ask": "两个受精卵里，哪一条是母亲给的？哪一条是父亲给的？",
+      "note": "不管哪种结果，<b>卵细胞给的都是 X</b>。差别只在父亲给的是 X 还是 Y——<b>给 X 是女孩，给 Y 是男孩</b>。",
+      "parts": [
+        "egg",
+        "spermX",
+        "spermY",
+        "zygoteXX",
+        "zygoteXY",
+        "sexchrom"
+      ],
+      "routes": [],
+      "caption": "性别取决于父亲的精子，机会各半"
+    }
+  ],
+  "labels": [
+    {
+      "p": "momcell",
+      "text": "母亲体细胞（23 对）",
+      "from": [
+        130,
+        42
+      ],
+      "to": [
+        130,
+        66
+      ],
+      "anchor": "middle"
+    },
+    {
+      "p": "dadcell",
+      "text": "父亲体细胞（23 对）",
+      "from": [
+        130,
+        580
+      ],
+      "to": [
+        130,
+        524
+      ],
+      "anchor": "middle"
+    },
+    {
+      "p": "egg",
+      "text": "卵细胞",
+      "from": [
+        300,
+        206
+      ],
+      "to": [
+        352,
+        174
+      ],
+      "anchor": "end"
+    },
+    {
+      "p": "spermX",
+      "text": "含 X 的精子",
+      "from": [
+        300,
+        352
+      ],
+      "to": [
+        346,
+        340
+      ],
+      "anchor": "end"
+    },
+    {
+      "p": "spermY",
+      "text": "含 Y 的精子",
+      "from": [
+        300,
+        556
+      ],
+      "to": [
+        346,
+        534
+      ],
+      "anchor": "end"
+    },
+    {
+      "p": "",
+      "text": "受精卵",
+      "from": [
+        856,
+        168
+      ],
+      "to": [
+        800,
+        198
+      ],
+      "anchor": "start"
+    },
+    {
+      "p": "",
+      "text": "受精卵",
+      "from": [
+        856,
+        428
+      ],
+      "to": [
+        800,
+        448
+      ],
+      "anchor": "start"
+    }
+  ],
+  "parts": [
+    {
+      "id": "sexchrom",
+      "name": "性染色体",
+      "en": "sex chromosome",
+      "only": "第 23 对",
+      "desc": "决定性别的一对染色体。女性是 XX（两条等长），男性是 XY（一条长、一条短）。",
+      "role": "长的是 X，短的是 Y——看长短就能分辨，不用记别的。",
+      "warn": "第 23 对以外的 22 对叫常染色体，男女完全相同，与性别无关。"
+    },
+    {
+      "id": "momcell",
+      "name": "母亲体细胞",
+      "en": "somatic cell",
+      "only": "XX",
+      "desc": "含 23 对染色体，第 23 对是两条一样的 X。",
+      "role": "形成卵细胞时只交出其中一条 X。",
+      "warn": "母亲身上没有 Y，所以她的卵细胞不可能带 Y。"
+    },
+    {
+      "id": "dadcell",
+      "name": "父亲体细胞",
+      "en": "somatic cell",
+      "only": "XY",
+      "desc": "含 23 对染色体，第 23 对是一条 X、一条 Y。",
+      "role": "形成精子时 X 和 Y 分开，各进入一半的精子。",
+      "warn": "「生男生女由母亲决定」是错的——母亲只能给 X，变量在父亲这边。"
+    },
+    {
+      "id": "egg",
+      "name": "卵细胞",
+      "en": "ovum",
+      "only": "含 X",
+      "desc": "染色体数减半，第 23 条一定是 X。",
+      "role": "与含 X 或含 Y 的精子结合，决定受精卵的性别组合。",
+      "warn": "卵细胞只有一种，不存在「含 Y 的卵细胞」。"
+    },
+    {
+      "id": "spermX",
+      "name": "含 X 的精子",
+      "en": "sperm",
+      "only": "含 X",
+      "desc": "染色体数减半，第 23 条是 X。与卵细胞结合后是 XX。",
+      "role": "受精后发育成女孩。",
+      "warn": "含 X 的精子本身不「决定女孩」——是它与卵细胞组合的结果。"
+    },
+    {
+      "id": "spermY",
+      "name": "含 Y 的精子",
+      "en": "sperm",
+      "only": "含 Y",
+      "desc": "染色体数减半，第 23 条是 Y。与卵细胞结合后是 XY。",
+      "role": "受精后发育成男孩。",
+      "warn": "两种精子数量大致各半，所以男女比例接近 1:1。"
+    },
+    {
+      "id": "zygoteXX",
+      "name": "受精卵 XX",
+      "en": "zygote",
+      "only": "女孩",
+      "desc": "两条 X，一条来自母亲、一条来自父亲。",
+      "role": "发育成女孩。",
+      "warn": "两条 X 一样长，所以画成两根等长的棒。"
+    },
+    {
+      "id": "zygoteXY",
+      "name": "受精卵 XY",
+      "en": "zygote",
+      "only": "男孩",
+      "desc": "一条 X 来自母亲、一条 Y 来自父亲。",
+      "role": "发育成男孩。",
+      "warn": "Y 一定来自父亲——这是判断「生男生女谁决定」的关键证据。"
+    }
+  ]
+}
