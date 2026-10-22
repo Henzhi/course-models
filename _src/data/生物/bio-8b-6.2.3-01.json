@@ -1,0 +1,829 @@
+{
+  "canvas": {
+    "w": 1000,
+    "h": 660
+  },
+  "legend": [
+    {
+      "color": "#7cab55",
+      "text": "高茎（显性）"
+    },
+    {
+      "color": "#cfa04a",
+      "text": "矮茎（隐性）"
+    }
+  ],
+  "shapes": [
+    {
+      "t": "ellipse",
+      "cx": 280,
+      "cy": 110,
+      "rx": 76,
+      "ry": 58,
+      "fill": "#f1f8e9",
+      "stroke": "#7cab55",
+      "sw": 2.6,
+      "part": "parent_tall"
+    },
+    {
+      "t": "line",
+      "x1": 258,
+      "y1": 84,
+      "x2": 258,
+      "y2": 136,
+      "stroke": "#6b63b8",
+      "sw": 9,
+      "cap": "round",
+      "part": "gene"
+    },
+    {
+      "t": "line",
+      "x1": 286,
+      "y1": 84,
+      "x2": 286,
+      "y2": 136,
+      "stroke": "#6b63b8",
+      "sw": 9,
+      "cap": "round",
+      "part": "gene"
+    },
+    {
+      "t": "text",
+      "x": 258,
+      "y": 74,
+      "tx": "D",
+      "size": 14,
+      "fill": "#4c4694",
+      "anchor": "middle",
+      "weight": 700,
+      "part": "gene",
+      "lbl": true
+    },
+    {
+      "t": "text",
+      "x": 286,
+      "y": 74,
+      "tx": "D",
+      "size": 14,
+      "fill": "#4c4694",
+      "anchor": "middle",
+      "weight": 700,
+      "part": "gene",
+      "lbl": true
+    },
+    {
+      "t": "text",
+      "x": 280,
+      "y": 40,
+      "tx": "纯种高茎",
+      "size": 13,
+      "fill": "#4d6b38",
+      "anchor": "middle",
+      "weight": 600,
+      "part": "parent_tall",
+      "lbl": true
+    },
+    {
+      "t": "ellipse",
+      "cx": 660,
+      "cy": 110,
+      "rx": 76,
+      "ry": 58,
+      "fill": "#fdf5e3",
+      "stroke": "#cfa04a",
+      "sw": 2.6,
+      "part": "parent_short"
+    },
+    {
+      "t": "line",
+      "x1": 638,
+      "y1": 84,
+      "x2": 638,
+      "y2": 136,
+      "stroke": "#6b63b8",
+      "sw": 9,
+      "cap": "round",
+      "part": "gene"
+    },
+    {
+      "t": "line",
+      "x1": 666,
+      "y1": 84,
+      "x2": 666,
+      "y2": 136,
+      "stroke": "#6b63b8",
+      "sw": 9,
+      "cap": "round",
+      "part": "gene"
+    },
+    {
+      "t": "text",
+      "x": 638,
+      "y": 74,
+      "tx": "d",
+      "size": 14,
+      "fill": "#4c4694",
+      "anchor": "middle",
+      "weight": 700,
+      "part": "gene",
+      "lbl": true
+    },
+    {
+      "t": "text",
+      "x": 666,
+      "y": 74,
+      "tx": "d",
+      "size": 14,
+      "fill": "#4c4694",
+      "anchor": "middle",
+      "weight": 700,
+      "part": "gene",
+      "lbl": true
+    },
+    {
+      "t": "text",
+      "x": 660,
+      "y": 40,
+      "tx": "纯种矮茎",
+      "size": 13,
+      "fill": "#8a6420",
+      "anchor": "middle",
+      "weight": 600,
+      "part": "parent_short",
+      "lbl": true
+    },
+    {
+      "t": "text",
+      "x": 470,
+      "y": 122,
+      "tx": "×",
+      "size": 28,
+      "fill": "#8a8fa6",
+      "anchor": "middle",
+      "weight": 400,
+      "part": "parent_tall"
+    },
+    {
+      "t": "circle",
+      "cx": 280,
+      "cy": 270,
+      "r": 42,
+      "fill": "#f5f4fb",
+      "stroke": "#b3aed6",
+      "sw": 2.4,
+      "part": "gamete_D"
+    },
+    {
+      "t": "line",
+      "x1": 280,
+      "y1": 240,
+      "x2": 280,
+      "y2": 300,
+      "stroke": "#6b63b8",
+      "sw": 9,
+      "cap": "round",
+      "part": "gene"
+    },
+    {
+      "t": "text",
+      "x": 280,
+      "y": 230,
+      "tx": "D",
+      "size": 14,
+      "fill": "#4c4694",
+      "anchor": "middle",
+      "weight": 700,
+      "part": "gene",
+      "lbl": true
+    },
+    {
+      "t": "circle",
+      "cx": 660,
+      "cy": 270,
+      "r": 42,
+      "fill": "#f5f4fb",
+      "stroke": "#b3aed6",
+      "sw": 2.4,
+      "part": "gamete_d"
+    },
+    {
+      "t": "line",
+      "x1": 660,
+      "y1": 240,
+      "x2": 660,
+      "y2": 300,
+      "stroke": "#6b63b8",
+      "sw": 9,
+      "cap": "round",
+      "part": "gene"
+    },
+    {
+      "t": "text",
+      "x": 660,
+      "y": 230,
+      "tx": "d",
+      "size": 14,
+      "fill": "#4c4694",
+      "anchor": "middle",
+      "weight": 700,
+      "part": "gene",
+      "lbl": true
+    },
+    {
+      "t": "ellipse",
+      "cx": 460,
+      "cy": 400,
+      "rx": 80,
+      "ry": 58,
+      "fill": "#f1f8e9",
+      "stroke": "#7cab55",
+      "sw": 2.8,
+      "part": "f1"
+    },
+    {
+      "t": "line",
+      "x1": 438,
+      "y1": 374,
+      "x2": 438,
+      "y2": 426,
+      "stroke": "#6b63b8",
+      "sw": 9,
+      "cap": "round",
+      "part": "gene"
+    },
+    {
+      "t": "line",
+      "x1": 466,
+      "y1": 374,
+      "x2": 466,
+      "y2": 426,
+      "stroke": "#6b63b8",
+      "sw": 9,
+      "cap": "round",
+      "part": "gene"
+    },
+    {
+      "t": "text",
+      "x": 438,
+      "y": 364,
+      "tx": "D",
+      "size": 14,
+      "fill": "#4c4694",
+      "anchor": "middle",
+      "weight": 700,
+      "part": "gene",
+      "lbl": true
+    },
+    {
+      "t": "text",
+      "x": 466,
+      "y": 364,
+      "tx": "d",
+      "size": 14,
+      "fill": "#4c4694",
+      "anchor": "middle",
+      "weight": 700,
+      "part": "gene",
+      "lbl": true
+    },
+    {
+      "t": "ellipse",
+      "cx": 200,
+      "cy": 540,
+      "rx": 62,
+      "ry": 42,
+      "fill": "#f1f8e9",
+      "stroke": "#7cab55",
+      "sw": 2.4,
+      "part": "f2"
+    },
+    {
+      "t": "text",
+      "x": 200,
+      "y": 534,
+      "tx": "DD",
+      "size": 17,
+      "fill": "#4d6b38",
+      "anchor": "middle",
+      "weight": 700,
+      "part": "f2",
+      "lbl": true
+    },
+    {
+      "t": "text",
+      "x": 200,
+      "y": 560,
+      "tx": "高茎",
+      "size": 13,
+      "fill": "#5f7d47",
+      "anchor": "middle",
+      "part": "f2",
+      "lbl": true
+    },
+    {
+      "t": "ellipse",
+      "cx": 400,
+      "cy": 540,
+      "rx": 62,
+      "ry": 42,
+      "fill": "#f1f8e9",
+      "stroke": "#7cab55",
+      "sw": 2.4,
+      "part": "f2"
+    },
+    {
+      "t": "text",
+      "x": 400,
+      "y": 534,
+      "tx": "Dd",
+      "size": 17,
+      "fill": "#4d6b38",
+      "anchor": "middle",
+      "weight": 700,
+      "part": "f2",
+      "lbl": true
+    },
+    {
+      "t": "text",
+      "x": 400,
+      "y": 560,
+      "tx": "高茎",
+      "size": 13,
+      "fill": "#5f7d47",
+      "anchor": "middle",
+      "part": "f2",
+      "lbl": true
+    },
+    {
+      "t": "ellipse",
+      "cx": 600,
+      "cy": 540,
+      "rx": 62,
+      "ry": 42,
+      "fill": "#f1f8e9",
+      "stroke": "#7cab55",
+      "sw": 2.4,
+      "part": "f2"
+    },
+    {
+      "t": "text",
+      "x": 600,
+      "y": 534,
+      "tx": "Dd",
+      "size": 17,
+      "fill": "#4d6b38",
+      "anchor": "middle",
+      "weight": 700,
+      "part": "f2",
+      "lbl": true
+    },
+    {
+      "t": "text",
+      "x": 600,
+      "y": 560,
+      "tx": "高茎",
+      "size": 13,
+      "fill": "#5f7d47",
+      "anchor": "middle",
+      "part": "f2",
+      "lbl": true
+    },
+    {
+      "t": "ellipse",
+      "cx": 800,
+      "cy": 540,
+      "rx": 62,
+      "ry": 42,
+      "fill": "#fdf5e3",
+      "stroke": "#cfa04a",
+      "sw": 2.4,
+      "part": "f2"
+    },
+    {
+      "t": "text",
+      "x": 800,
+      "y": 534,
+      "tx": "dd",
+      "size": 17,
+      "fill": "#8a6420",
+      "anchor": "middle",
+      "weight": 700,
+      "part": "f2",
+      "lbl": true
+    },
+    {
+      "t": "text",
+      "x": 800,
+      "y": 560,
+      "tx": "矮茎",
+      "size": 13,
+      "fill": "#96702c",
+      "anchor": "middle",
+      "part": "f2",
+      "lbl": true
+    }
+  ],
+  "routes": [
+    {
+      "id": "r1",
+      "color": "#7cab55",
+      "w": 10,
+      "speed": 0.8,
+      "pts": [
+        [
+          280,
+          164
+        ],
+        [
+          280,
+          228
+        ]
+      ],
+      "off": 0.06
+    },
+    {
+      "id": "r2",
+      "color": "#cfa04a",
+      "w": 10,
+      "speed": 0.8,
+      "pts": [
+        [
+          660,
+          164
+        ],
+        [
+          660,
+          228
+        ]
+      ],
+      "off": 0.06
+    },
+    {
+      "id": "r3",
+      "color": "#7cab55",
+      "w": 9,
+      "speed": 0.8,
+      "pts": [
+        [
+          280,
+          312
+        ],
+        [
+          350,
+          352
+        ],
+        [
+          405,
+          382
+        ]
+      ],
+      "off": 0.06
+    },
+    {
+      "id": "r4",
+      "color": "#cfa04a",
+      "w": 9,
+      "speed": 0.8,
+      "pts": [
+        [
+          660,
+          312
+        ],
+        [
+          580,
+          352
+        ],
+        [
+          515,
+          382
+        ]
+      ],
+      "off": 0.06
+    },
+    {
+      "id": "r5",
+      "color": "#7cab55",
+      "w": 8,
+      "speed": 0.75,
+      "pts": [
+        [
+          412,
+          438
+        ],
+        [
+          330,
+          478
+        ],
+        [
+          240,
+          506
+        ]
+      ],
+      "off": 0.06
+    },
+    {
+      "id": "r6",
+      "color": "#7cab55",
+      "w": 8,
+      "speed": 0.75,
+      "pts": [
+        [
+          442,
+          450
+        ],
+        [
+          424,
+          482
+        ],
+        [
+          400,
+          506
+        ]
+      ],
+      "off": 0.06
+    },
+    {
+      "id": "r7",
+      "color": "#7cab55",
+      "w": 8,
+      "speed": 0.75,
+      "pts": [
+        [
+          478,
+          450
+        ],
+        [
+          500,
+          482
+        ],
+        [
+          600,
+          506
+        ]
+      ],
+      "off": 0.06
+    },
+    {
+      "id": "r8",
+      "color": "#cfa04a",
+      "w": 8,
+      "speed": 0.75,
+      "pts": [
+        [
+          508,
+          450
+        ],
+        [
+          590,
+          482
+        ],
+        [
+          762,
+          506
+        ]
+      ],
+      "off": 0.06
+    }
+  ],
+  "steps": [
+    {
+      "name": "矮茎怎么不见了",
+      "say": "孟德尔把纯种高茎豌豆和纯种矮茎豌豆杂交，子一代全部是高茎——矮茎一株都没有。",
+      "stats": [
+        {
+          "v": "100%",
+          "label": "子一代都是高茎"
+        }
+      ],
+      "ask": "矮茎的性状消失了吗？如果真消失了，它还有可能再出现吗？",
+      "note": "子一代全表现为高茎，说明 <b>高茎对矮茎是显性</b>。但矮茎的基因并没有被「消灭」——它只是<b>没有表现出来</b>。",
+      "parts": [
+        "parent_tall",
+        "parent_short",
+        "gamete_D",
+        "gamete_d",
+        "f1"
+      ],
+      "routes": [
+        "r1",
+        "r2",
+        "r3",
+        "r4"
+      ],
+      "caption": "纯种高茎 × 纯种矮茎 → 子一代全是高茎"
+    },
+    {
+      "name": "它又回来了",
+      "say": "让子一代自交，子二代里矮茎又出现了，而且高茎比矮茎正好接近 3 : 1。",
+      "stats": [
+        {
+          "v": "3 : 1",
+          "label": "子二代 高茎 : 矮茎"
+        }
+      ],
+      "ask": "矮茎「消失」了一代又回来了，这说明了什么？",
+      "note": "<b>隐性基因不会消失，只是藏在显性基因旁边。</b>子一代是 Dd：D 表现出来了，d 藏着没表现，但它照样能传给下一代。",
+      "parts": [
+        "f1",
+        "f2"
+      ],
+      "routes": [
+        "r5",
+        "r6",
+        "r7",
+        "r8"
+      ],
+      "caption": "子二代：高茎 : 矮茎 ≈ 3 : 1"
+    },
+    {
+      "name": "大写显性，小写隐性",
+      "say": "基因成对存在，一个来自父方、一个来自母方。大写 D 是显性基因，小写 d 是隐性基因。",
+      "stats": [
+        {
+          "v": "D",
+          "label": "显性基因 → 高茎"
+        },
+        {
+          "v": "d",
+          "label": "隐性基因 → 矮茎"
+        }
+      ],
+      "ask": "为什么 DD 和 Dd 都长成高茎，只有 dd 是矮茎？",
+      "note": "<b>只要有一个 D，就表现高茎；两个都是 d，才表现矮茎。</b>这就是「显性」的意思——盖住对方。<br>DD → 高茎 ｜ Dd → 高茎 ｜ dd → 矮茎",
+      "parts": [
+        "parent_tall",
+        "parent_short",
+        "f1",
+        "f2",
+        "gene"
+      ],
+      "routes": [],
+      "caption": "DD、Dd 都是高茎，只有 dd 是矮茎"
+    },
+    {
+      "name": "四种组合从哪来",
+      "say": "子一代 Dd 形成生殖细胞时，D 和 d 分开，各进一半的生殖细胞——所以生殖细胞有两种。",
+      "ask": "两个 Dd 的生殖细胞随机结合，能凑出几种组合？",
+      "table": {
+        "head": [
+          "",
+          "含 D",
+          "含 d"
+        ],
+        "rows": [
+          [
+            "含 D",
+            "DD 高茎",
+            "Dd 高茎"
+          ],
+          [
+            "含 d",
+            "Dd 高茎",
+            "dd 矮茎"
+          ]
+        ]
+      },
+      "note": "四种组合是 <b>DD : Dd : Dd : dd</b>，也就是 <b>1 : 2 : 1</b>。看表现：三个高茎、一个矮茎。",
+      "parts": [
+        "f1",
+        "gamete_D",
+        "gamete_d",
+        "f2"
+      ],
+      "routes": [
+        "r5",
+        "r6",
+        "r7",
+        "r8"
+      ],
+      "caption": "Dd × Dd → 1 DD : 2 Dd : 1 dd"
+    },
+    {
+      "name": "3 : 1 的来历",
+      "say": "基因组成的比是 1 : 2 : 1，但表现出来的比是 3 : 1。",
+      "stats": [
+        {
+          "v": "3 : 1",
+          "label": "按性状表现"
+        },
+        {
+          "v": "1 : 2 : 1",
+          "label": "按基因组成"
+        }
+      ],
+      "ask": "为什么两个比例不一样？问「高茎几个」和「Dd 几个」，答案一样吗？",
+      "note": "<b>DD 和 Dd 长出来都是高茎</b>——基因组成不同，表现相同，所以 1 + 2 = 3 个高茎、1 个矮茎。<br><b>答题先看清问的是「表现」还是「基因组成」。</b>",
+      "parts": [
+        "f2"
+      ],
+      "routes": [],
+      "caption": "表现 3 : 1；基因组成 1 : 2 : 1"
+    }
+  ],
+  "labels": [
+    {
+      "p": "",
+      "text": "生殖细胞",
+      "from": [
+        380,
+        302
+      ],
+      "to": [
+        322,
+        288
+      ],
+      "anchor": "start"
+    },
+    {
+      "p": "f1",
+      "text": "自交",
+      "from": [
+        620,
+        400
+      ],
+      "to": [
+        546,
+        400
+      ],
+      "anchor": "start"
+    },
+    {
+      "p": "f1",
+      "text": "子一代 · 高茎",
+      "from": [
+        296,
+        398
+      ],
+      "to": [
+        378,
+        398
+      ],
+      "anchor": "end"
+    }
+  ],
+  "parts": [
+    {
+      "id": "parent_tall",
+      "name": "纯种高茎（DD）",
+      "en": "homozygous",
+      "only": "两个基因相同",
+      "desc": "两条染色体上都是显性基因 D。",
+      "role": "高茎是显性性状，纯种高茎只能产生含 D 的生殖细胞。",
+      "warn": "「纯种」的意思是两个基因相同（DD 或 dd），不是「品种好」。"
+    },
+    {
+      "id": "parent_short",
+      "name": "纯种矮茎（dd）",
+      "en": "homozygous",
+      "only": "两个基因相同",
+      "desc": "两条染色体上都是隐性基因 d。",
+      "role": "矮茎是隐性性状，纯种矮茎只能产生含 d 的生殖细胞。",
+      "warn": "隐性性状不是「没有基因」，而是两个基因都是隐性的。"
+    },
+    {
+      "id": "gamete_D",
+      "name": "含 D 的生殖细胞",
+      "en": "gamete",
+      "only": "基因成单",
+      "desc": "染色体减半，只带一个基因 D。",
+      "role": "与含 d 的生殖细胞结合，子代是 Dd（高茎）。",
+      "warn": "生殖细胞里的基因是成单的，不能说「一对基因」。"
+    },
+    {
+      "id": "gamete_d",
+      "name": "含 d 的生殖细胞",
+      "en": "gamete",
+      "only": "基因成单",
+      "desc": "染色体减半，只带一个基因 d。",
+      "role": "与含 D 的生殖细胞结合，子代同样是 Dd（高茎）。",
+      "warn": "d 本身不决定「矮」——只有两个 d 凑在一起才表现矮茎。"
+    },
+    {
+      "id": "f1",
+      "name": "子一代（Dd）",
+      "en": "F1",
+      "only": "显性基因藏住隐性",
+      "desc": "一个 D、一个 d，表现为高茎。",
+      "role": "隐性基因 d 就藏在这里，没有消失，能继续传下去。",
+      "warn": "「子一代全是高茎」不等于「没有矮茎基因」——这是本节最容易错的判断。"
+    },
+    {
+      "id": "f2",
+      "name": "子二代",
+      "en": "F2",
+      "only": "性状分离",
+      "desc": "子一代自交的后代，四个个体：DD、Dd、Dd、dd。",
+      "role": "表现上 3 高 : 1 矮；基因组成上是 1 : 2 : 1。",
+      "warn": "1 : 2 : 1 说的是基因组成，3 : 1 说的是表现，两个比不能混用。"
+    },
+    {
+      "id": "gene",
+      "name": "基因",
+      "en": "gene",
+      "only": "成对存在",
+      "desc": "控制性状的 DNA 片段。大写字母表示显性基因，小写表示隐性基因。",
+      "role": "显性基因会盖住隐性基因的表现，但盖不住它的传递。",
+      "warn": "「显性」说的是表现上盖住对方，不是「更重要」或「更容易遗传」。"
+    }
+  ]
+}
