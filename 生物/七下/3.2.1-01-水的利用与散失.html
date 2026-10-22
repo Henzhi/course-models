@@ -16,7 +16,8 @@
   body{
     font-family:"Microsoft YaHei","PingFang SC","Segoe UI",system-ui,sans-serif;
     background:var(--bg); color:var(--ink); font-size:16px; line-height:1.65;
-    min-height:100vh; display:flex; flex-direction:column; -webkit-font-smoothing:antialiased;
+    height:100vh; overflow:hidden;
+    display:flex; flex-direction:column; -webkit-font-smoothing:antialiased;
   }
   header{padding:14px 24px 12px; background:#fff; border-bottom:1px solid var(--line)}
   .topbar{display:flex; align-items:center; gap:14px; font-size:13px}
@@ -38,6 +39,7 @@
   .ghost.off{background:#f1f2f8; color:var(--muted)}
   main{
     flex:1; display:grid; grid-template-columns:minmax(0,1fr) 408px;
+    grid-template-rows:minmax(0,1fr);
     gap:16px; padding:16px 20px 8px; min-height:0;
   }
   .canvas-wrap{
@@ -47,7 +49,7 @@
   svg{width:100%; height:100%; display:block; min-height:0}
   .panel{
     background:#fff; border:1px solid var(--line); border-radius:16px;
-    box-shadow:var(--shadow); padding:18px 20px 24px; overflow:auto;
+    box-shadow:var(--shadow); padding:18px 20px 24px; overflow:auto; min-height:0;
   }
   .panel h3{font-size:20px; font-weight:700; letter-spacing:-.2px}
   .panel .step-no{
@@ -87,6 +89,13 @@
   }
   .steps button:hover{border-color:#c4c9dd}
   .steps button.on{background:var(--soft); border-color:#c9c3f5; color:var(--brand); font-weight:700}
+  .stepnav{display:flex; gap:7px; flex-wrap:wrap; margin:12px 0 2px}
+  .stepnav button{
+    width:40px; height:34px; border:1px solid var(--line); background:#fff; border-radius:8px;
+    font:inherit; font-size:14px; font-weight:600; color:var(--ink2); cursor:pointer;
+  }
+  .stepnav button:hover{border-color:#c4c9dd}
+  .stepnav button.on{background:var(--brand); border-color:var(--brand); color:#fff}
   .btns{display:flex; gap:7px; flex-wrap:wrap}
   .btns button{
     border:1px solid var(--line); background:#fff; border-radius:8px;
@@ -106,6 +115,11 @@
   .legend{display:flex; flex-wrap:wrap; gap:7px 14px}
   .legend .lg{display:inline-flex; align-items:center; gap:6px; font-size:13.5px; color:var(--ink2)}
   .legend .lg i{width:12px; height:6px; border-radius:3px; display:inline-block; flex:none}
+  .cmp{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}
+  .cmp th,.cmp td{border-bottom:1px solid var(--line);padding:5px 6px;text-align:left;vertical-align:top}
+  .cmp th{font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:.5px;padding-bottom:7px}
+  .cmp td:first-child{font-weight:600;color:var(--ink);white-space:nowrap}
+  .cmp td{color:var(--ink2)}
   .keys{
     margin-top:16px; padding-top:13px; border-top:1px dashed var(--line);
     font-size:12.5px; color:var(--muted); line-height:1.9;
@@ -128,6 +142,7 @@
   .cap text{pointer-events:none}
 
   @media (max-width:1180px){
+    body{height:auto; overflow:auto}
     main{grid-template-columns:1fr; grid-template-rows:minmax(300px,1fr) auto}
     .panel{max-height:350px}
     h1{font-size:21px}
@@ -325,7 +340,8 @@ window.__APP__ = {"canvas":{"w":1000,"h":682},"legend":[{"color":"#3f7fc0","text
       var isOn = on.indexOf(rt.id) >= 0;
       var ids = svg.querySelectorAll('[data-route="' + rt.id + '"]');
       for(var i=0;i<ids.length;i++){
-        ids[i].setAttribute("opacity", isOn ? (i === 0 ? 0.26 : 0.95) : 0.14);
+        var offOp = (rt.off === undefined || rt.off === null) ? 0.14 : rt.off;
+        ids[i].setAttribute("opacity", isOn ? (i === 0 ? 0.26 : 0.95) : offOp);
       }
       if(!isOn) return;
       var len = core.getTotalLength();
@@ -357,15 +373,17 @@ window.__APP__ = {"canvas":{"w":1000,"h":682},"legend":[{"color":"#3f7fc0","text
     return null;
   }
 
-  function controls(){
-    var names = D.steps.map(function(s){ return s.name; });
-    return '<div class="ctrl"><div class="lab">讲解步骤</div><div class="steps">'
-      + names.map(function(nm, i){
-          return '<button type="button" data-go="' + i + '" class="' + (S.step === i ? "on" : "") + '">'
-            + (i + 1) + ". " + nm + '</button>';
+  function stepsNav(){
+    return '<div class="stepnav">'
+      + D.steps.map(function(st, i){
+          return '<button type="button" data-go="' + i + '" title="' + st.name + '" class="'
+            + (S.step === i ? "on" : "") + '">' + (i + 1) + '</button>';
         }).join("")
-      + '</div></div>'
-      + '<div class="ctrl"><div class="lab">播放</div><div class="btns">'
+      + '</div>';
+  }
+
+  function controls(){
+    return '<div class="ctrl"><div class="lab">播放</div><div class="btns">'
       + '<button type="button" id="btnPlay" class="' + (S.playing ? "on" : "") + '">'
       + (S.playing ? "⏸ 暂停流动" : "▶ 播放流动") + '</button>'
       + '<button type="button" id="btnPrev">上一步</button>'
@@ -398,7 +416,8 @@ window.__APP__ = {"canvas":{"w":1000,"h":682},"legend":[{"color":"#3f7fc0","text
 
   function renderStep(){
     var st = D.steps[S.step];
-    var h = '<h3><span class="step-no">' + (S.step + 1) + '</span>' + st.name + '</h3>';
+    var h = '<h3><span class="step-no">' + (S.step + 1) + '</span>' + st.name + '</h3>'
+      + stepsNav();
     if(st.say) h += '<p class="goal">' + st.say + '</p>';
     if(st.stats && st.stats.length){
       h += '<div class="stats">' + st.stats.map(function(x, i){
@@ -407,6 +426,15 @@ window.__APP__ = {"canvas":{"w":1000,"h":682},"legend":[{"color":"#3f7fc0","text
     }
     if(st.ask) h += '<div class="p-sec"><h4>观察提示</h4><p>' + st.ask + '</p></div>';
     if(st.note) h += '<div class="p-sec warn"><h4>关键结论</h4><p>' + st.note + '</p></div>';
+    if(st.table && st.table.head && st.table.rows){
+      h += '<table class="cmp"><thead><tr>'
+        + st.table.head.map(function(x){ return '<th>' + x + '</th>'; }).join('')
+        + '</tr></thead><tbody>'
+        + st.table.rows.map(function(r){
+            return '<tr>' + r.map(function(c){ return '<td>' + c + '</td>'; }).join('') + '</tr>';
+          }).join('')
+        + '</tbody></table>';
+    }
     h += controls() + legendHtml();
     h += '<div class="keys"><span><kbd>空格</kbd> 暂停/播放</span>'
       + '<span><kbd>←</kbd><kbd>→</kbd> 切换步骤</span>'
@@ -427,7 +455,7 @@ window.__APP__ = {"canvas":{"w":1000,"h":682},"legend":[{"color":"#3f7fc0","text
     if(cap){
       while(cap.firstChild) cap.removeChild(cap.firstChild);
       if(st.caption){
-        var t = mk("text", {x:D.canvas.w / 2, y:D.canvas.h - 14, "font-size":13.5,
+        var t = mk("text", {x:D.canvas.w / 2, y:D.canvas.h - 22, "font-size":13.5,
           fill:"#6b7488", "text-anchor":"middle"});
         t.textContent = st.caption;
         cap.appendChild(t);

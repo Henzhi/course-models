@@ -46,6 +46,7 @@
   .ghost.off{background:#f1f2f8; color:var(--muted)}
   main{
     flex:1; display:grid; grid-template-columns:minmax(0,1fr) 396px;
+    grid-template-rows:minmax(0,1fr);
     gap:16px; padding:16px 20px 8px; min-height:0;
   }
   .canvas-wrap{
@@ -115,6 +116,7 @@
   svg.hide-lb .lb{display:none}
 
   @media (max-width:1180px){
+    body{height:auto; overflow:auto}
     main{grid-template-columns:1fr; grid-template-rows:minmax(280px,1fr) auto}
     .panel{max-height:330px}
     h1{font-size:21px}
