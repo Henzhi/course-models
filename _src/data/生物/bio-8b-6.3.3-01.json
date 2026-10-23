@@ -1,0 +1,972 @@
+{
+  "canvas": {
+    "w": 1000,
+    "h": 660
+  },
+  "legend": [
+    {
+      "color": "#ece3ce",
+      "text": "浅色蛾"
+    },
+    {
+      "color": "#57514a",
+      "text": "深色蛾"
+    }
+  ],
+  "shapes": [
+    {
+      "t": "rect",
+      "x": 90,
+      "y": 80,
+      "w": 280,
+      "h": 300,
+      "rx": 10,
+      "fill": "#e8e2d4",
+      "stroke": "#cfc7b5",
+      "sw": 2,
+      "part": "bark1850"
+    },
+    {
+      "t": "line",
+      "x1": 135,
+      "y1": 92,
+      "x2": 135,
+      "y2": 368,
+      "stroke": "#ded6c5",
+      "sw": 7,
+      "cap": "round",
+      "part": "bark1850"
+    },
+    {
+      "t": "line",
+      "x1": 215,
+      "y1": 92,
+      "x2": 215,
+      "y2": 368,
+      "stroke": "#ded6c5",
+      "sw": 7,
+      "cap": "round",
+      "part": "bark1850"
+    },
+    {
+      "t": "line",
+      "x1": 295,
+      "y1": 92,
+      "x2": 295,
+      "y2": 368,
+      "stroke": "#ded6c5",
+      "sw": 7,
+      "cap": "round",
+      "part": "bark1850"
+    },
+    {
+      "t": "rect",
+      "x": 630,
+      "y": 80,
+      "w": 280,
+      "h": 300,
+      "rx": 10,
+      "fill": "#4a4640",
+      "stroke": "#333029",
+      "sw": 2,
+      "part": "bark1950"
+    },
+    {
+      "t": "line",
+      "x1": 700,
+      "y1": 92,
+      "x2": 700,
+      "y2": 368,
+      "stroke": "#565049",
+      "sw": 7,
+      "cap": "round",
+      "part": "bark1950"
+    },
+    {
+      "t": "line",
+      "x1": 780,
+      "y1": 92,
+      "x2": 780,
+      "y2": 368,
+      "stroke": "#565049",
+      "sw": 7,
+      "cap": "round",
+      "part": "bark1950"
+    },
+    {
+      "t": "line",
+      "x1": 860,
+      "y1": 92,
+      "x2": 860,
+      "y2": 368,
+      "stroke": "#565049",
+      "sw": 7,
+      "cap": "round",
+      "part": "bark1950"
+    },
+    {
+      "t": "ellipse",
+      "cx": 145,
+      "cy": 135,
+      "rx": 17,
+      "ry": 12,
+      "fill": "#f7f2e4",
+      "stroke": "#d8cfb8",
+      "sw": 1.6,
+      "part": "moth_light"
+    },
+    {
+      "t": "line",
+      "x1": 145,
+      "y1": 124,
+      "x2": 145,
+      "y2": 146,
+      "stroke": "#d8cfb8",
+      "sw": 1.2,
+      "part": "moth_light"
+    },
+    {
+      "t": "path",
+      "d": "M 142 123 L 136 114 M 148 123 L 154 114",
+      "fill": "none",
+      "stroke": "#d8cfb8",
+      "sw": 1.4,
+      "cap": "round",
+      "part": "moth_light"
+    },
+    {
+      "t": "ellipse",
+      "cx": 250,
+      "cy": 175,
+      "rx": 17,
+      "ry": 12,
+      "fill": "#f7f2e4",
+      "stroke": "#d8cfb8",
+      "sw": 1.6,
+      "part": "moth_light"
+    },
+    {
+      "t": "line",
+      "x1": 250,
+      "y1": 164,
+      "x2": 250,
+      "y2": 186,
+      "stroke": "#d8cfb8",
+      "sw": 1.2,
+      "part": "moth_light"
+    },
+    {
+      "t": "path",
+      "d": "M 247 163 L 241 154 M 253 163 L 259 154",
+      "fill": "none",
+      "stroke": "#d8cfb8",
+      "sw": 1.4,
+      "cap": "round",
+      "part": "moth_light"
+    },
+    {
+      "t": "ellipse",
+      "cx": 170,
+      "cy": 255,
+      "rx": 17,
+      "ry": 12,
+      "fill": "#f7f2e4",
+      "stroke": "#d8cfb8",
+      "sw": 1.6,
+      "part": "moth_light"
+    },
+    {
+      "t": "line",
+      "x1": 170,
+      "y1": 244,
+      "x2": 170,
+      "y2": 266,
+      "stroke": "#d8cfb8",
+      "sw": 1.2,
+      "part": "moth_light"
+    },
+    {
+      "t": "path",
+      "d": "M 167 243 L 161 234 M 173 243 L 179 234",
+      "fill": "none",
+      "stroke": "#d8cfb8",
+      "sw": 1.4,
+      "cap": "round",
+      "part": "moth_light"
+    },
+    {
+      "t": "ellipse",
+      "cx": 295,
+      "cy": 290,
+      "rx": 17,
+      "ry": 12,
+      "fill": "#f7f2e4",
+      "stroke": "#d8cfb8",
+      "sw": 1.6,
+      "part": "moth_light"
+    },
+    {
+      "t": "line",
+      "x1": 295,
+      "y1": 279,
+      "x2": 295,
+      "y2": 301,
+      "stroke": "#d8cfb8",
+      "sw": 1.2,
+      "part": "moth_light"
+    },
+    {
+      "t": "path",
+      "d": "M 292 278 L 286 269 M 298 278 L 304 269",
+      "fill": "none",
+      "stroke": "#d8cfb8",
+      "sw": 1.4,
+      "cap": "round",
+      "part": "moth_light"
+    },
+    {
+      "t": "ellipse",
+      "cx": 300,
+      "cy": 125,
+      "rx": 17,
+      "ry": 12,
+      "fill": "#5b554b",
+      "stroke": "#3a352f",
+      "sw": 1.6,
+      "part": "moth_dark"
+    },
+    {
+      "t": "line",
+      "x1": 300,
+      "y1": 114,
+      "x2": 300,
+      "y2": 136,
+      "stroke": "#4e4840",
+      "sw": 1.2,
+      "part": "moth_dark"
+    },
+    {
+      "t": "path",
+      "d": "M 297 113 L 291 104 M 303 113 L 309 104",
+      "fill": "none",
+      "stroke": "#4e4840",
+      "sw": 1.4,
+      "cap": "round",
+      "part": "moth_dark"
+    },
+    {
+      "t": "ellipse",
+      "cx": 205,
+      "cy": 340,
+      "rx": 17,
+      "ry": 12,
+      "fill": "#5b554b",
+      "stroke": "#3a352f",
+      "sw": 1.6,
+      "part": "moth_dark"
+    },
+    {
+      "t": "line",
+      "x1": 205,
+      "y1": 329,
+      "x2": 205,
+      "y2": 351,
+      "stroke": "#4e4840",
+      "sw": 1.2,
+      "part": "moth_dark"
+    },
+    {
+      "t": "path",
+      "d": "M 202 328 L 196 319 M 208 328 L 214 319",
+      "fill": "none",
+      "stroke": "#4e4840",
+      "sw": 1.4,
+      "cap": "round",
+      "part": "moth_dark"
+    },
+    {
+      "t": "ellipse",
+      "cx": 700,
+      "cy": 155,
+      "rx": 17,
+      "ry": 12,
+      "fill": "#f7f2e4",
+      "stroke": "#d8cfb8",
+      "sw": 1.6,
+      "part": "moth_light"
+    },
+    {
+      "t": "line",
+      "x1": 700,
+      "y1": 144,
+      "x2": 700,
+      "y2": 166,
+      "stroke": "#d8cfb8",
+      "sw": 1.2,
+      "part": "moth_light"
+    },
+    {
+      "t": "path",
+      "d": "M 697 143 L 691 134 M 703 143 L 709 134",
+      "fill": "none",
+      "stroke": "#d8cfb8",
+      "sw": 1.4,
+      "cap": "round",
+      "part": "moth_light"
+    },
+    {
+      "t": "ellipse",
+      "cx": 800,
+      "cy": 120,
+      "rx": 17,
+      "ry": 12,
+      "fill": "#5b554b",
+      "stroke": "#3a352f",
+      "sw": 1.6,
+      "part": "moth_dark"
+    },
+    {
+      "t": "line",
+      "x1": 800,
+      "y1": 109,
+      "x2": 800,
+      "y2": 131,
+      "stroke": "#4e4840",
+      "sw": 1.2,
+      "part": "moth_dark"
+    },
+    {
+      "t": "path",
+      "d": "M 797 108 L 791 99 M 803 108 L 809 99",
+      "fill": "none",
+      "stroke": "#4e4840",
+      "sw": 1.4,
+      "cap": "round",
+      "part": "moth_dark"
+    },
+    {
+      "t": "ellipse",
+      "cx": 870,
+      "cy": 205,
+      "rx": 17,
+      "ry": 12,
+      "fill": "#5b554b",
+      "stroke": "#3a352f",
+      "sw": 1.6,
+      "part": "moth_dark"
+    },
+    {
+      "t": "line",
+      "x1": 870,
+      "y1": 194,
+      "x2": 870,
+      "y2": 216,
+      "stroke": "#4e4840",
+      "sw": 1.2,
+      "part": "moth_dark"
+    },
+    {
+      "t": "path",
+      "d": "M 867 193 L 861 184 M 873 193 L 879 184",
+      "fill": "none",
+      "stroke": "#4e4840",
+      "sw": 1.4,
+      "cap": "round",
+      "part": "moth_dark"
+    },
+    {
+      "t": "ellipse",
+      "cx": 675,
+      "cy": 255,
+      "rx": 17,
+      "ry": 12,
+      "fill": "#5b554b",
+      "stroke": "#3a352f",
+      "sw": 1.6,
+      "part": "moth_dark"
+    },
+    {
+      "t": "line",
+      "x1": 675,
+      "y1": 244,
+      "x2": 675,
+      "y2": 266,
+      "stroke": "#4e4840",
+      "sw": 1.2,
+      "part": "moth_dark"
+    },
+    {
+      "t": "path",
+      "d": "M 672 243 L 666 234 M 678 243 L 684 234",
+      "fill": "none",
+      "stroke": "#4e4840",
+      "sw": 1.4,
+      "cap": "round",
+      "part": "moth_dark"
+    },
+    {
+      "t": "ellipse",
+      "cx": 780,
+      "cy": 300,
+      "rx": 17,
+      "ry": 12,
+      "fill": "#5b554b",
+      "stroke": "#3a352f",
+      "sw": 1.6,
+      "part": "moth_dark"
+    },
+    {
+      "t": "line",
+      "x1": 780,
+      "y1": 289,
+      "x2": 780,
+      "y2": 311,
+      "stroke": "#4e4840",
+      "sw": 1.2,
+      "part": "moth_dark"
+    },
+    {
+      "t": "path",
+      "d": "M 777 288 L 771 279 M 783 288 L 789 279",
+      "fill": "none",
+      "stroke": "#4e4840",
+      "sw": 1.4,
+      "cap": "round",
+      "part": "moth_dark"
+    },
+    {
+      "t": "ellipse",
+      "cx": 865,
+      "cy": 340,
+      "rx": 17,
+      "ry": 12,
+      "fill": "#5b554b",
+      "stroke": "#3a352f",
+      "sw": 1.6,
+      "part": "moth_dark"
+    },
+    {
+      "t": "line",
+      "x1": 865,
+      "y1": 329,
+      "x2": 865,
+      "y2": 351,
+      "stroke": "#4e4840",
+      "sw": 1.2,
+      "part": "moth_dark"
+    },
+    {
+      "t": "path",
+      "d": "M 862 328 L 856 319 M 868 328 L 874 319",
+      "fill": "none",
+      "stroke": "#4e4840",
+      "sw": 1.4,
+      "cap": "round",
+      "part": "moth_dark"
+    },
+    {
+      "t": "rect",
+      "x": 435,
+      "y": 255,
+      "w": 140,
+      "h": 75,
+      "rx": 4,
+      "fill": "#c9c4bb",
+      "stroke": "#a8a29a",
+      "sw": 1.8,
+      "part": "factory"
+    },
+    {
+      "t": "rect",
+      "x": 450,
+      "y": 190,
+      "w": 16,
+      "h": 65,
+      "fill": "#b3ada4",
+      "stroke": "#98928a",
+      "sw": 1.4,
+      "part": "factory"
+    },
+    {
+      "t": "rect",
+      "x": 478,
+      "y": 170,
+      "w": 16,
+      "h": 85,
+      "fill": "#b3ada4",
+      "stroke": "#98928a",
+      "sw": 1.4,
+      "part": "factory"
+    },
+    {
+      "t": "rect",
+      "x": 506,
+      "y": 200,
+      "w": 16,
+      "h": 55,
+      "fill": "#b3ada4",
+      "stroke": "#98928a",
+      "sw": 1.4,
+      "part": "factory"
+    },
+    {
+      "t": "rect",
+      "x": 450,
+      "y": 276,
+      "w": 14,
+      "h": 16,
+      "fill": "#8f8a82",
+      "part": "factory"
+    },
+    {
+      "t": "rect",
+      "x": 480,
+      "y": 276,
+      "w": 14,
+      "h": 16,
+      "fill": "#8f8a82",
+      "part": "factory"
+    },
+    {
+      "t": "rect",
+      "x": 510,
+      "y": 276,
+      "w": 14,
+      "h": 16,
+      "fill": "#8f8a82",
+      "part": "factory"
+    },
+    {
+      "t": "rect",
+      "x": 540,
+      "y": 276,
+      "w": 14,
+      "h": 16,
+      "fill": "#8f8a82",
+      "part": "factory"
+    },
+    {
+      "t": "path",
+      "d": "M 458 190 C 446 172 468 160 454 142",
+      "fill": "none",
+      "stroke": "#cfcac2",
+      "sw": 11,
+      "cap": "round",
+      "part": "factory"
+    },
+    {
+      "t": "path",
+      "d": "M 486 170 C 474 152 496 140 482 122",
+      "fill": "none",
+      "stroke": "#cfcac2",
+      "sw": 11,
+      "cap": "round",
+      "part": "factory"
+    },
+    {
+      "t": "path",
+      "d": "M 514 200 C 502 182 524 170 510 152",
+      "fill": "none",
+      "stroke": "#cfcac2",
+      "sw": 11,
+      "cap": "round",
+      "part": "factory"
+    },
+    {
+      "t": "rect",
+      "x": 120,
+      "y": 470,
+      "w": 147,
+      "h": 30,
+      "fill": "#f7f2e4",
+      "stroke": "#d8cfb8",
+      "sw": 1.4,
+      "part": "chart"
+    },
+    {
+      "t": "rect",
+      "x": 267,
+      "y": 470,
+      "w": 73,
+      "h": 30,
+      "fill": "#57514a",
+      "stroke": "#3a352f",
+      "sw": 1.4,
+      "part": "chart"
+    },
+    {
+      "t": "rect",
+      "x": 660,
+      "y": 470,
+      "w": 37,
+      "h": 30,
+      "fill": "#f7f2e4",
+      "stroke": "#d8cfb8",
+      "sw": 1.4,
+      "part": "chart"
+    },
+    {
+      "t": "rect",
+      "x": 697,
+      "y": 470,
+      "w": 183,
+      "h": 30,
+      "fill": "#57514a",
+      "stroke": "#3a352f",
+      "sw": 1.4,
+      "part": "chart"
+    },
+    {
+      "t": "text",
+      "x": 230,
+      "y": 56,
+      "tx": "1850 年",
+      "size": 16,
+      "fill": "#4b5468",
+      "anchor": "middle",
+      "weight": 700,
+      "part": "bark1850"
+    },
+    {
+      "t": "text",
+      "x": 770,
+      "y": 56,
+      "tx": "1950 年",
+      "size": 16,
+      "fill": "#4b5468",
+      "anchor": "middle",
+      "weight": 700,
+      "part": "bark1950"
+    },
+    {
+      "t": "text",
+      "x": 510,
+      "y": 374,
+      "tx": "煤烟把树干熏黑",
+      "size": 13,
+      "fill": "#6b7280",
+      "anchor": "middle",
+      "part": "factory"
+    },
+    {
+      "t": "text",
+      "x": 230,
+      "y": 528,
+      "tx": "深色蛾 33%",
+      "size": 14,
+      "fill": "#4b5468",
+      "anchor": "middle",
+      "weight": 700,
+      "part": "chart"
+    },
+    {
+      "t": "text",
+      "x": 770,
+      "y": 528,
+      "tx": "深色蛾 83%",
+      "size": 14,
+      "fill": "#4b5468",
+      "anchor": "middle",
+      "weight": 700,
+      "part": "chart"
+    },
+    {
+      "t": "text",
+      "x": 230,
+      "y": 550,
+      "tx": "2 / 6",
+      "size": 12.5,
+      "fill": "#8b93a5",
+      "anchor": "middle",
+      "part": "chart"
+    },
+    {
+      "t": "text",
+      "x": 770,
+      "y": 550,
+      "tx": "5 / 6",
+      "size": 12.5,
+      "fill": "#8b93a5",
+      "anchor": "middle",
+      "part": "chart"
+    },
+    {
+      "t": "circle",
+      "cx": 700,
+      "cy": 155,
+      "r": 30,
+      "fill": "none",
+      "stroke": "#d94a4a",
+      "sw": 2.4,
+      "dash": "6 5",
+      "part": "danger"
+    }
+  ],
+  "routes": [
+    {
+      "id": "r_time",
+      "color": "#8a8fa6",
+      "w": 8,
+      "speed": 0.6,
+      "pts": [
+        [
+          386,
+          345
+        ],
+        [
+          446,
+          345
+        ],
+        [
+          510,
+          345
+        ],
+        [
+          576,
+          345
+        ],
+        [
+          624,
+          345
+        ]
+      ],
+      "off": 0
+    },
+    {
+      "id": "r_trend",
+      "color": "#b4553f",
+      "w": 8,
+      "speed": 0.7,
+      "pts": [
+        [
+          345,
+          485
+        ],
+        [
+          424,
+          485
+        ],
+        [
+          510,
+          485
+        ],
+        [
+          598,
+          485
+        ],
+        [
+          655,
+          485
+        ]
+      ],
+      "off": 0
+    }
+  ],
+  "steps": [
+    {
+      "name": "变异本来就有",
+      "say": "1850 年的树干上爬满浅色蛾，但仔细看——其中有几只是深色的。",
+      "stats": [
+        {
+          "v": "4 : 2",
+          "label": "浅色 : 深色"
+        }
+      ],
+      "ask": "这些深色蛾是怎么来的？是它们「为了适应」才变深的吗？",
+      "note": "<b>变异本来就存在，与环境无关。</b>同一批蛾里天生就有深有浅，而且这种差异<b>能遗传给后代</b>——这是自然选择能起作用的前提。",
+      "parts": [
+        "bark1850",
+        "moth_light",
+        "moth_dark"
+      ],
+      "routes": [],
+      "hide": [
+        "danger",
+        "chart"
+      ],
+      "caption": "1850 年：浅色多、深色少，但两种都有"
+    },
+    {
+      "name": "环境变了",
+      "say": "工业革命之后，煤烟把树皮上的地衣熏死，树干变成了黑色。",
+      "stats": [
+        {
+          "v": "浅色 → 黑色",
+          "label": "树干颜色"
+        }
+      ],
+      "ask": "注意：变的是树干的颜色，不是蛾的颜色。蛾有没有跟着「变黑」？",
+      "note": "<b>环境改变和蛾的变异是两件独立的事。</b>树变黑是被动的，蛾的颜色差异早就有了。<b>环境只是改变了「哪种蛾更显眼」。</b>",
+      "parts": [
+        "bark1850",
+        "bark1950",
+        "factory"
+      ],
+      "routes": [
+        "r_time"
+      ],
+      "hide": [
+        "danger",
+        "chart"
+      ],
+      "caption": "环境变了：树干被煤烟熏黑"
+    },
+    {
+      "name": "谁显眼谁倒霉",
+      "say": "在黑色树干上，浅色蛾格外显眼，容易被鸟发现吃掉；深色蛾融进树皮，反而躲得过。",
+      "stats": [
+        {
+          "v": "浅色",
+          "label": "显眼 → 易被吃"
+        }
+      ],
+      "ask": "这到底是「蛾努力变黑」，还是「鸟替环境做了筛选」？",
+      "note": "从蛾的角度，它<b>什么都没做</b>——没有努力、没有适应。是<b>捕食者按可见度做了筛选</b>。这就是「选择」二字的来历。",
+      "parts": [
+        "bark1850",
+        "bark1950",
+        "moth_light",
+        "moth_dark",
+        "danger"
+      ],
+      "routes": [],
+      "hide": [
+        "chart"
+      ],
+      "caption": "深色树干上，浅色蛾无处可藏"
+    },
+    {
+      "name": "比例变了",
+      "say": "一代代下来，深色蛾在群体里的比例从 2/6 升到了 5/6。",
+      "stats": [
+        {
+          "v": "33% → 83%",
+          "label": "深色蛾的比例"
+        }
+      ],
+      "ask": "是某一只蛾变黑了吗？还是群体的构成变了？",
+      "note": "<b>没有哪只蛾变黑——是「哪种更容易活到繁殖」变了。</b>深色蛾活下来的多，后代也就多，比例自然上升。<b>个体不变，群体在变。</b>",
+      "parts": [
+        "bark1850",
+        "bark1950",
+        "moth_light",
+        "moth_dark",
+        "chart"
+      ],
+      "routes": [
+        "r_trend"
+      ],
+      "hide": [
+        "danger"
+      ],
+      "caption": "深色蛾比例：33% → 83%"
+    },
+    {
+      "name": "自然选择的四个要点",
+      "say": "达尔文把这套机制总结成四点，缺一条都不成立。",
+      "table": {
+        "head": [
+          "要点",
+          "内容"
+        ],
+        "rows": [
+          [
+            "过度繁殖",
+            "后代数量远多于能存活的"
+          ],
+          [
+            "生存斗争",
+            "争夺有限的食物和空间"
+          ],
+          [
+            "遗传变异",
+            "个体之间本来就有差异，且能遗传"
+          ],
+          [
+            "适者生存",
+            "适应环境的活下来，把性状传给后代"
+          ]
+        ]
+      },
+      "note": "串起来就是一句：<b>先有随机的差异，再由环境筛掉一部分，剩下的把差异传下去。</b>变异没有方向，方向是环境给的。",
+      "parts": [
+        "bark1850",
+        "bark1950",
+        "moth_light",
+        "moth_dark"
+      ],
+      "routes": [],
+      "hide": [
+        "danger",
+        "chart"
+      ],
+      "caption": "变异在前，选择在后"
+    }
+  ],
+  "labels": [],
+  "parts": [
+    {
+      "id": "bark1850",
+      "name": "浅色树干（1850 年）",
+      "en": "bark",
+      "only": "地衣覆盖",
+      "desc": "树皮上长满地衣，呈浅灰米色。浅色蛾在上面几乎看不出来。",
+      "role": "在这个环境里，浅色是有利的。",
+      "warn": "树干的颜色不是蛾能选的，它由环境决定。"
+    },
+    {
+      "id": "bark1950",
+      "name": "深色树干（1950 年）",
+      "en": "bark",
+      "only": "煤烟熏黑",
+      "desc": "煤烟杀死地衣，树皮裸露并被熏成黑色。",
+      "role": "环境变了，浅色反而变成劣势。",
+      "warn": "变的是环境，不是蛾。这是理解自然选择最关键的一步。"
+    },
+    {
+      "id": "moth_light",
+      "name": "浅色蛾",
+      "en": "light moth",
+      "only": "一种变异",
+      "desc": "体色浅，与长满地衣的树干相近。",
+      "role": "在浅色树干上不易被发现；在深色树干上非常显眼。",
+      "warn": "它没有「适应失败」——只是环境变了，原本的保护色失效。"
+    },
+    {
+      "id": "moth_dark",
+      "name": "深色蛾",
+      "en": "dark moth",
+      "only": "另一种变异",
+      "desc": "体色深，与熏黑的树皮相近。",
+      "role": "在深色树干上不易被发现，更容易活到繁殖。",
+      "warn": "深色蛾不是「进化出来的」，它本来就有，只是以前不占优势。"
+    },
+    {
+      "id": "factory",
+      "name": "工厂与煤烟",
+      "en": "industry",
+      "only": "环境变化",
+      "desc": "工业革命排放的煤烟改变了树干颜色。",
+      "role": "它是「选择压力」的来源——环境变了，筛选标准就变了。",
+      "warn": "环境不会「让」生物变异，它只决定谁更容易活下来。"
+    },
+    {
+      "id": "chart",
+      "name": "群体比例",
+      "en": "frequency",
+      "only": "统计结果",
+      "desc": "深色蛾在群体中的比例：33% → 83%。",
+      "role": "变化发生在群体层面，不在个体身上。",
+      "warn": "「进化」说的是群体比例的改变，不是某一只个体变了。"
+    },
+    {
+      "id": "danger",
+      "name": "被发现的浅色蛾",
+      "en": "predation",
+      "only": "选择压力",
+      "desc": "在深色树干上，浅色蛾因对比明显而容易被捕食。",
+      "role": "这就是「适者生存」里那个「选择」的具体机制。",
+      "warn": "不是鸟「故意」帮深色蛾——是浅色的先被吃掉，剩下的自然多是深色的。"
+    }
+  ]
+}
